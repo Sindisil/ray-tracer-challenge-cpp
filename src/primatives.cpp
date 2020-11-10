@@ -129,3 +129,11 @@ TEST_CASE("Subtracting a vector from a point") {
 
   CHECK(p - v == res_p);
 }
+
+TEST_CASE("Subtracting two vectors") {
+  Vec3 v1{3.f, 2.f, 1.f};
+  Vec3 v2{5.f, 6.f, 7.f};
+  Vec3 res_v{-2.f, -4.f, -6.f};
+
+  CHECK(v1 - v2 == res_v);
+}
