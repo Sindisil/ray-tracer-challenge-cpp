@@ -113,6 +113,20 @@ TEST_CASE("Negating a vector") {
   CHECK(-v == Vec3{-1, 2, -3});
 }
 
+TEST_CASE("Multiplying a vector by a scalar") {
+  Vec3 v{1, -2, 3};
+
+  CHECK(v * 3.5f == Vec3{3.5f, -7, 10.5f});
+  CHECK(3.5f * v == Vec3{3.5f, -7, 10.5f});
+}
+
+TEST_CASE("Multiplying a vector by a fraction") {
+  Vec3 v{1, -2, 3};
+
+  CHECK(v * .5f == Vec3{.5f, -1.f, 1.5f});
+  CHECK(.5f * v == Vec3{.5f, -1.f, 1.5f});
+}
+
 // Point & Vec3 tests
 
 TEST_CASE("Points and Vec3s may be added together") {

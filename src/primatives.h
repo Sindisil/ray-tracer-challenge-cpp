@@ -22,6 +22,13 @@ public:
     z -= v.z;
     return *this;
   }
+
+  Vec3 &operator*=(float f) {
+    x *= f;
+    y *= f;
+    z *= f;
+    return *this;
+  }
 };
 
 class Point {
@@ -58,8 +65,10 @@ inline Point operator-(Point p, Vec3 v) {
 inline Vec3 operator-(Point p1, Point p2) {
   return Vec3{p1.x - p2.x, p1.y - p2.y, p1.z - p2.z};
 }
-
 inline Vec3 operator-(Vec3 v1, Vec3 v2) { return v1 -= v2; }
 
 inline Vec3 operator-(Vec3 v) { return Vec3{-v.x, -v.y, -v.z}; }
+
+inline Vec3 operator*(Vec3 v, float f) { return v *= f; }
+inline Vec3 operator*(float f, Vec3 v) { return v *= f; }
 #endif
