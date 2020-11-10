@@ -99,6 +99,20 @@ TEST_CASE("Vec3s may be compared for equality and non-equality") {
   }
 }
 
+TEST_CASE("Subtracting two vectors") {
+  Vec3 v1{3.f, 2.f, 1.f};
+  Vec3 v2{5.f, 6.f, 7.f};
+  Vec3 res_v{-2.f, -4.f, -6.f};
+
+  CHECK(v1 - v2 == res_v);
+}
+
+TEST_CASE("Negating a vector") {
+  Vec3 v{1, -2, 3};
+
+  CHECK(-v == Vec3{-1, 2, -3});
+}
+
 // Point & Vec3 tests
 
 TEST_CASE("Points and Vec3s may be added together") {
@@ -128,18 +142,4 @@ TEST_CASE("Subtracting a vector from a point") {
   Point res_p{-2, -4, -6};
 
   CHECK(p - v == res_p);
-}
-
-TEST_CASE("Subtracting two vectors") {
-  Vec3 v1{3.f, 2.f, 1.f};
-  Vec3 v2{5.f, 6.f, 7.f};
-  Vec3 res_v{-2.f, -4.f, -6.f};
-
-  CHECK(v1 - v2 == res_v);
-}
-
-TEST_CASE("Negating a vector") {
-  Vec3 v{1, -2, 3};
-
-  CHECK(-v == Vec3{-1, 2, -3});
 }
