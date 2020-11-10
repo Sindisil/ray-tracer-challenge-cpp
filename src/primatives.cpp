@@ -1,5 +1,4 @@
-#include "point.h"
-#include "vec3.h"
+#include "primatives.h"
 
 #include "doctest.h"
 
@@ -19,6 +18,8 @@ bool operator==(Vec3 const &lhs, Vec3 const &rhs) {
   return fequals(lhs.x, rhs.x) && fequals(lhs.y, rhs.y) &&
          fequals(lhs.z, rhs.z);
 }
+
+// Point tests
 
 TEST_CASE("Creating a 3d point") {
   SUBCASE("A Point 'a' is constructed with args 4.3, -4.2, 3.1") {
@@ -64,6 +65,8 @@ TEST_CASE("Points may be compared for equality and non-equality") {
   }
 }
 
+// Vec3 tests
+
 TEST_CASE("Creating a Vec3") {
   SUBCASE("A Vector 'a' is constructed with args 4.3, -4.2, 3.1") {
     Vec3 a{4.3f, -4.2f, 3.1f};
@@ -94,4 +97,35 @@ TEST_CASE("Vec3s may be compared for equality and non-equality") {
     CHECK_FALSE(a == c);
     CHECK_FALSE(c == b);
   }
+}
+
+// Point & Vec3 tests
+
+TEST_CASE("Points and Vec3s may be added together") {
+  Point p1{3, -2, 5};
+  Vec3 v1{-2, 3, 1};
+  Vec3 v2{2, 1.2f, -6.7f};
+
+  Point res_p{1, 1, 6};
+  Vec3 res_v{0, 4.2f, -5.7f};
+
+  CHECK(p1 + v1 == res_p);
+  CHECK(v1 + p1 == res_p);
+  CHECK(v1 + v2 == res_v);
+}
+
+TEST_CASE("Subracting two points") {
+  Point p1{3, 2, 1};
+  Point p2{5, 6, 7};
+  Vec3 res_v{-2, -4, -6};
+
+  CHECK(p1 - p2 == res_v);
+}
+
+TEST_CASE("Subtracting a vector from a point") {
+  Point p{3, 2, 1};
+  Vec3 v{5, 6, 7};
+  Point res_p{-2, -4, -6};
+
+  CHECK(p - v == res_p);
 }
