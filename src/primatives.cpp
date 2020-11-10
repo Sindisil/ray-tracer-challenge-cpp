@@ -137,3 +137,9 @@ TEST_CASE("Subtracting two vectors") {
 
   CHECK(v1 - v2 == res_v);
 }
+
+TEST_CASE("Negating a vector") {
+  Vec3 v{1, -2, 3};
+
+  CHECK(-v == Vec3{-1, 2, -3});
+}

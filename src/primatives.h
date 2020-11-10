@@ -60,4 +60,6 @@ inline Vec3 operator-(Point p1, Point p2) {
 }
 
 inline Vec3 operator-(Vec3 v1, Vec3 v2) { return v1 -= v2; }
+
+inline Vec3 operator-(Vec3 v) { return Vec3{-v.x, -v.y, -v.z}; }
 #endif
