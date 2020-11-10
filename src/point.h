@@ -11,4 +11,5 @@ public:
   Point(float x, float y) : Point(x, y, 0){};
 };
 
+bool operator==(Point const &lhs, Point const &rhs);
 #endif
