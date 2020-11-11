@@ -40,7 +40,7 @@ public:
   float magnitude();
   Vec3 &normalize();
 
-  float dot(Vec3 const &v) { return (x * v.x) + (y * v.y) + (z * v.z); }
+  float dot(Vec3 v) { return (x * v.x) + (y * v.y) + (z * v.z); }
 };
 
 class Point {
@@ -87,8 +87,8 @@ inline Vec3 operator*(float f, Vec3 v) { return v *= f; }
 inline Vec3 operator/(Vec3 v, float f) { return v /= f; }
 inline Vec3 operator/(float f, Vec3 v) { return v /= f; }
 
-inline float dot(Vec3 const &v1, Vec3 const &v2) {
-  return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
+inline float dot(Vec3 v1, Vec3 v2) {
+  return v1.dot(v2);
 }
 
 #endif
