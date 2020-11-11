@@ -1,13 +1,12 @@
 #ifndef PRIMATIVES_H_GUARD
 #define PRIMATIVES_H_GUARD
 
-class Vec3 {
-public:
+struct Vec3 {
   float x;
   float y;
   float z;
 
-  Vec3(float x, float y, float z) : x(x), y(y), z(z){};
+  Vec3(float x, float y, float z) : x(x), y(y), z(z){}
 
   Vec3 &operator+=(Vec3 v) {
     x += v.x;
@@ -47,14 +46,13 @@ public:
   }
 };
 
-class Point {
-public:
+struct Point {
   float x;
   float y;
   float z;
 
-  Point(float x, float y, float z) : x(x), y(y), z(z){};
-  Point(float x, float y) : Point(x, y, 0){};
+  Point(float x, float y, float z) : x(x), y(y), z(z) {}
+  Point(float x, float y) : Point(x, y, 0) {}
 
   Point &operator+=(Vec3 v) {
     x += v.x;
@@ -94,4 +92,47 @@ inline Vec3 operator/(float f, Vec3 v) { return v /= f; }
 inline float dot(Vec3 v1, Vec3 v2) { return v1.dot(v2); }
 inline Vec3 cross(Vec3 v1, Vec3 v2) { return v1.cross(v2); }
 
+struct Color {
+  float r;
+  float g;
+  float b;
+
+  Color(float r, float g, float b) : r(r), g(g), b(b) {}
+
+  Color &operator+=(Color c) {
+    r += c.r;
+    g += c.g;
+    b += c.b;
+    return *this;
+  }
+
+  Color &operator-=(Color c) {
+    r -= c.r;
+    g -= c.r;
+    b -= c.b;
+    return *this;
+  }
+
+  Color &operator*=(float f) {
+    r *= f;
+    g *= f;
+    b *= f;
+    return *this;
+  }
+
+  Color &operator*=(Color c) {
+    r *= c.r;
+    g *= c.g;
+    b *= c.b;
+    return *this;
+  }
+};
+
+bool operator==(Color c1, Color c2);
+
+inline Color operator+(Color c1, Color c2) { return c1 += c2; }
+inline Color operator-(Color c1, Color c2) { return c1 -= c2; }
+inline Color operator*(Color c, float f) { return c *= f; }
+inline Color operator*(float f, Color c) { return c *= f; }
+inline Color operator*(Color c1, Color c2) { return c1 *= c2; }
 #endif
