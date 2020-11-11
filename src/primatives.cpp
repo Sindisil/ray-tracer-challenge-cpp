@@ -204,3 +204,8 @@ TEST_CASE("Non-zero length vectors can be normalized") {
     CHECK_EQ(normalize(Vec3{1, 2, 3}).magnitude(), doctest::Approx(1.f));
   }
 }
+
+TEST_CASE("The dot product of two vectors") {
+  CHECK(Vec3{1, 2, 3}.dot(Vec3{2, 3, 4}) == 20);
+  CHECK(dot(Vec3{1, 2, 3} , Vec3{2, 3, 4}) == 20);
+}
