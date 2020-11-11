@@ -38,6 +38,7 @@ public:
   }
 
   float magnitude();
+  Vec3 &normalize();
 };
 
 class Point {
@@ -83,6 +84,5 @@ inline Vec3 operator*(float f, Vec3 v) { return v *= f; }
 
 inline Vec3 operator/(Vec3 v, float f) { return v /= f; }
 inline Vec3 operator/(float f, Vec3 v) { return v /= f; }
-
 
 #endif

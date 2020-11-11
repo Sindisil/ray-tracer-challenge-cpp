@@ -3,6 +3,7 @@
 #include "doctest.h"
 
 #include <cmath>
+#include <stdexcept>
 
 constexpr float EPSILON{0.000001f};
 bool fequals(float const &lhs, float const &rhs) {
@@ -20,6 +21,20 @@ bool operator==(Vec3 const &lhs, Vec3 const &rhs) {
 }
 
 float Vec3::magnitude() { return sqrt(x * x + y * y + z * z); }
+
+Vec3 &Vec3::normalize() {
+  auto mag = magnitude();
+  if (mag == 0) {
+    throw std::range_error("Can't normalize Vec3 with zero magnitude");
+  }
+  x /= mag;
+  y /= mag;
+  z /= mag;
+  return *this;
+}
+
+Vec3 normalize(Vec3 v) { return v.normalize(); }
+
 
 // Point tests
 
@@ -172,4 +187,20 @@ TEST_CASE("Vectors can return their magnitude") {
   CHECK((Vec3{0, 0, 1}).magnitude() == 1);
   CHECK_EQ((Vec3{1, 2, 3}).magnitude(), doctest::Approx(sqrt(14)));
   CHECK_EQ((Vec3{-1, -2, -3}).magnitude(), doctest::Approx(sqrt(14)));
+}
+
+TEST_CASE("Non-zero length vectors can be normalized") {
+  SUBCASE("Normalizing (0, 0, 0) throws") {
+    CHECK_THROWS_AS(normalize(Vec3{0, 0, 0}), std::range_error const &);
+  }
+  SUBCASE("Normalizing (4, 0, 0) gives (1, 0, 0)") {
+    CHECK(normalize(Vec3{4, 0, 0}) == Vec3{1, 0, 0});
+  }
+  SUBCASE("Normalizing (1, 2, 3) gives (sqrt(14), sqrt(14), sqrt(14))") {
+    CHECK(normalize(Vec3{1.f, 2.f, 3.f}) ==
+          Vec3{1 / sqrt(14.f), 2 / sqrt(14.f), 3 / sqrt(14.f)});
+  }
+  SUBCASE("A normalized vector should have a magnitude of 1") {
+    CHECK_EQ(normalize(Vec3{1, 2, 3}).magnitude(), doctest::Approx(1.f));
+  }
 }
