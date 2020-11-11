@@ -64,6 +64,8 @@ struct Point {
 
 bool operator==(Point const &lhs, Point const &rhs);
 bool operator==(Vec3 const &lhs, Vec3 const &rhs);
+inline bool operator!=(Point const &lhs, Point const &rhs) { return !(lhs == rhs); }
+inline bool operator!=(Vec3 const &lhs, Vec3 const &rhs) { return !(lhs == rhs); }
 
 inline Point operator+(Point p, Vec3 v) { return p += v; }
 inline Point operator+(Vec3 v, Point p) { return p += v; }
@@ -126,9 +128,11 @@ struct Color {
     b *= c.b;
     return *this;
   }
+
 };
 
 bool operator==(Color c1, Color c2);
+inline bool operator!=(Color c1, Color c2) { return !(c1 == c2); }
 
 inline Color operator+(Color c1, Color c2) { return c1 += c2; }
 inline Color operator-(Color c1, Color c2) { return c1 -= c2; }
