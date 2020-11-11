@@ -21,14 +21,14 @@ public:
     if (x < 0 || y < 0) {
       throw std::out_of_range("Pixel coordinates must be non-negative");
     }
-    return m_pixels.at(x + y * m_width);
+    return m_pixels.at(x + static_cast<size_t>(y) * m_width);
   }
 
   void write_pixel(int x, int y, Color c) {
     if (x < 0 || y < 0) {
       throw std::out_of_range("Pixel coordinates must be non-negative");
     }
-    m_pixels.at(x + y * m_width) = c;
+    m_pixels.at(x + static_cast<size_t>(y) * m_width) = c;
   }
 
   int width() { return m_width; }
