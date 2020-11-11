@@ -41,6 +41,10 @@ public:
   Vec3 &normalize();
 
   float dot(Vec3 v) { return (x * v.x) + (y * v.y) + (z * v.z); }
+  Vec3 cross(Vec3 v) {
+    return Vec3{(y * v.z) - (z * v.y), (z * v.x) - (x * v.z),
+                (x * v.y) - (y * v.x)};
+  }
 };
 
 class Point {
@@ -87,8 +91,7 @@ inline Vec3 operator*(float f, Vec3 v) { return v *= f; }
 inline Vec3 operator/(Vec3 v, float f) { return v /= f; }
 inline Vec3 operator/(float f, Vec3 v) { return v /= f; }
 
-inline float dot(Vec3 v1, Vec3 v2) {
-  return v1.dot(v2);
-}
+inline float dot(Vec3 v1, Vec3 v2) { return v1.dot(v2); }
+inline Vec3 cross(Vec3 v1, Vec3 v2) { return v1.cross(v2); }
 
 #endif

@@ -206,6 +206,13 @@ TEST_CASE("Non-zero length vectors can be normalized") {
 }
 
 TEST_CASE("The dot product of two vectors") {
-  CHECK(Vec3{1, 2, 3}.dot(Vec3{2, 3, 4}) == 20);
   CHECK(dot(Vec3{1, 2, 3} , Vec3{2, 3, 4}) == 20);
+}
+
+TEST_CASE("The cross product of two vectors") {
+  Vec3 a{1, 2, 3};
+  Vec3 b{2, 3, 4};
+
+  CHECK(cross(a, b) == Vec3{-1, 2, -1});
+  CHECK(cross(b, a) == Vec3{1, -2, 1});
 }
