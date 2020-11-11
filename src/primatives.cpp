@@ -2,7 +2,7 @@
 
 #include "doctest.h"
 
-#include <cstdlib>
+#include <cmath>
 
 constexpr float EPSILON{0.000001f};
 bool fequals(float const &lhs, float const &rhs) {
@@ -18,6 +18,8 @@ bool operator==(Vec3 const &lhs, Vec3 const &rhs) {
   return fequals(lhs.x, rhs.x) && fequals(lhs.y, rhs.y) &&
          fequals(lhs.z, rhs.z);
 }
+
+float Vec3::magnitude() { return sqrt(x * x + y * y + z * z); }
 
 // Point tests
 
@@ -162,4 +164,12 @@ TEST_CASE("Subtracting a vector from a point") {
   Point res_p{-2, -4, -6};
 
   CHECK(p - v == res_p);
+}
+
+TEST_CASE("Vectors can return their magnitude") {
+  CHECK((Vec3{1, 0, 0}).magnitude() == 1);
+  CHECK((Vec3{0, 1, 0}).magnitude() == 1);
+  CHECK((Vec3{0, 0, 1}).magnitude() == 1);
+  CHECK_EQ((Vec3{1, 2, 3}).magnitude(), doctest::Approx(sqrt(14)));
+  CHECK_EQ((Vec3{-1, -2, -3}).magnitude(), doctest::Approx(sqrt(14)));
 }

@@ -36,6 +36,8 @@ public:
     z /= f;
     return *this;
   }
+
+  float magnitude();
 };
 
 class Point {
