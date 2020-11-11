@@ -127,6 +127,12 @@ TEST_CASE("Multiplying a vector by a fraction") {
   CHECK(.5f * v == Vec3{.5f, -1.f, 1.5f});
 }
 
+TEST_CASE("Dividing a vector by a scalar") {
+  Vec3 v{1, -2, 3};
+
+  CHECK(v / 2 == Vec3{0.5f, -1.f, 1.5f});
+}
+
 // Point & Vec3 tests
 
 TEST_CASE("Points and Vec3s may be added together") {
