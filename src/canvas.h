@@ -5,6 +5,7 @@
 
 #include <stdexcept>
 #include <vector>
+#include <string>
 
 class Canvas {
 public:
@@ -33,6 +34,8 @@ public:
 
   int width() { return m_width; }
   int height() { return m_height; }
+
+  std::string to_ppm();
 
 private:
   int m_width;
