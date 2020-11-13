@@ -5,7 +5,7 @@
 #include <cmath>
 #include <stdexcept>
 
-constexpr float EPSILON{0.000001f};
+constexpr float EPSILON{0.00001f};
 bool fequals(float const &lhs, float const &rhs) {
   return fabs(lhs - rhs) < EPSILON;
 }
