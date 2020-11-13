@@ -3,6 +3,12 @@ target_compile_features(tests PRIVATE cxx_std_17)
 set_target_properties(tests PROPERTIES CXX_EXTENSIONS OFF)
 target_include_directories(tests PRIVATE ../extern/doctest)
 
+add_executable(projectile projectile_main.cpp  primatives.cpp)
+target_compile_features(projectile PRIVATE cxx_std_17)
+set_target_properties(projectile PROPERTIES CXX_EXTENSIONS OFF)
+target_include_directories(projectile PRIVATE ../extern/doctest)
+target_compile_definitions(projectile PRIVATE DOCTEST_CONFIG_DISABLE)
+
 if (MSVC)
     # warning level 4 and all warnings as errors
     target_compile_options(tests PRIVATE /W4 /WX)
