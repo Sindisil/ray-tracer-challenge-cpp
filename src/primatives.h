@@ -1,12 +1,14 @@
 #ifndef PRIMATIVES_H_GUARD
 #define PRIMATIVES_H_GUARD
 
+#include <ostream>
+
 struct Vec3 {
   float x;
   float y;
   float z;
 
-  Vec3(float x, float y, float z) : x(x), y(y), z(z){}
+  explicit Vec3(float x, float y, float z) : x(x), y(y), z(z){}
 
   Vec3 &operator+=(Vec3 v) {
     x += v.x;
@@ -51,8 +53,8 @@ struct Point {
   float y;
   float z;
 
-  Point(float x, float y, float z) : x(x), y(y), z(z) {}
-  Point(float x, float y) : Point(x, y, 0) {}
+  explicit Point(float x, float y, float z) : x(x), y(y), z(z) {}
+  explicit Point(float x, float y) : Point(x, y, 0) {}
 
   Point &operator+=(Vec3 v) {
     x += v.x;
@@ -93,6 +95,18 @@ inline Vec3 operator/(float f, Vec3 v) { return v /= f; }
 
 inline float dot(Vec3 v1, Vec3 v2) { return v1.dot(v2); }
 inline Vec3 cross(Vec3 v1, Vec3 v2) { return v1.cross(v2); }
+
+inline std::ostream &operator<<(std::ostream &os, Vec3 const &val) {
+  os << "(" << val.x << ", " << val.y << ", " << val.z << ")";
+  return os;
+}
+
+inline std::ostream &operator<<(std::ostream &os, Point const &val) {
+  os << "(" << val.x << ", " << val.y << ", " << val.z << ")";
+  return os;
+}
+
+
 
 struct Color {
   float r;
