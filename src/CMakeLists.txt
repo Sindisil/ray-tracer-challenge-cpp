@@ -9,6 +9,12 @@ set_target_properties(projectile PROPERTIES CXX_EXTENSIONS OFF)
 target_include_directories(projectile PRIVATE ../extern/doctest)
 target_compile_definitions(projectile PRIVATE DOCTEST_CONFIG_DISABLE)
 
+add_executable(plot_projectile plot_projectile.cpp  primatives.cpp canvas.cpp)
+target_compile_features(plot_projectile PRIVATE cxx_std_17)
+set_target_properties(plot_projectile PROPERTIES CXX_EXTENSIONS OFF)
+target_include_directories(plot_projectile PRIVATE ../extern/doctest)
+target_compile_definitions(plot_projectile PRIVATE DOCTEST_CONFIG_DISABLE)
+
 if (MSVC)
     # warning level 4 and all warnings as errors
     target_compile_options(tests PRIVATE /W4 /WX)
