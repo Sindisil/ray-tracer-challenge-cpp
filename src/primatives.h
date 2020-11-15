@@ -151,6 +151,11 @@ struct Color {
   }
 };
 
+inline std::ostream &operator<<(std::ostream &os, Color const &val) {
+  os << "(r=" << val.r << ", g=" << val.g << ", b=" << val.b << ")";
+  return os;
+}
+
 bool operator==(Color c1, Color c2);
 inline bool operator!=(Color c1, Color c2) { return !(c1 == c2); }
 
