@@ -9,10 +9,10 @@
 
 namespace raytrace {
 
-template <typename T>
-inline bool about_equal(
-    T lhs, T rhs, T max_rel_diff = std::numeric_limits<T>::epsilon(),
-    typename std::enable_if<std::is_floating_point<T>::value, T>::type * = 0) {
+template <typename T, typename std::enable_if_t<
+                          std::is_floating_point<T>::value, T> * = nullptr>
+inline bool about_equal(T lhs, T rhs,
+                        T max_rel_diff = std::numeric_limits<T>::epsilon()) {
   T diff = std::abs(lhs - rhs);
   lhs = std::abs(lhs);
   rhs = std::abs(rhs);
