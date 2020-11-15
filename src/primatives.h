@@ -169,8 +169,8 @@ template <size_t R, size_t C> class Matrix {
 public:
   Matrix(std::initializer_list<float> vals) {
     int i = 0;
-    for (auto vi = std::begin(vals);
-         vi != std::end(vals) && i < m_cells.size(); ++vi) {
+    for (auto vi = std::begin(vals); vi != std::end(vals) && i < m_cells.size();
+         ++vi) {
       m_cells[i] = *vi;
       ++i;
     }
@@ -183,7 +183,7 @@ public:
   }
 
 private:
-  std::array<float, R*C> m_cells{0};
+  std::array<float, R * C> m_cells{0};
 };
 
 template <size_t R, size_t C>
