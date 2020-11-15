@@ -4,7 +4,7 @@
 #include <initializer_list>
 #include <ostream>
 #include <stdexcept>
-#include <vector>
+#include <array>
 
 namespace raytrace {
 
@@ -160,11 +160,17 @@ inline Color operator*(Color c, float f) { return c *= f; }
 inline Color operator*(float f, Color c) { return c *= f; }
 inline Color operator*(Color c1, Color c2) { return c1 *= c2; }
 
-template <typename T, size_t R, size_t C> class Matrix {
+template <size_t R, size_t C> class Matrix {
 public:
-  Matrix(std::initializer_list<T> vals) : m_cells(vals) {}
-
-  T &operator()(int r, int c) {
+  Matrix(std::initializer_list<float> vals) {
+    int i = 0;
+    for (auto vi = std::begin(vals);
+         vi != std::end(vals) && i < m_cells.size(); ++vi) {
+      m_cells[i] = *vi;
+      ++i;
+    }
+  }
+  float &operator()(int r, int c) {
     if (r < 0 || c < 0 || r >= R || c >= C) {
       throw std::out_of_range("index out of range");
     }
@@ -172,7 +178,7 @@ public:
   }
 
 private:
-  std::vector<T> m_cells{R * C};
+  std::array<float, R*C> m_cells{R * C};
 };
 
 } // namespace raytrace

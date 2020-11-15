@@ -255,7 +255,7 @@ TEST_CASE("Multiplying colors") {
 // Matrix tests
 
 TEST_CASE("Constructing and inspecting a 4x4 matrix") {
-  Matrix<float, 4, 4> m{1.f, 2.f,  3.f,  4.f,  5.5f,  6.5f,  7.5f,  8.5f,
+  Matrix<4, 4> m{1.f, 2.f,  3.f,  4.f,  5.5f,  6.5f,  7.5f,  8.5f,
                         9.f, 10.f, 11.f, 12.f, 13.5f, 14.5f, 15.5f, 16.5f};
   CHECK(m(0, 0) == 1);
   CHECK(m(0, 3) == 4);
@@ -266,7 +266,7 @@ TEST_CASE("Constructing and inspecting a 4x4 matrix") {
 };
 
 TEST_CASE("A 2x2 matrix ought to be representable") {
-  Matrix<float, 2, 2> m{-3, 5, 1, -2};
+  Matrix<2, 2> m{-3, 5, 1, -2};
   CHECK(m(0, 0) == -3);
   CHECK(m(0, 1) == 5);
   CHECK(m(1, 0) == 1);
@@ -274,9 +274,11 @@ TEST_CASE("A 2x2 matrix ought to be representable") {
 };
 
 TEST_CASE("A 3x3 matrix ought to be representable") {
-  Matrix<float, 3, 3> m{-3, 5, 0, 1, -2, -7, 0, 1, 1};
+  Matrix<3, 3> m{-3, 5, 0, 1, -2, -7, 0, 1, 1};
   CHECK(m(0, 0) == -3);
   CHECK(m(1, 1) == -2);
   CHECK(m(2, 2) == 1);
 };
+
+
 } // namespace raytrace
