@@ -41,6 +41,19 @@ bool operator==(Color c1, Color c2) {
   return fequals(c1.r, c2.r) && fequals(c1.r, c2.r) && fequals(c1.r, c2.r);
 }
 
+template <size_t R, size_t C>
+bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs) {
+  for (int r = 0; r < R; ++r) {
+    for (int c = 0; c < C; ++c) {
+      if (!fequals(lhs(r, c), rhs(r, c))) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+  
+
 // Point tests
 
 TEST_CASE("Creating a 3d point") {
@@ -280,5 +293,16 @@ TEST_CASE("A 3x3 matrix ought to be representable") {
   CHECK(m(2, 2) == 1);
 };
 
+TEST_CASE("Matrix equality with identical matrices") {
+  Matrix<4, 4> a{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
+  Matrix<4, 4> b{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
+  CHECK(a == b);
+};
+
+TEST_CASE("Matrix equality with identical matrices") {
+  Matrix<4, 4> a{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
+  Matrix<4, 4> b{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2.1f};
+  CHECK(a != b);
+};
 
 } // namespace raytrace

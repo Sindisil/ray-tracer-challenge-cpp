@@ -181,5 +181,13 @@ private:
   std::array<float, R*C> m_cells{0};
 };
 
+template <size_t R, size_t C>
+bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs);
+
+template <size_t R, size_t C>
+inline bool operator!=(Matrix<R, C> lhs, Matrix<R, C> rhs) {
+  return !(lhs == rhs);
+};
+
 } // namespace raytrace
 #endif
