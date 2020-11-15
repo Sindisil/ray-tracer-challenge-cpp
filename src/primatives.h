@@ -178,7 +178,7 @@ public:
   }
 
 private:
-  std::array<float, R*C> m_cells{R * C};
+  std::array<float, R*C> m_cells{0};
 };
 
 } // namespace raytrace
