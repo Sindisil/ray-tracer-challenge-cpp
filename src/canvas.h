@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 
+namespace raytrace {
 class Canvas {
 public:
   Canvas(int width, int height) : m_width(width), m_height(height) {
@@ -41,6 +42,6 @@ private:
   int m_width;
   int m_height;
   std::vector<Color> m_pixels;
-
 };
+} // namespace raytrace
 #endif // ! CANVAS_H

@@ -4,6 +4,11 @@
 #include <algorithm>
 #include <iostream>
 
+using raytrace::Point;
+using raytrace::Vec3;
+using raytrace::Canvas;
+using raytrace::Color;
+
 struct Projectile {
   Point position;
   Vec3 velocity;

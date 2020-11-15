@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 
+namespace raytrace {
 std::string Canvas::to_ppm() {
   constexpr auto max_ppm_line_len = 70;
   std::ostringstream ppm;
@@ -138,3 +139,4 @@ TEST_CASE("PPM files are terminated by a newline") {
   Canvas c{5, 3};
   CHECK(c.to_ppm().back() == '\n');
 };
+} // namespace raytrace

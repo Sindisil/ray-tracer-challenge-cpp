@@ -3,6 +3,9 @@
 #include <iostream>
 #include <algorithm>
 
+using raytrace::Point;
+using raytrace::Vec3;
+
 struct Projectile {
   Point position;
   Vec3 velocity;

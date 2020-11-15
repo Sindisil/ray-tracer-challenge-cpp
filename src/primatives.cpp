@@ -5,6 +5,8 @@
 #include <cmath>
 #include <stdexcept>
 
+namespace raytrace {
+
 constexpr float EPSILON{0.00001f};
 bool fequals(float const &lhs, float const &rhs) {
   return fabs(lhs - rhs) < EPSILON;
@@ -38,9 +40,6 @@ Vec3 normalize(Vec3 v) { return v.normalize(); }
 bool operator==(Color c1, Color c2) {
   return fequals(c1.r, c2.r) && fequals(c1.r, c2.r) && fequals(c1.r, c2.r);
 }
-
-
-
 
 // Point tests
 
@@ -212,7 +211,7 @@ TEST_CASE("Non-zero length vectors can be normalized") {
 }
 
 TEST_CASE("The dot product of two vectors") {
-  CHECK(dot(Vec3{1, 2, 3} , Vec3{2, 3, 4}) == 20);
+  CHECK(dot(Vec3{1, 2, 3}, Vec3{2, 3, 4}) == 20);
 }
 
 TEST_CASE("The cross product of two vectors") {
@@ -252,3 +251,4 @@ TEST_CASE("Multiplying colors") {
   Color c2{.9f, 1.f, .1f};
   CHECK(c1 * c2 == Color{.9f, .2f, .4f});
 }
+} // namespace raytrace

@@ -1,8 +1,8 @@
 #ifndef PRIMATIVES_H_GUARD
 #define PRIMATIVES_H_GUARD
-
 #include <ostream>
 
+namespace raytrace {
 struct Vec3 {
   float x;
   float y;
@@ -153,4 +153,6 @@ inline Color operator-(Color c1, Color c2) { return c1 -= c2; }
 inline Color operator*(Color c, float f) { return c *= f; }
 inline Color operator*(float f, Color c) { return c *= f; }
 inline Color operator*(Color c1, Color c2) { return c1 *= c2; }
+
+}
 #endif
