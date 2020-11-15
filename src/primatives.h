@@ -1,14 +1,19 @@
 #ifndef PRIMATIVES_H_GUARD
 #define PRIMATIVES_H_GUARD
+
+#include <initializer_list>
 #include <ostream>
+#include <stdexcept>
+#include <vector>
 
 namespace raytrace {
+
 struct Vec3 {
   float x;
   float y;
   float z;
 
-  explicit Vec3(float x, float y, float z) : x(x), y(y), z(z){}
+  explicit Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 
   Vec3 &operator+=(Vec3 v) {
     x += v.x;
@@ -66,8 +71,12 @@ struct Point {
 
 bool operator==(Point const &lhs, Point const &rhs);
 bool operator==(Vec3 const &lhs, Vec3 const &rhs);
-inline bool operator!=(Point const &lhs, Point const &rhs) { return !(lhs == rhs); }
-inline bool operator!=(Vec3 const &lhs, Vec3 const &rhs) { return !(lhs == rhs); }
+inline bool operator!=(Point const &lhs, Point const &rhs) {
+  return !(lhs == rhs);
+}
+inline bool operator!=(Vec3 const &lhs, Vec3 const &rhs) {
+  return !(lhs == rhs);
+}
 
 inline Point operator+(Point p, Vec3 v) { return p += v; }
 inline Point operator+(Vec3 v, Point p) { return p += v; }
@@ -106,8 +115,6 @@ inline std::ostream &operator<<(std::ostream &os, Point const &val) {
   return os;
 }
 
-
-
 struct Color {
   float r;
   float g;
@@ -142,7 +149,6 @@ struct Color {
     b *= c.b;
     return *this;
   }
-
 };
 
 bool operator==(Color c1, Color c2);
@@ -154,5 +160,20 @@ inline Color operator*(Color c, float f) { return c *= f; }
 inline Color operator*(float f, Color c) { return c *= f; }
 inline Color operator*(Color c1, Color c2) { return c1 *= c2; }
 
-}
+template <typename T, size_t R, size_t C> class Matrix {
+public:
+  Matrix(std::initializer_list<T> vals) : m_cells(vals) {}
+
+  T &operator()(int r, int c) {
+    if (r < 0 || c < 0 || r >= R || c >= C) {
+      throw std::out_of_range("index out of range");
+    }
+    return m_cells.at(r * C + c);
+  }
+
+private:
+  std::vector<T> m_cells{R * C};
+};
+
+} // namespace raytrace
 #endif
