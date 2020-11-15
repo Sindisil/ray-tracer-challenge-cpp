@@ -7,19 +7,14 @@
 
 namespace raytrace {
 
-constexpr float EPSILON{0.00001f};
-bool fequals(float const &lhs, float const &rhs) {
-  return fabs(lhs - rhs) < EPSILON;
-}
-
 bool operator==(Point const &lhs, Point const &rhs) {
-  return fequals(lhs.x, rhs.x) && fequals(lhs.y, rhs.y) &&
-         fequals(lhs.z, rhs.z);
+  return about_equal(lhs.x, rhs.x) && about_equal(lhs.y, rhs.y) &&
+         about_equal(lhs.z, rhs.z);
 }
 
 bool operator==(Vec3 const &lhs, Vec3 const &rhs) {
-  return fequals(lhs.x, rhs.x) && fequals(lhs.y, rhs.y) &&
-         fequals(lhs.z, rhs.z);
+  return about_equal(lhs.x, rhs.x) && about_equal(lhs.y, rhs.y) &&
+         about_equal(lhs.z, rhs.z);
 }
 
 float Vec3::magnitude() { return sqrt(x * x + y * y + z * z); }
@@ -38,21 +33,21 @@ Vec3 &Vec3::normalize() {
 Vec3 normalize(Vec3 v) { return v.normalize(); }
 
 bool operator==(Color c1, Color c2) {
-  return fequals(c1.r, c2.r) && fequals(c1.r, c2.r) && fequals(c1.r, c2.r);
+  return about_equal(c1.r, c2.r) && about_equal(c1.r, c2.r) &&
+         about_equal(c1.r, c2.r);
 }
 
 template <size_t R, size_t C>
 bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs) {
   for (int r = 0; r < R; ++r) {
     for (int c = 0; c < C; ++c) {
-      if (!fequals(lhs(r, c), rhs(r, c))) {
+      if (!about_equal(lhs(r, c), rhs(r, c))) {
         return false;
       }
     }
   }
   return true;
 }
-  
 
 // Point tests
 
@@ -269,7 +264,7 @@ TEST_CASE("Multiplying colors") {
 
 TEST_CASE("Constructing and inspecting a 4x4 matrix") {
   Matrix<4, 4> m{1.f, 2.f,  3.f,  4.f,  5.5f,  6.5f,  7.5f,  8.5f,
-                        9.f, 10.f, 11.f, 12.f, 13.5f, 14.5f, 15.5f, 16.5f};
+                 9.f, 10.f, 11.f, 12.f, 13.5f, 14.5f, 15.5f, 16.5f};
   CHECK(m(0, 0) == 1);
   CHECK(m(0, 3) == 4);
   CHECK(m(1, 0) == doctest::Approx(5.5f));

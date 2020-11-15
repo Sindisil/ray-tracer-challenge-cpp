@@ -1,12 +1,23 @@
 #ifndef PRIMATIVES_H_GUARD
 #define PRIMATIVES_H_GUARD
 
+#include <array>
 #include <initializer_list>
+#include <limits>
 #include <ostream>
 #include <stdexcept>
-#include <array>
 
 namespace raytrace {
+
+template <typename T>
+inline bool about_equal(
+    T lhs, T rhs, T max_rel_diff = std::numeric_limits<T>::epsilon(),
+    typename std::enable_if<std::is_floating_point<T>::value, T>::type * = 0) {
+  T diff = std::abs(lhs - rhs);
+  lhs = std::abs(lhs);
+  rhs = std::abs(rhs);
+  return diff <= (std::max(lhs, rhs) * max_rel_diff);
+}
 
 struct Vec3 {
   float x;
