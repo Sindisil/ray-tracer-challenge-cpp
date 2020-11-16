@@ -281,7 +281,7 @@ TEST_CASE("Matrix equality with identical matrices") {
   CHECK(a == b);
 };
 
-TEST_CASE("Matrix equality with identical matrices") {
+TEST_CASE("Matrix equality with different matrices") {
   Matrix<4, 4> a{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
   Matrix<4, 4> b{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2.1f};
   CHECK(a != b);
