@@ -54,8 +54,18 @@ struct Vec3 {
     return *this;
   }
 
-  float magnitude();
-  Vec3 &normalize();
+  Vec3 &normalize() {
+    auto mag = magnitude();
+    if (mag == 0) {
+      throw std::range_error("Can't normalize Vec3 with zero magnitude");
+    }
+    x /= mag;
+    y /= mag;
+    z /= mag;
+    return *this;
+  }
+
+  float magnitude() { return sqrt(x * x + y * y + z * z); }
 
   float dot(Vec3 v) { return (x * v.x) + (y * v.y) + (z * v.z); }
   Vec3 cross(Vec3 v) {
@@ -80,8 +90,16 @@ struct Point {
   }
 };
 
-bool operator==(Point const &lhs, Point const &rhs);
-bool operator==(Vec3 const &lhs, Vec3 const &rhs);
+inline bool operator==(Point const &lhs, Point const &rhs) {
+  return about_equal(lhs.x, rhs.x) && about_equal(lhs.y, rhs.y) &&
+         about_equal(lhs.z, rhs.z);
+}
+
+inline bool operator==(Vec3 const &lhs, Vec3 const &rhs) {
+  return about_equal(lhs.x, rhs.x) && about_equal(lhs.y, rhs.y) &&
+         about_equal(lhs.z, rhs.z);
+}
+
 inline bool operator!=(Point const &lhs, Point const &rhs) {
   return !(lhs == rhs);
 }
@@ -113,18 +131,12 @@ inline Vec3 operator*(float f, Vec3 v) { return v *= f; }
 inline Vec3 operator/(Vec3 v, float f) { return v /= f; }
 inline Vec3 operator/(float f, Vec3 v) { return v /= f; }
 
+inline Vec3 normalize(Vec3 v) { return v.normalize(); }
 inline float dot(Vec3 v1, Vec3 v2) { return v1.dot(v2); }
 inline Vec3 cross(Vec3 v1, Vec3 v2) { return v1.cross(v2); }
 
-inline std::ostream &operator<<(std::ostream &os, Vec3 const &val) {
-  os << "(" << val.x << ", " << val.y << ", " << val.z << ")";
-  return os;
-}
-
-inline std::ostream &operator<<(std::ostream &os, Point const &val) {
-  os << "(" << val.x << ", " << val.y << ", " << val.z << ")";
-  return os;
-}
+std::ostream &operator<<(std::ostream &os, Vec3 const &val);
+std::ostream &operator<<(std::ostream &os, Point const &val);
 
 struct Color {
   float r;
@@ -162,10 +174,7 @@ struct Color {
   }
 };
 
-inline std::ostream &operator<<(std::ostream &os, Color const &val) {
-  os << "(r=" << val.r << ", g=" << val.g << ", b=" << val.b << ")";
-  return os;
-}
+std::ostream &operator<<(std::ostream &os, Color const &val);
 
 bool operator==(Color c1, Color c2);
 inline bool operator!=(Color c1, Color c2) { return !(c1 == c2); }

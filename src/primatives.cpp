@@ -7,34 +7,24 @@
 
 namespace raytrace {
 
-bool operator==(Point const &lhs, Point const &rhs) {
-  return about_equal(lhs.x, rhs.x) && about_equal(lhs.y, rhs.y) &&
-         about_equal(lhs.z, rhs.z);
+std::ostream &operator<<(std::ostream &os, Vec3 const &val) {
+  os << "(" << val.x << ", " << val.y << ", " << val.z << ")";
+  return os;
 }
 
-bool operator==(Vec3 const &lhs, Vec3 const &rhs) {
-  return about_equal(lhs.x, rhs.x) && about_equal(lhs.y, rhs.y) &&
-         about_equal(lhs.z, rhs.z);
+std::ostream &operator<<(std::ostream &os, Point const &val) {
+  os << "(" << val.x << ", " << val.y << ", " << val.z << ")";
+  return os;
 }
-
-float Vec3::magnitude() { return sqrt(x * x + y * y + z * z); }
-
-Vec3 &Vec3::normalize() {
-  auto mag = magnitude();
-  if (mag == 0) {
-    throw std::range_error("Can't normalize Vec3 with zero magnitude");
-  }
-  x /= mag;
-  y /= mag;
-  z /= mag;
-  return *this;
-}
-
-Vec3 normalize(Vec3 v) { return v.normalize(); }
 
 bool operator==(Color c1, Color c2) {
   return about_equal(c1.r, c2.r) && about_equal(c1.r, c2.r) &&
          about_equal(c1.r, c2.r);
+}
+
+std::ostream &operator<<(std::ostream &os, Color const &val) {
+  os << "(r=" << val.r << ", g=" << val.g << ", b=" << val.b << ")";
+  return os;
 }
 
 template <size_t R, size_t C>
