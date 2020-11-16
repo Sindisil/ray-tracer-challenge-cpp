@@ -57,6 +57,10 @@ Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs);
 
 template <size_t N> Matrix<N, N> identity_matrix();
 
+inline float determinant(Matrix<2, 2> m) {
+  return (m(0, 0) * m(1, 1)) - (m(0, 1) * m(1, 0));
+}
+
 struct Vec3 {
   float x;
   float y;

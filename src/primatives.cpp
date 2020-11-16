@@ -395,4 +395,10 @@ TEST_CASE("Transposing the identity matrix") {
 
   CHECK(m.transpose() == identity_matrix<4>());
 };
+
+TEST_CASE("Calculating the determinant of a 2x2 matrix") {
+  Matrix<2, 2> a{1, 5, -3, 2};
+
+  CHECK(determinant(a) == 17);
+};
 } // namespace raytrace
