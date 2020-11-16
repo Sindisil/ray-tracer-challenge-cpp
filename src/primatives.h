@@ -40,6 +40,8 @@ public:
 
   Matrix<R, C> transpose();
 
+  Matrix<R - 1, C - 1> submatrix(int r, int c);
+
 private:
   std::array<float, R * C> m_cells{0};
 };

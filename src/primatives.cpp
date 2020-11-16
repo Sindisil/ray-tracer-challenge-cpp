@@ -95,6 +95,27 @@ template <size_t R, size_t C> Matrix<R, C> Matrix<R, C>::transpose() {
   return t;
 }
 
+template <size_t R, size_t C>
+Matrix<R - 1, C - 1> Matrix<R, C>::submatrix(int r_skip, int c_skip) {
+  Matrix<R - 1, C - 1> s{};
+  int srow = 0;
+  int scol = 0;
+
+  for (int r = 0; r < R; ++r) {
+    if (r != r_skip) {
+      for (int c = 0; c < C; ++c) {
+        if (c != c_skip) {
+          s(srow, scol) = m_cells[r * C + c];
+          ++scol;
+        }
+      }
+      ++srow;
+      scol = 0;
+    }
+  }
+  return s;
+}
+
 // Point tests
 
 TEST_CASE("Creating a 3d point") {
@@ -401,4 +422,16 @@ TEST_CASE("Calculating the determinant of a 2x2 matrix") {
 
   CHECK(determinant(a) == 17);
 };
+
+TEST_CASE("A submatrix of a 3x3 matrix is a 2x3 matrix") {
+  Matrix<3, 3> a{1, 5, 0, -3, 2, 7, 0, 6, -3};
+
+  CHECK(a.submatrix(0, 2) == Matrix<2, 2>{-3, 2, 0, 6});
+};
+
+TEST_CASE("A submatrix of a 4x4 matrix is a 3x3 matrix") {
+  Matrix<4, 4> a{-6, 1, 1, 6, -8, 5, 8, 6, -1, 0, 8, 2, -7, 1, -1, 1};
+  CHECK(a.submatrix(2, 1) == Matrix<3, 3>{-6, 1, 6, -8, 8, 6, -7, -1, 1});
+};
+
 } // namespace raytrace

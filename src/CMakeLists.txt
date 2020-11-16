@@ -17,7 +17,7 @@ target_compile_definitions(plot_projectile PRIVATE DOCTEST_CONFIG_DISABLE)
 
 if (MSVC)
     # warning level 4 and all warnings as errors
-    target_compile_options(tests PRIVATE /W4 /WX)
+    target_compile_options(tests PRIVATE /W4)
 else()
     # lots of warnings and all warnings as errors
     target_compile_options(tests -Wall -Wextra -pedantic)
