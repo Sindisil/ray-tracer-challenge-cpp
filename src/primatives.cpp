@@ -2,9 +2,6 @@
 
 #include "doctest.h"
 
-#include <cmath>
-#include <stdexcept>
-
 namespace raytrace {
 
 std::ostream &operator<<(std::ostream &os, Vec3 const &val) {

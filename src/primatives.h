@@ -1,6 +1,7 @@
 #ifndef PRIMATIVES_H_GUARD
 #define PRIMATIVES_H_GUARD
 
+#include <algorithm>
 #include <array>
 #include <initializer_list>
 #include <limits>
