@@ -20,12 +20,47 @@ inline bool about_equal(T lhs, T rhs,
   return diff <= (std::max(lhs, rhs) * max_rel_diff);
 }
 
+template <size_t R, size_t C> class Matrix {
+public:
+  Matrix(std::initializer_list<float> vals) {
+    int i = 0;
+    for (auto vi = std::begin(vals); vi != std::end(vals) && i < m_cells.size();
+         ++vi) {
+      m_cells[i] = *vi;
+      ++i;
+    }
+  }
+
+  float &operator()(int r, int c) {
+    if (r < 0 || c < 0 || r >= R || c >= C) {
+      throw std::out_of_range("index out of range");
+    }
+    return m_cells.at(r * C + c);
+  }
+
+private:
+  std::array<float, R * C> m_cells{0};
+};
+
+template <size_t R, size_t C>
+bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs);
+
+template <size_t R, size_t C>
+inline bool operator!=(Matrix<R, C> lhs, Matrix<R, C> rhs) {
+  return !(lhs == rhs);
+};
+
+template <size_t R, size_t C, size_t N>
+Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs);
+
 struct Vec3 {
   float x;
   float y;
   float z;
 
-  explicit Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
+  Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
+
+  // explicit operator Matrix<4, 1>() { return Matrix<4, 1>{x, y, z, 0}; }
 
   Vec3 &operator+=(Vec3 v) {
     x += v.x;
@@ -80,8 +115,10 @@ struct Point {
   float y;
   float z;
 
-  explicit Point(float x, float y, float z) : x(x), y(y), z(z) {}
-  explicit Point(float x, float y) : Point(x, y, 0) {}
+  Point(float x, float y, float z) : x(x), y(y), z(z) {}
+  Point(float x, float y) : Point(x, y, 0) {}
+
+  // explicit operator Matrix<4, 1>() { return Matrix<4, 1>{x, y, z, 1}; }
 
   Point &operator+=(Vec3 v) {
     x += v.x;
@@ -186,34 +223,8 @@ inline Color operator*(Color c, float f) { return c *= f; }
 inline Color operator*(float f, Color c) { return c *= f; }
 inline Color operator*(Color c1, Color c2) { return c1 *= c2; }
 
-template <size_t R, size_t C> class Matrix {
-public:
-  Matrix(std::initializer_list<float> vals) {
-    int i = 0;
-    for (auto vi = std::begin(vals); vi != std::end(vals) && i < m_cells.size();
-         ++vi) {
-      m_cells[i] = *vi;
-      ++i;
-    }
-  }
-  float &operator()(int r, int c) {
-    if (r < 0 || c < 0 || r >= R || c >= C) {
-      throw std::out_of_range("index out of range");
-    }
-    return m_cells.at(r * C + c);
-  }
-
-private:
-  std::array<float, R * C> m_cells{0};
-};
-
-template <size_t R, size_t C>
-bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs);
-
-template <size_t R, size_t C>
-inline bool operator!=(Matrix<R, C> lhs, Matrix<R, C> rhs) {
-  return !(lhs == rhs);
-};
+template <size_t R, size_t C> Point operator*(Matrix<R, C> lhs, Point p);
+template <size_t R, size_t C> Vec3 operator*(Matrix<R, C> lhs, Vec3 v);
 
 } // namespace raytrace
 #endif

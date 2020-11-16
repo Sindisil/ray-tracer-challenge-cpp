@@ -2,6 +2,8 @@
 
 #include "doctest.h"
 
+#include <iostream>
+
 namespace raytrace {
 
 std::ostream &operator<<(std::ostream &os, Vec3 const &val) {
@@ -34,6 +36,45 @@ bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs) {
     }
   }
   return true;
+}
+
+template <size_t R, size_t C, size_t N>
+Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs) {
+  Matrix<R, C> res{};
+
+  for (int r = 0; r < static_cast<int>(R); ++r) {
+    for (int c = 0; c < static_cast<int>(C); ++c) {
+      for (int n = 0; n < static_cast<int>(N); ++n) {
+        res(r, c) += lhs(r, n) * rhs(n, c);
+      }
+    }
+  }
+  return res;
+}
+
+template <size_t R, size_t C> Point operator*(Matrix<R, C> lhs, Point p) {
+  Matrix<4, 1> rhs{p.x, p.y, p.z, 0};
+  Matrix<4, 1> prod = lhs * rhs;
+  return Point{prod(0, 0), prod(1, 0), prod(2, 0)};
+}
+
+template <size_t R, size_t C> Vec3 operator*(Matrix<R, C> lhs, Vec3 v) {
+  Matrix<4, 1> rhs{v.x, v.y, v.z, 1};
+  Matrix<4, 1> prod = lhs * rhs;
+  return Vec3{prod(0, 0), prod(1, 0), prod(2, 0)};
+}
+
+template <size_t R, size_t C>
+std::ostream &operator<<(std::ostream &os, Matrix<R, C> const &val) {
+  Matrix<R, C> &m = const_cast<Matrix<R, C> &>(val);
+  for (int r = 0; r < static_cast<int>(R); ++r) {
+    os << (r == 0 ? "" : ", ") << "(";
+    for (int c = 0; c < static_cast<int>(C); ++c) {
+      os << (c == 0 ? "" : ", ") << m(r, c);
+    }
+    os << ")";
+  }
+  return os;
 }
 
 // Point tests
@@ -285,6 +326,29 @@ TEST_CASE("Matrix equality with different matrices") {
   Matrix<4, 4> a{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
   Matrix<4, 4> b{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2.1f};
   CHECK(a != b);
+};
+
+TEST_CASE("Multiplying two matrices") {
+  Matrix<4, 4> a{1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2};
+  Matrix<4, 4> b{-2, 1, 2, 3, 3, 2, 1, -1, 4, 3, 6, 5, 1, 2, 7, 8};
+  Matrix<4, 4> c{20, 22, 50,  48,  44, 54, 114, 108,
+                 40, 58, 110, 102, 16, 26, 46,  42};
+
+  CHECK(a * b == c);
+};
+
+TEST_CASE("Matrix multiplied by a Vector") {
+  Matrix<4, 4> a{1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1};
+  Vec3 v{1, 2, 3};
+
+  CHECK(a * v == Vec3{18, 24, 33});
+};
+
+TEST_CASE("Matrix multiplied by a Point") {
+  Matrix<4, 4> a{1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1};
+  Point p{1, 2, 3};
+
+  CHECK(a * p == Point{14, 22, 32});
 };
 
 } // namespace raytrace
