@@ -38,6 +38,8 @@ public:
     return m_cells.at(r * C + c);
   }
 
+  Matrix<R, C> transpose();
+
 private:
   std::array<float, R * C> m_cells{0};
 };

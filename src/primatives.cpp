@@ -85,6 +85,16 @@ template <size_t N> Matrix<N, N> identity_matrix() {
   return m;
 }
 
+template <size_t R, size_t C> Matrix<R, C> Matrix<R, C>::transpose() {
+  Matrix<R, C> t{};
+  for (int c = 0; c < C; ++c) {
+    for (int r = 0; r < C; ++r) {
+      t(c, r) = m_cells[r * C + c];
+    }
+  }
+  return t;
+}
+
 // Point tests
 
 TEST_CASE("Creating a 3d point") {
@@ -373,4 +383,16 @@ TEST_CASE("Multiplying the identity matrix by a Point or Vector") {
   CHECK(m * v == v);
 };
 
+TEST_CASE("Transposing a matrix") {
+  Matrix<4, 4> a{0, 9, 3, 0, 9, 8, 0, 8, 1, 8, 5, 3, 0, 0, 5, 8};
+  Matrix<4, 4> transposed{0, 9, 1, 0, 9, 8, 8, 0, 3, 0, 5, 5, 0, 8, 3, 8};
+
+  CHECK(a.transpose() == transposed);
+};
+
+TEST_CASE("Transposing the identity matrix") {
+  Matrix<4, 4> m = identity_matrix<4>();
+
+  CHECK(m.transpose() == identity_matrix<4>());
+};
 } // namespace raytrace
