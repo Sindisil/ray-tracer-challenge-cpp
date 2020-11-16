@@ -53,6 +53,8 @@ inline bool operator!=(Matrix<R, C> lhs, Matrix<R, C> rhs) {
 template <size_t R, size_t C, size_t N>
 Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs);
 
+template <size_t N> Matrix<N, N> identity_matrix();
+
 struct Vec3 {
   float x;
   float y;

@@ -77,6 +77,14 @@ std::ostream &operator<<(std::ostream &os, Matrix<R, C> const &val) {
   return os;
 }
 
+template <size_t N> Matrix<N, N> identity_matrix() {
+  Matrix<N, N> m{};
+  for (int i = 0; i < static_cast<int>(N); ++i) {
+    m(i, i) = 1;
+  }
+  return m;
+}
+
 // Point tests
 
 TEST_CASE("Creating a 3d point") {
@@ -349,6 +357,20 @@ TEST_CASE("Matrix multiplied by a Point") {
   Point p{1, 2, 3};
 
   CHECK(a * p == Point{14, 22, 32});
+};
+
+TEST_CASE("Multiplying a matrix by the identity matrix") {
+  Matrix<4, 4> m{0, 1, 2, 4, 1, 2, 4, 8, 2, 4, 8, 16, 4, 8, 16, 32};
+  CHECK(m * identity_matrix<4>() == m);
+};
+
+TEST_CASE("Multiplying the identity matrix by a Point or Vector") {
+  Matrix<4, 4> m = identity_matrix<4>();
+  Point p{1, 2, 3};
+  Vec3 v{4, 5, 6};
+
+  CHECK(m * p == p);
+  CHECK(m * v == v);
 };
 
 } // namespace raytrace
