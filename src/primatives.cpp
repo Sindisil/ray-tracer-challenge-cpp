@@ -116,6 +116,18 @@ Matrix<R - 1, C - 1> Matrix<R, C>::submatrix(int r_skip, int c_skip) {
   return s;
 }
 
+float determinant(Matrix<2, 2> m) {
+  return (m(0, 0) * m(1, 1)) - (m(0, 1) * m(1, 0));
+}
+
+template <size_t N> float determinant(Matrix<N, N> m) {
+  float det = 0;
+  for (int c = 0; c < N; ++c) {
+    det += m(0, c) * cofactor(m, 0, c);
+  }
+  return det;
+}
+
 // Point tests
 
 TEST_CASE("Creating a 3d point") {
@@ -451,6 +463,23 @@ TEST_CASE("Calculating a cofactor of a 3x3 matrix") {
   CHECK_EQ(cofactor(a, 0, 0), doctest::Approx(-12.f));
   CHECK_EQ(minor(a, 1, 0), doctest::Approx(25.f));
   CHECK_EQ(cofactor(a, 1, 0), doctest::Approx(-25.f));
+};
+
+TEST_CASE("Calculating the determinant of a 3x3 matrix") {
+  Matrix<3, 3> a{1, 2, 6, -5, 8, -4, 2, 6, 4};
+  CHECK_EQ(cofactor(a, 0, 0), doctest::Approx(56.f));
+  CHECK_EQ(cofactor(a, 0, 1), doctest::Approx(12.f));
+  CHECK_EQ(cofactor(a, 0, 2), doctest::Approx(-46.f));
+  CHECK_EQ(determinant(a), doctest::Approx(-196.f));
+};
+
+TEST_CASE("Calculating the determinant of a 4x4 matrix") {
+  Matrix<4, 4> a{-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9};
+  CHECK_EQ(cofactor(a, 0, 0), doctest::Approx(690.f));
+  CHECK_EQ(cofactor(a, 0, 1), doctest::Approx(447.f));
+  CHECK_EQ(cofactor(a, 0, 2), doctest::Approx(210.f));
+  CHECK_EQ(cofactor(a, 0, 3), doctest::Approx(51.f));
+  CHECK_EQ(determinant(a), doctest::Approx(-4071.f));
 };
 
 } // namespace raytrace

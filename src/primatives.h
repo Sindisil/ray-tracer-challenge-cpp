@@ -59,16 +59,15 @@ Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs);
 
 template <size_t N> Matrix<N, N> identity_matrix();
 
-inline float determinant(Matrix<2, 2> m) {
-  return (m(0, 0) * m(1, 1)) - (m(0, 1) * m(1, 0));
-}
+float determinant(Matrix<2, 2> m);
+template <size_t N> float determinant(Matrix<N, N> m);
 
-inline float minor(Matrix<3, 3> m, int r, int c) {
+template <size_t N> inline float minor(Matrix<N, N> m, int r, int c) {
   return determinant(m.submatrix(r, c));
 }
 
-inline float cofactor(Matrix<3, 3> m, int r, int c) {
-  auto f = minor(m, r, c);
+template <size_t N> inline float cofactor(Matrix<N, N> m, int r, int c) {
+  auto f = determinant(m.submatrix(r, c));
   return (r + c) % 2 == 0 ? f : -f;
 }
 
