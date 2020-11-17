@@ -434,4 +434,14 @@ TEST_CASE("A submatrix of a 4x4 matrix is a 3x3 matrix") {
   CHECK(a.submatrix(2, 1) == Matrix<3, 3>{-6, 1, 6, -8, 8, 6, -7, -1, 1});
 };
 
+TEST_CASE("Calculating the minor of a 3x3 matrix") {
+  Matrix<3, 3> a{3, 5, 0, 2, -1, -7, 6, -1, 5};
+
+  auto b = a.submatrix(1, 0);
+  auto det = determinant(b);
+
+  CHECK_EQ(det, doctest::Approx(25.f));
+  CHECK_EQ(minor(a, 1, 0), doctest::Approx(25.f));
+};
+
 } // namespace raytrace

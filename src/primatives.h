@@ -63,6 +63,10 @@ inline float determinant(Matrix<2, 2> m) {
   return (m(0, 0) * m(1, 1)) - (m(0, 1) * m(1, 0));
 }
 
+inline float minor(Matrix<3, 3> m, int r, int c) {
+  return determinant(m.submatrix(r, c));
+}
+
 struct Vec3 {
   float x;
   float y;
