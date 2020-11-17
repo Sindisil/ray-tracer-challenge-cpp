@@ -67,6 +67,11 @@ inline float minor(Matrix<3, 3> m, int r, int c) {
   return determinant(m.submatrix(r, c));
 }
 
+inline float cofactor(Matrix<3, 3> m, int r, int c) {
+  auto f = minor(m, r, c);
+  return (r + c) % 2 == 0 ? f : -f;
+}
+
 struct Vec3 {
   float x;
   float y;

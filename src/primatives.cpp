@@ -444,4 +444,13 @@ TEST_CASE("Calculating the minor of a 3x3 matrix") {
   CHECK_EQ(minor(a, 1, 0), doctest::Approx(25.f));
 };
 
+TEST_CASE("Calculating a cofactor of a 3x3 matrix") {
+  Matrix<3, 3> a{3, 5, 0, 2, -1, -7, 6, -1, 5};
+
+  CHECK_EQ(minor(a, 0, 0), doctest::Approx(-12.f));
+  CHECK_EQ(cofactor(a, 0, 0), doctest::Approx(-12.f));
+  CHECK_EQ(minor(a, 1, 0), doctest::Approx(25.f));
+  CHECK_EQ(cofactor(a, 1, 0), doctest::Approx(-25.f));
+};
+
 } // namespace raytrace
