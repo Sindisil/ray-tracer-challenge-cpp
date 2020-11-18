@@ -36,6 +36,10 @@ public:
 
   Matrix<R - 1, C - 1> submatrix(int r, int c);
 
+  bool is_invertable() { return R == C && determinant(*this) != 0; }
+
+  Matrix<R, C> inverse();
+
 private:
   std::array<float, R * C> m_cells{0};
 };

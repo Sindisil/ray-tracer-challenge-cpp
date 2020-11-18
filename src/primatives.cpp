@@ -128,6 +128,23 @@ template <size_t N> float determinant(Matrix<N, N> m) {
   return det;
 }
 
+template <size_t R, size_t C> Matrix<R, C> Matrix<R, C>::inverse() {
+  if (!is_invertable()) {
+    throw std::domain_error("Matrix not invertable");
+  }
+
+  Matrix<R, C> m{};
+  for (int row = 0; row < R; ++row) {
+    for (int col = 0; col < C; ++col) {
+      auto c = cofactor<R>(*this, row, col);
+      m(col, row) = c / determinant(*this);
+    }
+  }
+  return m;
+}
+
+// TESTS BELOW THIS POINT
+
 // Point tests
 
 TEST_CASE("Creating a 3d point") {
@@ -482,4 +499,44 @@ TEST_CASE("Calculating the determinant of a 4x4 matrix") {
   CHECK_EQ(determinant(a), doctest::Approx(-4071.f));
 };
 
+TEST_CASE("Testing an invertable matrix for invertibility") {
+  Matrix<4, 4> a{6, 4, 4, 4, 5, 5, 7, 6, 4, -9, 3, -7, 9, 1, 7, -6};
+  CHECK_EQ(determinant(a), doctest::Approx(-2120.f));
+  CHECK(a.is_invertable());
+};
+
+TEST_CASE("Testing a noninvertable matrix for invertability") {
+  Matrix<4, 4> a{-4, 2, -2, 3, 9, 6, 2, 6, 0, -5, 1, -5, 0, 0, 0, 0};
+  CHECK_EQ(determinant(a), doctest::Approx(0.f));
+  CHECK(!a.is_invertable());
+}
+
+TEST_CASE("Calculating the inverse of a matrix") {
+  Matrix<4, 4> a{-5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4};
+  auto b = a.inverse();
+  CHECK_EQ(determinant(a), doctest::Approx(532));
+  CHECK_EQ(cofactor(a, 2, 3), doctest::Approx(-160));
+  CHECK_EQ(b(3, 2), doctest::Approx(-160.f / 532.f));
+  CHECK_EQ(cofactor(a, 3, 2), doctest::Approx(105.f));
+  CHECK_EQ(b(2, 3), doctest::Approx(105.f / 532.f));
+  CHECK(b == Matrix<4, 4>{0.21805f, 0.45113f, 0.24060f, -0.04511f, -0.80827f,
+                          -1.45677f, -0.44361f, 0.52068f, -0.07895f, -0.22368f,
+                          -0.05263f, 0.19737f, -0.52256f, -0.81391f, -0.30075f,
+                          0.30639f});
+}
+
+TEST_CASE("Calculating the inverse of another matrix") {
+  Matrix<4, 4> a{8, -5, 9, 2, 7, 5, 6, 1, -6, 0, 9, 6, -3, 0, -9, -4};
+  CHECK(a.inverse() == Matrix<4, 4>{-.15385f, -.15385f, -.28205f, -.53846f,
+                                    -.07692f, .12308f, .02564f, .03077f,
+                                    .35897f, .35897f, .43590f, .92308f,
+                                    -.69231f, -.69231f, -.76923f, -1.92308f});
+};
+
+TEST_CASE("Multiplying a product by its inverse") {
+  Matrix<4, 4> a{3, -9, 7, 3, 3, -8, 2, -9, -4, 4, 4, 4, 1, -6, 5, -1, 1};
+  Matrix<4, 4> b{8, 2, 2, 2, 3, -1, 7, 0, 7, 0, 5, 4, 6, -2, 0, 5};
+  auto c = a * b;
+  CHECK(c * b.inverse() == a);
+};
 } // namespace raytrace
