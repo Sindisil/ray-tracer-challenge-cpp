@@ -1,25 +1,20 @@
-add_executable(tests tests.cpp primatives.cpp canvas.cpp)
-target_compile_features(tests PRIVATE cxx_std_17)
-set_target_properties(tests PROPERTIES CXX_EXTENSIONS OFF)
-target_include_directories(tests PRIVATE ../extern/doctest)
-
-add_executable(projectile projectile_main.cpp  primatives.cpp)
+add_executable(projectile projectile.cpp  primatives.cpp)
 target_compile_features(projectile PRIVATE cxx_std_17)
 set_target_properties(projectile PROPERTIES CXX_EXTENSIONS OFF)
-target_include_directories(projectile PRIVATE ../extern/doctest)
 target_compile_definitions(projectile PRIVATE DOCTEST_CONFIG_DISABLE)
 
 add_executable(plot_projectile plot_projectile.cpp  primatives.cpp canvas.cpp)
 target_compile_features(plot_projectile PRIVATE cxx_std_17)
 set_target_properties(plot_projectile PROPERTIES CXX_EXTENSIONS OFF)
-target_include_directories(plot_projectile PRIVATE ../extern/doctest)
 target_compile_definitions(plot_projectile PRIVATE DOCTEST_CONFIG_DISABLE)
 
 if (MSVC)
-    # warning level 4 and all warnings as errors
-    target_compile_options(tests PRIVATE /W4)
+    # warning level 4
+    target_compile_options(projectile PRIVATE /W4)
+    target_compile_options(plot_projectile PRIVATE /W4)
 else()
-    # lots of warnings and all warnings as errors
-    target_compile_options(tests -Wall -Wextra -pedantic)
+    # lots of warnings
+    target_compile_options(projectile -Wall -Wextra -pedantic)
+    target_compile_options(plot_projectile -Wall -Wextra -pedantic)
 endif()
 
