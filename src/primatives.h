@@ -119,9 +119,6 @@ Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs);
 
 template <size_t N> Matrix<N, N> identity_matrix();
 
-float determinant(Matrix<2, 2> m);
-template <size_t N> float determinant(Matrix<N, N> m);
-
 template <size_t N> inline float minor(Matrix<N, N> m, int r, int c) {
   return m.submatrix(r, c).determinant();
 }
