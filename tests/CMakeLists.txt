@@ -1,4 +1,4 @@
-add_executable(tests tests.cpp test_primatives.cpp test_canvas.cpp)
+add_executable(tests tests.cpp test_primatives.cpp test_canvas.cpp "test_matrix.cpp")
 target_include_directories(tests PRIVATE ../src ../extern/doctest)
 target_sources(tests PRIVATE ../src/primatives.cpp ../src/canvas.cpp)
 target_compile_features(tests PRIVATE cxx_std_17)
