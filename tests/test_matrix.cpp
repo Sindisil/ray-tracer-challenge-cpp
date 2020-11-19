@@ -58,14 +58,14 @@ TEST_CASE("Matrix multiplied by a Vector") {
   Matrix<4, 4> a{1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1};
   Vec3 v{1, 2, 3};
 
-  CHECK(a * v == Vec3{18, 24, 33});
+  CHECK(a * v == Vec3{14, 22, 32});
 };
 
 TEST_CASE("Matrix multiplied by a Point") {
   Matrix<4, 4> a{1, 2, 3, 4, 2, 4, 4, 2, 8, 6, 4, 1, 0, 0, 0, 1};
   Point p{1, 2, 3};
 
-  CHECK(a * p == Point{14, 22, 32});
+  CHECK(a * p == Point{18, 24, 33});
 };
 
 TEST_CASE("Multiplying a matrix by the identity matrix") {
@@ -187,3 +187,22 @@ TEST_CASE("Multiplying a product by its inverse") {
   auto c = a * b;
   CHECK(c * b.inverse() == a);
 };
+
+TEST_CASE("Multiplying by a translation matrix") {
+  auto transform = translation(5, -3, 2);
+  Point p{-3, 4, 5};
+
+  CHECK(transform * p == Point{2, 1, 7});
+};
+
+TEST_CASE("Multiplying by the innverse of a translation matrix") {
+  auto inv = translation(5, -3, 2).inverse();
+  auto p = Point{-3, 4, 5};
+  CHECK(inv * p == Point{-8, 7, 3});
+};
+
+TEST_CASE("Translation does not affect vectors") {
+  auto transform = translation(5, -3, 2);
+  auto v = Vec3{-3, 4, 5};
+  CHECK(transform * v == v);
+}

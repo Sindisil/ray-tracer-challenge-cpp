@@ -101,17 +101,6 @@ private:
   std::array<float, R * C> m_cells{0};
 };
 
-template <size_t R, size_t C>
-bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs);
-
-template <size_t R, size_t C>
-inline bool operator!=(Matrix<R, C> lhs, Matrix<R, C> rhs) {
-  return !(lhs == rhs);
-};
-
-template <size_t R, size_t C, size_t N>
-Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs);
-
 template <size_t N> Matrix<N, N> identity_matrix() {
   Matrix<N, N> m{};
   for (int i = 0; i < static_cast<int>(N); ++i) {
@@ -120,8 +109,16 @@ template <size_t N> Matrix<N, N> identity_matrix() {
   return m;
 }
 
-template <size_t R, size_t C> Point operator*(Matrix<R, C> lhs, Point p);
-template <size_t R, size_t C> Vec3 operator*(Matrix<R, C> lhs, Vec3 v);
+Matrix<4, 1> from_point(Point p) { return Matrix<4, 1>{p.x, p.y, p.z, 1}; }
+Matrix<4, 1> from_vec3(Vec3 p) { return Matrix<4, 1>{p.x, p.y, p.z, 0}; }
+
+template <size_t R, size_t C>
+bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs);
+
+template <size_t R, size_t C>
+inline bool operator!=(Matrix<R, C> lhs, Matrix<R, C> rhs) {
+  return !(lhs == rhs);
+};
 
 template <size_t R, size_t C>
 bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs) {
@@ -150,12 +147,13 @@ Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs) {
 }
 
 template <size_t R, size_t C> Point operator*(Matrix<R, C> lhs, Point p) {
-  Matrix<4, 1> rhs{p.x, p.y, p.z, 0};
+  auto rhs = from_point(p);
   Matrix<4, 1> prod = lhs * rhs;
   return Point{prod(0, 0), prod(1, 0), prod(2, 0)};
 }
+
 template <size_t R, size_t C> Vec3 operator*(Matrix<R, C> lhs, Vec3 v) {
-  Matrix<4, 1> rhs{v.x, v.y, v.z, 1};
+  auto rhs = from_vec3(v);
   Matrix<4, 1> prod = lhs * rhs;
   return Vec3{prod(0, 0), prod(1, 0), prod(2, 0)};
 }
@@ -173,5 +171,12 @@ std::ostream &operator<<(std::ostream &os, Matrix<R, C> const &val) {
   return os;
 }
 
+inline Matrix<4, 4> translation(float x, float y, float z) {
+  auto m = identity_matrix<4>();
+  m(0, 3) = x;
+  m(1, 3) = y;
+  m(2, 3) = z;
+  return m;
+}
 } // namespace raytrace
 #endif // !MATRIX_H
