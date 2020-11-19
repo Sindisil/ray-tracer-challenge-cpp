@@ -6,9 +6,8 @@
 namespace raytrace {
 template <size_t R, size_t C> class Matrix {
 public:
+  template <typename = typename std::enable_if<(R > 1) || (C > 1)>::type>
   Matrix(std::initializer_list<float> vals) {
-    static_assert(R > 1 || C > 1,
-                  "At least one dimension of a Matrix must be greater than 1");
     int i = 0;
     for (auto vi = std::begin(vals); vi != std::end(vals) && i < m_cells.size();
          ++vi) {
@@ -34,9 +33,8 @@ public:
     return t;
   }
 
+  template <typename = typename std::enable_if<(R >= 2) && (C >= 2)>::type>
   Matrix<R - 1, C - 1> submatrix(int r_skip, int c_skip) {
-    static_assert(R > 1, "Result of submatrix must have at least one row");
-    static_assert(C > 1, "Result of submatrix must have at least one column");
     Matrix<R - 1, C - 1> s{};
     int srow = 0;
     int scol = 0;
@@ -73,19 +71,19 @@ public:
     return m;
   }
 
+  template <typename = typename std::enable_if<R == C>::type>
   float minor(int r, int c) {
-    static_assert(R == C, "Can't find find the minor of non-square matrix");
     return submatrix(r, c).determinant();
   }
 
+  template <typename = typename std::enable_if<R == C>::type>
   float cofactor(int r, int c) {
-    static_assert(R == C, "Can't find cofactor of non-square matrix");
     auto f = minor(r, c);
     return (r + c) % 2 == 0 ? f : -f;
   }
 
+  template <typename = typename std::enable_if<R == C>::type>
   float determinant() {
-    static_assert(R == C, "Can't find determinant of non-square matrix");
     if constexpr (R == 2) {
       return ((*this)(0, 0) * (*this)(1, 1)) - ((*this)(0, 1) * (*this)(1, 0));
     } else {
