@@ -17,6 +17,8 @@ inline bool about_equal(float lhs, float rhs) {
 template <size_t R, size_t C> class Matrix {
 public:
   Matrix(std::initializer_list<float> vals) {
+    static_assert(R > 1 || C > 1,
+                  "At least one dimension of a Matrix must be greater than 1");
     int i = 0;
     for (auto vi = std::begin(vals); vi != std::end(vals) && i < m_cells.size();
          ++vi) {
@@ -43,6 +45,8 @@ public:
   }
 
   Matrix<R - 1, C - 1> submatrix(int r_skip, int c_skip) {
+    static_assert(R > 1, "Result of submatrix must have at least one row");
+    static_assert(C > 1, "Result of submatrix must have at least one column");
     Matrix<R - 1, C - 1> s{};
     int srow = 0;
     int scol = 0;
@@ -79,19 +83,20 @@ public:
     return m;
   }
 
+  float minor(int r, int c) {
+    static_assert(R == C, "Can't find find the minor of non-square matrix");
+    return submatrix(r, c).determinant();
+  }
+
   float cofactor(int r, int c) {
-    if constexpr (R == C) {
-      auto f = submatrix(r, c).determinant();
-      return (r + c) % 2 == 0 ? f : -f;
-    } else {
-      throw std::domain_error("Can't find cofactor of non-square matrix");
-    }
+    static_assert(R == C, "Can't find cofactor of non-square matrix");
+    auto f = minor(r, c);
+    return (r + c) % 2 == 0 ? f : -f;
   }
 
   float determinant() {
-    if constexpr (R != C) {
-      throw std::domain_error("Can't find determinant of non-square matrix");
-    } else if constexpr (R == 2) {
+    static_assert(R == C, "Can't find determinant of non-square matrix");
+    if constexpr (R == 2) {
       return ((*this)(0, 0) * (*this)(1, 1)) - ((*this)(0, 1) * (*this)(1, 0));
     } else {
       float det = 0;
@@ -118,10 +123,6 @@ template <size_t R, size_t C, size_t N>
 Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs);
 
 template <size_t N> Matrix<N, N> identity_matrix();
-
-template <size_t N> inline float minor(Matrix<N, N> m, int r, int c) {
-  return m.submatrix(r, c).determinant();
-}
 
 struct Vec3 {
   float x;
