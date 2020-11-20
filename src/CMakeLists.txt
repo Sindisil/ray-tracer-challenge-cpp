@@ -14,7 +14,7 @@ if (MSVC)
     target_compile_options(plot_projectile PRIVATE /W4)
 else()
     # lots of warnings
-    target_compile_options(projectile -Wall -Wextra -pedantic)
-    target_compile_options(plot_projectile -Wall -Wextra -pedantic)
+    target_compile_options(projectile PRIVATE -Wall -Wextra -pedantic)
+    target_compile_options(plot_projectile PRIVATE -Wall -Wextra -pedantic)
 endif()
 

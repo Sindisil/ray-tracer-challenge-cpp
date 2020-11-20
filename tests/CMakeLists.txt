@@ -9,6 +9,6 @@ if (MSVC)
     target_compile_options(tests PRIVATE /W4)
 else()
     # lots of warnings
-    target_compile_options(tests -Wall -Wextra -pedantic)
+    target_compile_options(tests PRIVATE -Wall -Wextra -pedantic)
 endif()
 
