@@ -101,7 +101,7 @@ TEST_CASE("Calculating the determinant of a 2x2 matrix") {
   CHECK(a.determinant() == 17);
 };
 
-TEST_CASE("A submatrix of a 3x3 matrix is a 2x2 matrix") {
+TEST_CASE("A submatrix of a 3x3 matrix is a 2x3 matrix") {
   Matrix<3, 3> a{1, 5, 0, -3, 2, 7, 0, 6, -3};
 
   CHECK(a.submatrix(0, 2) == Matrix<2, 2>{-3, 2, 0, 6});
