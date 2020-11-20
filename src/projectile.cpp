@@ -1,7 +1,7 @@
 #include "primatives.h"
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 
 using raytrace::Point;
 using raytrace::Vec3;
@@ -28,7 +28,7 @@ Projectile tick(Environment env, Projectile proj) {
   return Projectile{pos, vel};
 }
 
-int main(int argc, char **argv) {
+int main() {
   Environment env{Vec3{0.f, -0.1f, 0.f}, Vec3{-0.01f, 0.f, 0.f}};
   Projectile proj{Point{0, 1, 0}, Vec3{5, 5, 1}.normalize()};
 
