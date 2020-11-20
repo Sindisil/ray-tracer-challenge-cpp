@@ -16,13 +16,12 @@ inline bool about_equal(float lhs, float rhs) {
 }
 
 struct Vec3 {
-  float x;
-  float y;
-  float z;
+  float x{0};
+  float y{0};
+  float z{0};
 
+  Vec3() = default;
   Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
-
-  // explicit operator Matrix<4, 1>() { return Matrix<4, 1>{x, y, z, 0}; }
 
   Vec3 &operator+=(Vec3 v) {
     x += v.x;
@@ -73,14 +72,13 @@ struct Vec3 {
 };
 
 struct Point {
-  float x;
-  float y;
-  float z;
+  float x{0};
+  float y{0};
+  float z{0};
 
+  Point() = default;
   Point(float x, float y, float z) : x(x), y(y), z(z) {}
   Point(float x, float y) : Point(x, y, 0) {}
-
-  // explicit operator Matrix<4, 1>() { return Matrix<4, 1>{x, y, z, 1}; }
 
   Point &operator+=(Vec3 v) {
     x += v.x;
