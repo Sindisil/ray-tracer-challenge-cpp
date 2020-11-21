@@ -6,9 +6,17 @@
 namespace raytrace {
 template <size_t R, size_t C> class Matrix {
 public:
+  template <size_t RR = R, size_t CC = C,
+            typename std::enable_if<(RR == 4 && CC == 1) ||
+                                    (RR == CC && RR >= 2 && RR <= R)>::type * =
+                nullptr>
+  Matrix(){};
+
+  template <size_t RR = R, size_t CC = C,
+            typename std::enable_if<(RR == 4 && CC == 1) ||
+                                    (RR == CC && RR >= 2 && RR <= R)>::type * =
+                nullptr>
   Matrix(std::initializer_list<float> vals) {
-    static_assert(R > 1 || C > 1,
-                  "At least one dimension of a Matrix must be greater than 1");
     int i = 0;
     for (auto vi = std::begin(vals); vi != std::end(vals) && i < m_cells.size();
          ++vi) {
@@ -35,11 +43,13 @@ public:
   }
 
   Matrix<R - 1, C - 1> submatrix(int r_skip, int c_skip) {
-    static_assert(R > 1, "Result of submatrix must have at least one row");
-    static_assert(C > 1, "Result of submatrix must have at least one column");
     Matrix<R - 1, C - 1> s{};
     int srow = 0;
     int scol = 0;
+
+    if (r_skip > R || c_skip >> C) {
+      throw std::out_of_range("row or column to skip was out of range");
+    }
 
     for (int r = 0; r < R; ++r) {
       if (r != r_skip) {
@@ -73,19 +83,22 @@ public:
     return m;
   }
 
+  template <size_t RR = R, size_t CC = C,
+            typename std::enable_if<RR == CC>::type * = nullptr>
   float minor(int r, int c) {
-    static_assert(R == C, "Can't find find the minor of non-square matrix");
     return submatrix(r, c).determinant();
   }
 
+  template <size_t RR = R, size_t CC = C,
+            typename std::enable_if<RR == CC>::type * = nullptr>
   float cofactor(int r, int c) {
-    static_assert(R == C, "Can't find cofactor of non-square matrix");
     auto f = minor(r, c);
     return (r + c) % 2 == 0 ? f : -f;
   }
 
+  template <size_t RR = R, size_t CC = C,
+            typename std::enable_if<RR == CC>::type * = nullptr>
   float determinant() {
-    static_assert(R == C, "Can't find determinant of non-square matrix");
     if constexpr (R == 2) {
       return ((*this)(0, 0) * (*this)(1, 1)) - ((*this)(0, 1) * (*this)(1, 0));
     } else {
