@@ -9,9 +9,9 @@ set_target_properties(plot_projectile PROPERTIES CXX_EXTENSIONS OFF)
 target_compile_definitions(plot_projectile PRIVATE DOCTEST_CONFIG_DISABLE)
 
 if (MSVC)
-    # warning level 4
-    target_compile_options(projectile PRIVATE /W4)
-    target_compile_options(plot_projectile PRIVATE /W4)
+    # warning level 4 plus extra warnings
+    target_compile_options(projectile PRIVATE /W4 /w44388 /w44287)
+    target_compile_options(plot_projectile PRIVATE /W4 /w44388 /w44287)
 else()
     # lots of warnings
     target_compile_options(projectile PRIVATE -Wall -Wextra -pedantic)

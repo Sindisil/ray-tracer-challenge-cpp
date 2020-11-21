@@ -3,6 +3,8 @@
 
 #include "primatives.h"
 
+#include <cassert>
+
 namespace raytrace {
 template <size_t R, size_t C> class Matrix {
 public:
@@ -17,8 +19,10 @@ public:
                                     (RR == CC && RR >= 2 && RR <= R)>::type * =
                 nullptr>
   Matrix(std::initializer_list<float> vals) {
+    assert(vals.size() <= m_cells.size());
     int i = 0;
-    for (auto vi = std::begin(vals); vi != std::end(vals) && i < m_cells.size();
+    for (auto vi = std::begin(vals);
+         vi != std::end(vals) && static_cast<size_t>(i) < m_cells.size();
          ++vi) {
       m_cells[i] = *vi;
       ++i;

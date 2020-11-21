@@ -24,7 +24,8 @@ std::string Canvas::to_ppm() {
                                       static_cast<int>(std::ceil(c.b * 255))};
 
       for (int i = 0; i < 3; ++i) {
-        auto s = std::to_string(std::clamp(color_values[i], 0, 255));
+        auto s = std::to_string(
+            std::clamp(color_values[static_cast<size_t>(i)], 0, 255));
 
         // PPM lines should be <= 70 chars
         if (line.size() + s.size() + 1 > max_ppm_line_len) {
