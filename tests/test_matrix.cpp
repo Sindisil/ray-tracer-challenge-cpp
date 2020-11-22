@@ -190,20 +190,20 @@ TEST_CASE("Multiplying a product by its inverse") {
 }
 
 TEST_CASE("Multiplying by a translation matrix") {
-  auto transform = translation(5, -3, 2);
+  auto transform = identity_matrix<4>().translate(5, -3, 2);
   Point p{-3, 4, 5};
 
   CHECK(transform * p == Point{2, 1, 7});
 }
 
 TEST_CASE("Multiplying by the innverse of a translation matrix") {
-  auto inv = translation(5, -3, 2).inverse();
+  auto inv = identity_matrix<4>().translate(5, -3, 2).inverse();
   auto p = Point{-3, 4, 5};
   CHECK(inv * p == Point{-8, 7, 3});
 }
 
 TEST_CASE("Translation does not affect vectors") {
-  auto transform = translation(5, -3, 2);
+  auto transform = identity_matrix<4>().translate(5, -3, 2);
   auto v = Vec3{-3, 4, 5};
   CHECK(transform * v == v);
 }

@@ -96,6 +96,16 @@ public:
       return det;
     }
   }
+
+  template <size_t RR = R, size_t CC = C,
+            typename std::enable_if<RR == CC && RR == 4>::type * = nullptr>
+  Matrix<R, C> translate(float x, float y, float z) {
+    auto m = identity_matrix<R>();
+    m(0, 3) = x;
+    m(1, 3) = y;
+    m(2, 3) = z;
+    return (*this) * m;
+  }
 };
 
 template <size_t N> Matrix<N, N> identity_matrix() {
@@ -168,12 +178,5 @@ std::ostream &operator<<(std::ostream &os, Matrix<R, C> const &val) {
   return os;
 }
 
-inline Matrix<4, 4> translation(float x, float y, float z) {
-  auto m = identity_matrix<4>();
-  m(0, 3) = x;
-  m(1, 3) = y;
-  m(2, 3) = z;
-  return m;
-}
 } // namespace raytrace
 #endif // !MATRIX_H
