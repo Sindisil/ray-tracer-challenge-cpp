@@ -70,11 +70,11 @@ TEST_CASE("Matrix multiplied by a Point") {
 
 TEST_CASE("Multiplying a matrix by the identity matrix") {
   Matrix<4, 4> m{0, 1, 2, 4, 1, 2, 4, 8, 2, 4, 8, 16, 4, 8, 16, 32};
-  CHECK(m * identity_matrix<4>() == m);
+  CHECK(m * identityMatrix() == m);
 }
 
 TEST_CASE("Multiplying the identity matrix by a Point or Vector") {
-  Matrix<4, 4> m = identity_matrix<4>();
+  Matrix<4, 4> m = identityMatrix();
   Point p{1, 2, 3};
   Vec3 v{4, 5, 6};
 
@@ -90,9 +90,9 @@ TEST_CASE("Transposing a matrix") {
 }
 
 TEST_CASE("Transposing the identity matrix") {
-  Matrix<4, 4> m = identity_matrix<4>();
+  Matrix<4, 4> m = identityMatrix();
 
-  CHECK(m.transpose() == identity_matrix<4>());
+  CHECK(m.transpose() == identityMatrix());
 }
 
 TEST_CASE("Calculating the determinant of a 2x2 matrix") {
@@ -190,20 +190,20 @@ TEST_CASE("Multiplying a product by its inverse") {
 }
 
 TEST_CASE("Multiplying by a translation matrix") {
-  auto transform = identity_matrix<4>().translate(5, -3, 2);
+  auto transform = identityMatrix().translate(5, -3, 2);
   Point p{-3, 4, 5};
 
   CHECK(transform * p == Point{2, 1, 7});
 }
 
 TEST_CASE("Multiplying by the innverse of a translation matrix") {
-  auto inv = identity_matrix<4>().translate(5, -3, 2).inverse();
+  auto inv = identityMatrix().translate(5, -3, 2).inverse();
   auto p = Point{-3, 4, 5};
   CHECK(inv * p == Point{-8, 7, 3});
 }
 
 TEST_CASE("Translation does not affect vectors") {
-  auto transform = identity_matrix<4>().translate(5, -3, 2);
+  auto transform = identityMatrix().translate(5, -3, 2);
   auto v = Vec3{-3, 4, 5};
   CHECK(transform * v == v);
 }

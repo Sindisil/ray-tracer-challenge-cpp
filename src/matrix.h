@@ -100,7 +100,7 @@ public:
   template <size_t RR = R, size_t CC = C,
             typename std::enable_if<RR == CC && RR == 4>::type * = nullptr>
   Matrix<R, C> translate(float x, float y, float z) {
-    auto m = identity_matrix<R>();
+    auto m = identityMatrix();
     m(0, 3) = x;
     m(1, 3) = y;
     m(2, 3) = z;
@@ -108,9 +108,9 @@ public:
   }
 };
 
-template <size_t N> Matrix<N, N> identity_matrix() {
-  Matrix<N, N> m{};
-  for (int i = 0; i < static_cast<int>(N); ++i) {
+Matrix<4, 4> identityMatrix() {
+  Matrix<4, 4> m{};
+  for (int i = 0; i < 4; ++i) {
     m(i, i) = 1;
   }
   return m;
