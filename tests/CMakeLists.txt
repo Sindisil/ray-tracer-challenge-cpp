@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.18)
+project(raytracer VERSION 0.1.0 LANGUAGES CXX)
+
 add_executable(tests tests.cpp test_primatives.cpp test_canvas.cpp "test_matrix.cpp")
 target_include_directories(tests PRIVATE ../src ../extern/doctest)
 target_sources(tests PRIVATE ../src/primatives.cpp ../src/canvas.cpp)

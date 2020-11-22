@@ -1,3 +1,6 @@
+cmake_minimum_required(VERSION 3.18)
+project(raytracer VERSION 0.1.0 LANGUAGES CXX)
+
 add_executable(projectile projectile.cpp  primatives.cpp)
 target_compile_features(projectile PRIVATE cxx_std_17)
 set_target_properties(projectile PROPERTIES CXX_EXTENSIONS OFF)
