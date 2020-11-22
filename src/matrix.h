@@ -6,46 +6,29 @@
 #include <cassert>
 
 namespace raytrace {
-template <size_t R, size_t C> class Matrix {
+template <size_t R, size_t C> struct Matrix {
 public:
-  template <size_t RR = R, size_t CC = C,
-            typename std::enable_if<(RR == 4 && CC == 1) ||
-                                    (RR == CC && RR >= 2 && RR <= R)>::type * =
-                nullptr>
-  Matrix(){};
-
-  template <size_t RR = R, size_t CC = C,
-            typename std::enable_if<(RR == 4 && CC == 1) ||
-                                    (RR == CC && RR >= 2 && RR <= R)>::type * =
-                nullptr>
-  Matrix(std::initializer_list<float> vals) {
-    assert(vals.size() <= m_cells.size());
-    int i = 0;
-    for (auto vi = std::begin(vals);
-         vi != std::end(vals) && static_cast<size_t>(i) < m_cells.size();
-         ++vi) {
-      m_cells[i] = *vi;
-      ++i;
-    }
-  }
+  float cells[R][C]{};
 
   float &operator()(int r, int c) {
     if (r < 0 || c < 0 || r >= R || c >= C) {
       throw std::out_of_range("index out of range");
     }
-    return m_cells.at(r * C + c);
+    return cells[r][c];
   }
 
   Matrix<R, C> transpose() {
     Matrix<R, C> t{};
     for (int c = 0; c < C; ++c) {
       for (int r = 0; r < C; ++r) {
-        t(c, r) = m_cells[r * C + c];
+        t(c, r) = cells[r][c];
       }
     }
     return t;
   }
 
+  template <size_t RR = R, size_t CC = C,
+            typename std::enable_if<(RR > 1) && (CC > 1)>::type * = nullptr>
   Matrix<R - 1, C - 1> submatrix(int r_skip, int c_skip) {
     Matrix<R - 1, C - 1> s{};
     int srow = 0;
@@ -59,7 +42,7 @@ public:
       if (r != r_skip) {
         for (int c = 0; c < C; ++c) {
           if (c != c_skip) {
-            s(srow, scol) = m_cells[r * C + c];
+            s(srow, scol) = cells[r][c];
             ++scol;
           }
         }
@@ -70,10 +53,10 @@ public:
     return s;
   }
 
-  bool is_invertable() { return R == C && determinant() != 0; }
+  bool isInvertable() { return R == C && determinant() != 0; }
 
   Matrix<R, C> inverse() {
-    if (!is_invertable()) {
+    if (!isInvertable()) {
       throw std::domain_error("Matrix not invertable");
     }
 
@@ -113,9 +96,6 @@ public:
       return det;
     }
   }
-
-private:
-  std::array<float, R * C> m_cells{0};
 };
 
 template <size_t N> Matrix<N, N> identity_matrix() {

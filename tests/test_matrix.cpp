@@ -150,13 +150,13 @@ TEST_CASE("Calculating the determinant of a 4x4 matrix") {
 TEST_CASE("Testing an invertable matrix for invertibility") {
   Matrix<4, 4> a{6, 4, 4, 4, 5, 5, 7, 6, 4, -9, 3, -7, 9, 1, 7, -6};
   CHECK_EQ(a.determinant(), doctest::Approx(-2120.f));
-  CHECK(a.is_invertable());
+  CHECK(a.isInvertable());
 };
 
 TEST_CASE("Testing a noninvertable matrix for invertability") {
   Matrix<4, 4> a{-4, 2, -2, 3, 9, 6, 2, 6, 0, -5, 1, -5, 0, 0, 0, 0};
   CHECK_EQ(a.determinant(), doctest::Approx(0.f));
-  CHECK(!a.is_invertable());
+  CHECK(!a.isInvertable());
 }
 
 TEST_CASE("Calculating the inverse of a matrix") {
@@ -182,7 +182,8 @@ TEST_CASE("Calculating the inverse of another matrix") {
 };
 
 TEST_CASE("Multiplying a product by its inverse") {
-  Matrix<4, 4> a{3, -9, 7, 3, 3, -8, 2, -9, -4, 4, 4, 4, 1, -6, 5, -1, 1};
+  Matrix<4, 4> a{
+      {{3, -9, 7, 3}, {3, -8, 2, -9}, {-4, 4, 4, 4}, {1, -6, 5, -1}}};
   Matrix<4, 4> b{8, 2, 2, 2, 3, -1, 7, 0, 7, 0, 5, 4, 6, -2, 0, 5};
   auto c = a * b;
   CHECK(c * b.inverse() == a);
