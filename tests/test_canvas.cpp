@@ -22,7 +22,7 @@ TEST_CASE("Creating a canvas") {
   }
 
   CHECK(all_black);
-};
+}
 
 TEST_CASE("Writing pixels to a canvas") {
   Canvas c{10, 20};
@@ -30,7 +30,7 @@ TEST_CASE("Writing pixels to a canvas") {
 
   c.write_pixel(2, 3, red);
   CHECK(c.pixel_at(2, 3) == red);
-};
+}
 
 TEST_CASE("Constructing the PPM header") {
   Canvas c{5, 3};
@@ -43,7 +43,7 @@ TEST_CASE("Constructing the PPM header") {
   CHECK(line == "5 3");
   std::getline(lines, line);
   CHECK(line == "255");
-};
+}
 
 TEST_CASE("Constructing the PPM pixel data") {
   Canvas c{5, 3};
@@ -64,7 +64,7 @@ TEST_CASE("Constructing the PPM pixel data") {
   CHECK(line == "0 0 0 0 0 0 0 128 0 0 0 0 0 0 0");
   std::getline(lines, line);
   CHECK(line == "0 0 0 0 0 0 0 0 0 0 0 0 0 0 255");
-};
+}
 
 TEST_CASE("PPM lines > 70 char should be split") {
   Canvas c{10, 2};
@@ -91,9 +91,9 @@ TEST_CASE("PPM lines > 70 char should be split") {
         "255 204 153 255 204 153 255 204 153 255 204 153 255 204 153 255 204");
   std::getline(lines, line);
   CHECK(line == "153 255 204 153 255 204 153 255 204 153 255 204 153");
-};
+}
 
 TEST_CASE("PPM files are terminated by a newline") {
   Canvas c{5, 3};
   CHECK(c.to_ppm().back() == '\n');
-};
+}

@@ -11,7 +11,7 @@ public:
   float cells[R][C]{};
 
   float &operator()(int r, int c) {
-    if (r < 0 || c < 0 || r >= R || c >= C) {
+    if (r < 0 || c < 0 || r >= int{R} || c >= int{C}) {
       throw std::out_of_range("index out of range");
     }
     return cells[r][c];
@@ -19,8 +19,8 @@ public:
 
   Matrix<R, C> transpose() {
     Matrix<R, C> t{};
-    for (int c = 0; c < C; ++c) {
-      for (int r = 0; r < C; ++r) {
+    for (int c = 0; c < int{C}; ++c) {
+      for (int r = 0; r < int{C}; ++r) {
         t(c, r) = cells[r][c];
       }
     }
@@ -34,13 +34,13 @@ public:
     int srow = 0;
     int scol = 0;
 
-    if (r_skip > R || c_skip >> C) {
+    if (r_skip > int{R} || c_skip >> int{C}) {
       throw std::out_of_range("row or column to skip was out of range");
     }
 
-    for (int r = 0; r < R; ++r) {
+    for (int r = 0; r < int{R}; ++r) {
       if (r != r_skip) {
-        for (int c = 0; c < C; ++c) {
+        for (int c = 0; c < int{C}; ++c) {
           if (c != c_skip) {
             s(srow, scol) = cells[r][c];
             ++scol;
@@ -61,8 +61,8 @@ public:
     }
 
     Matrix<R, C> m{};
-    for (int row = 0; row < R; ++row) {
-      for (int col = 0; col < C; ++col) {
+    for (int row = 0; row < int{R}; ++row) {
+      for (int col = 0; col < int{C}; ++col) {
         auto c = cofactor(row, col);
         m(col, row) = c / determinant();
       }
@@ -90,7 +90,7 @@ public:
       return ((*this)(0, 0) * (*this)(1, 1)) - ((*this)(0, 1) * (*this)(1, 0));
     } else {
       float det = 0;
-      for (int c = 0; c < R; ++c) {
+      for (int c = 0; c < int{R}; ++c) {
         det += (*this)(0, c) * cofactor(0, c);
       }
       return det;
@@ -115,12 +115,12 @@ bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs);
 template <size_t R, size_t C>
 inline bool operator!=(Matrix<R, C> lhs, Matrix<R, C> rhs) {
   return !(lhs == rhs);
-};
+}
 
 template <size_t R, size_t C>
 bool operator==(Matrix<R, C> lhs, Matrix<R, C> rhs) {
-  for (int r = 0; r < R; ++r) {
-    for (int c = 0; c < C; ++c) {
+  for (int r = 0; r < int{R}; ++r) {
+    for (int c = 0; c < int{C}; ++c) {
       if (!about_equal(lhs(r, c), rhs(r, c))) {
         return false;
       }
@@ -133,9 +133,9 @@ template <size_t R, size_t C, size_t N>
 Matrix<R, C> operator*(Matrix<R, N> lhs, Matrix<N, C> rhs) {
   Matrix<R, C> res{};
 
-  for (int r = 0; r < static_cast<int>(R); ++r) {
-    for (int c = 0; c < static_cast<int>(C); ++c) {
-      for (int n = 0; n < static_cast<int>(N); ++n) {
+  for (int r = 0; r < int{R}; ++r) {
+    for (int c = 0; c < int{C}; ++c) {
+      for (int n = 0; n < int{N}; ++n) {
         res(r, c) += lhs(r, n) * rhs(n, c);
       }
     }
