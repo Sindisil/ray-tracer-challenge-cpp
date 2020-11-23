@@ -100,7 +100,7 @@ public:
     m(0, 3) = x;
     m(1, 3) = y;
     m(2, 3) = z;
-    return (*this) * m;
+    return m * (*this);
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
@@ -109,7 +109,7 @@ public:
     m(0, 0) = x;
     m(1, 1) = y;
     m(2, 2) = z;
-    return (*this) * m;
+    return m * (*this);
   }
 };
 
