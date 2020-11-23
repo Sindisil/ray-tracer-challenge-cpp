@@ -95,32 +95,22 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> translate(float x, float y, float z) {
-    auto m = identityMatrix();
-    m(0, 3) = x;
-    m(1, 3) = y;
-    m(2, 3) = z;
-    return m * (*this);
+  Matrix<4> translate(float x, float y, float z) {
+    return Matrix<4>{{{1, 0, 0, x}, {0, 1, 0, y}, {0, 0, 1, z}, {0, 0, 0, 1}}} *
+           (*this);
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
   Matrix<N> scale(float x, float y, float z) {
-    auto m = identityMatrix();
-    m(0, 0) = x;
-    m(1, 1) = y;
-    m(2, 2) = z;
-    return m * (*this);
+    return Matrix<4>{{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}}} *
+           (*this);
   }
 };
 
 // Free functions for Matrix
 
 Matrix<4> identityMatrix() {
-  Matrix<4> m{};
-  for (int i = 0; i < 4; ++i) {
-    m(i, i) = 1;
-  }
-  return m;
+  return Matrix<4>{{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}}};
 }
 
 template <size_t N> bool operator==(Matrix<N> lhs, Matrix<N> rhs);
