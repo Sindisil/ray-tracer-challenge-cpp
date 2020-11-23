@@ -223,3 +223,25 @@ TEST_CASE("Translation does not affect vectors") {
   auto v = Vec3{-3, 4, 5};
   CHECK(transform * v == v);
 }
+
+TEST_CASE("A scaling matrix applied to a point") {
+  Point p{-4, 6, 8};
+
+  CHECK(identityMatrix().scale(2, 3, 4) * p == Point{-8, 18, 32});
+}
+
+TEST_CASE("A scaling matrix applied to a vector") {
+  Vec3 v{-4, 6, 8};
+
+  CHECK(identityMatrix().scale(2, 3, 4) * v == Vec3{-8, 18, 32});
+}
+
+TEST_CASE("Multiplying by the inverse of a scaling matrix") {
+  Vec3 v{-4, 6, 8};
+  CHECK(identityMatrix().scale(2, 3, 4).inverse() * v == Vec3{-2, 2, 2});
+}
+
+TEST_CASE("Reflection is scaling by a negative value") {
+  Point p{2, 3, 4};
+  CHECK(identityMatrix().scale(-1, 1, 1) * p == Point{-2, 3, 4});
+}

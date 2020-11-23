@@ -102,6 +102,15 @@ public:
     m(2, 3) = z;
     return (*this) * m;
   }
+
+  template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
+  Matrix<N> scale(float x, float y, float z) {
+    auto m = identityMatrix();
+    m(0, 0) = x;
+    m(1, 1) = y;
+    m(2, 2) = z;
+    return (*this) * m;
+  }
 };
 
 // Free functions for Matrix
@@ -145,21 +154,31 @@ template <size_t N> Matrix<N> operator*(Matrix<N> lhs, Matrix<N> rhs) {
 }
 
 template <size_t N, typename std::enable_if<(N == 4)>::type * = nullptr>
-Point operator*(Matrix<N> lhs, Point p) {
+Point operator*(Matrix<N> m, Point p) {
   auto prod = Point{};
-  prod.x = lhs(0, 0) * p.x + lhs(0, 1) * p.y + lhs(0, 2) * p.z + lhs(0, 3);
-  prod.y = lhs(1, 0) * p.x + lhs(1, 1) * p.y + lhs(1, 2) * p.z + lhs(1, 3);
-  prod.z = lhs(2, 0) * p.x + lhs(2, 1) * p.y + lhs(2, 2) * p.z + lhs(2, 3);
+  prod.x = m(0, 0) * p.x + m(0, 1) * p.y + m(0, 2) * p.z + m(0, 3);
+  prod.y = m(1, 0) * p.x + m(1, 1) * p.y + m(1, 2) * p.z + m(1, 3);
+  prod.z = m(2, 0) * p.x + m(2, 1) * p.y + m(2, 2) * p.z + m(2, 3);
   return prod;
 }
 
 template <size_t N, typename std::enable_if<(N == 4)>::type * = nullptr>
-Vec3 operator*(Matrix<N> lhs, Vec3 v) {
+Point operator*(Point p, Matrix<N> m) {
+  return m * p;
+}
+
+template <size_t N, typename std::enable_if<(N == 4)>::type * = nullptr>
+Vec3 operator*(Matrix<N> m, Vec3 v) {
   auto prod = Vec3{};
-  prod.x = lhs(0, 0) * v.x + lhs(0, 1) * v.y + lhs(0, 2) * v.z;
-  prod.y = lhs(1, 0) * v.x + lhs(1, 1) * v.y + lhs(1, 2) * v.z;
-  prod.z = lhs(2, 0) * v.x + lhs(2, 1) * v.y + lhs(2, 2) * v.z;
+  prod.x = m(0, 0) * v.x + m(0, 1) * v.y + m(0, 2) * v.z;
+  prod.y = m(1, 0) * v.x + m(1, 1) * v.y + m(1, 2) * v.z;
+  prod.z = m(2, 0) * v.x + m(2, 1) * v.y + m(2, 2) * v.z;
   return prod;
+}
+
+template <size_t N, typename std::enable_if<(N == 4)>::type * = nullptr>
+Vec3 operator*(Vec3 v, Matrix<N> m) {
+  return m * v;
 }
 
 template <size_t N>
