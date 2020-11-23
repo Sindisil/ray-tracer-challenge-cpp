@@ -3,15 +3,12 @@
 
 #include "primatives.h"
 
-#include <cassert>
-
-// TODO - consider removing most operations from Matrix &
-// specializing Matrix as Mat4 for 4x4 matrices. This should
-// simplify later code, since most every Matrix we'll use will by 4x4. Might be
-// easier than adding the SFINAE guard all every member function of Matrix that
-// is only valid for 4x4 matrices.
+#include <cmath>
 
 namespace raytrace {
+
+const float pi = 2 * acos(0.f);
+
 template <size_t N> struct Matrix {
 public:
   float cells[N][N]{};
@@ -60,7 +57,7 @@ public:
 
   bool isInvertable() { return determinant() != 0; }
 
-  Matrix<N> inverse() {
+  Matrix<N> invert() {
     if (!isInvertable()) {
       throw std::domain_error("Matrix not invertable");
     }
@@ -103,6 +100,33 @@ public:
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
   Matrix<N> scale(float x, float y, float z) {
     return Matrix<4>{{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}}} *
+           (*this);
+  }
+
+  template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
+  Matrix<N> rotate_x(float r) {
+    return Matrix<4>{{{1, 0, 0, 0},
+                      {0, std::cos(r), -std::sin(r), 0},
+                      {0, std::sin(r), std::cos(r), 0},
+                      {0, 0, 0, 1}}} *
+           (*this);
+  }
+
+  template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
+  Matrix<N> rotate_y(float r) {
+    return Matrix<4>{{{std::cos(r), 0, std::sin(r), 0},
+                      {0, 1, 0, 0},
+                      {-std::sin(r), 0, std::cos(r), 0},
+                      {0, 0, 0, 1}}} *
+           (*this);
+  }
+
+  template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
+  Matrix<N> rotate_z(float r) {
+    return Matrix<4>{{{std::cos(r), -std::sin(r), 0, 0},
+                      {std::sin(r), std::cos(r), 0, 0},
+                      {0, 0, 1, 0},
+                      {0, 0, 0, 1}}} *
            (*this);
   }
 };
