@@ -1,9 +1,8 @@
-#include "doctest.h"
+#include <cmath>
 
+#include "doctest.h"
 #include "matrix.h"
 #include "primatives.h"
-
-#include <cmath>
 
 using namespace raytrace;
 
@@ -304,4 +303,31 @@ TEST_CASE("A shearing transformation moves z in proportion to x") {
 TEST_CASE("A shearing transformation moves z in proportion to y") {
   Point p{2, 3, 4};
   CHECK(identityMatrix().shear(0, 0, 0, 0, 0, 1) * p == Point{2, 3, 7});
+}
+
+TEST_CASE("Transformations are applied in seqence") {
+  Point p{1, 0, 1};
+  auto a{identityMatrix().rotate_x(pi / 2)};
+  auto b{identityMatrix().scale(5, 5, 5)};
+  auto c{identityMatrix().translate(10, 5, 7)};
+
+  auto p2{a * p};
+  CHECK(p2 == Point{1, -1, 0});
+  auto p3{b * p2};
+  CHECK(p3 == Point{5, -5, 0});
+  auto p4{c * p3};
+  CHECK(p4 == Point{15, 0, 7});
+}
+
+TEST_CASE("Chained transformations must be appied in the correct order") {
+  Point p{1, 0, 1};
+  auto a{identityMatrix().rotate_x(pi / 2)};
+  auto b{identityMatrix().scale(5, 5, 5)};
+  auto c{identityMatrix().translate(10, 5, 7)};
+
+  auto t = c * b * a;
+  CHECK(t * p == Point{15, 0, 7});
+  CHECK(identityMatrix().rotate_x(pi / 2).scale(5, 5, 5).translate(10, 5, 7) *
+            p ==
+        Point{15, 0, 7});
 }
