@@ -275,3 +275,33 @@ TEST_CASE("Rotating a point around the z axis") {
         Point{-std::sqrt(2.f) / 2, std::sqrt(2.f) / 2, 0});
   CHECK(identityMatrix().rotate_z(pi / 2) * p == Point{-1, 0, 0});
 }
+
+TEST_CASE("A shearing transformation moves x in proportion to y") {
+  Point p{2, 3, 4};
+  CHECK(identityMatrix().shear(1, 0, 0, 0, 0, 0) * p == Point{5, 3, 4});
+}
+
+TEST_CASE("A shearing transformation moves x in proportion to z") {
+  Point p{2, 3, 4};
+  CHECK(identityMatrix().shear(0, 1, 0, 0, 0, 0) * p == Point{6, 3, 4});
+}
+
+TEST_CASE("A shearing transformation moves y in proportion to x") {
+  Point p{2, 3, 4};
+  CHECK(identityMatrix().shear(0, 0, 1, 0, 0, 0) * p == Point{2, 5, 4});
+}
+
+TEST_CASE("A shearing transformation moves y in proportion to z") {
+  Point p{2, 3, 4};
+  CHECK(identityMatrix().shear(0, 0, 0, 1, 0, 0) * p == Point{2, 7, 4});
+}
+
+TEST_CASE("A shearing transformation moves z in proportion to x") {
+  Point p{2, 3, 4};
+  CHECK(identityMatrix().shear(0, 0, 0, 0, 1, 0) * p == Point{2, 3, 6});
+}
+
+TEST_CASE("A shearing transformation moves z in proportion to y") {
+  Point p{2, 3, 4};
+  CHECK(identityMatrix().shear(0, 0, 0, 0, 0, 1) * p == Point{2, 3, 7});
+}

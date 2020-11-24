@@ -129,6 +129,13 @@ public:
                       {0, 0, 0, 1}}} *
            (*this);
   }
+
+  template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
+  Matrix<N> shear(float xy, float xz, float yx, float yz, float zx, float zy) {
+    return Matrix<4>{
+               {{1, xy, xz, 0}, {yx, 1, yz, 0}, {zx, zy, 1, 0}, {0, 0, 0, 1}}} *
+           (*this);
+  }
 };
 
 // Free functions for Matrix
