@@ -81,11 +81,11 @@ public:
 
   float determinant() {
     if constexpr (N == 2) {
-      return ((*this)(0, 0) * (*this)(1, 1)) - ((*this)(0, 1) * (*this)(1, 0));
+      return (cells[0][0] * cells[1][1]) - (cells[0][1] * cells[1][0]);
     } else {
       float det = 0;
       for (int c = 0; c < int{N}; ++c) {
-        det += (*this)(0, c) * cofactor(0, c);
+        det += cells[0][c] * cofactor(0, c);
       }
       return det;
     }
