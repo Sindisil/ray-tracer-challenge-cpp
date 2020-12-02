@@ -17,7 +17,7 @@ struct Ray {
   Point position(float t) { return origin + direction * t; };
 };
 
-std::vector<float> intersect(Sphere const& s, Ray const& r);
+std::vector<float> intersect(Sphere const &s, Ray const &r);
 
 } // namespace raytrace
 
