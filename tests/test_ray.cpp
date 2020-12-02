@@ -40,10 +40,10 @@ TEST_CASE("A ray intersects a sphere at two points") {
   Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
   Sphere s{};
 
-  std::vector<float> xs{intersect(s, r)};
+  auto xs = intersect(s, r);
   REQUIRE(xs.size() == 2);
-  CHECK(aboutEqual(xs[0], 4.0));
-  CHECK(aboutEqual(xs[1], 6.0));
+  CHECK(aboutEqual(xs[0].t, 4.0));
+  CHECK(aboutEqual(xs[1].t, 6.0));
 }
 
 TEST_CASE("A ray intersects a sphere at a tangent") {
@@ -51,8 +51,8 @@ TEST_CASE("A ray intersects a sphere at a tangent") {
   Sphere s{};
   auto xs = intersect(s, r);
   REQUIRE(xs.size() == 2);
-  CHECK(aboutEqual(xs[0], 5.0));
-  CHECK(aboutEqual(xs[1], 5.0));
+  CHECK(aboutEqual(xs[0].t, 5.0));
+  CHECK(aboutEqual(xs[1].t, 5.0));
 }
 
 TEST_CASE("A ray misses a sphere") {
@@ -67,8 +67,8 @@ TEST_CASE("A ray originates inside a sphere") {
   Sphere s{};
   auto xs = intersect(s, r);
   REQUIRE(xs.size() == 2);
-  CHECK(aboutEqual(xs[0], -1.0));
-  CHECK(aboutEqual(xs[1], 1.0));
+  CHECK(aboutEqual(xs[0].t, -1.0));
+  CHECK(aboutEqual(xs[1].t, 1.0));
 }
 
 TEST_CASE("A sphere is behind a ray") {
@@ -76,8 +76,8 @@ TEST_CASE("A sphere is behind a ray") {
   Sphere s{};
   auto xs = intersect(s, r);
   REQUIRE(xs.size() == 2);
-  CHECK(aboutEqual(xs[0], -6.0));
-  CHECK(aboutEqual(xs[1], -4.0));
+  CHECK(aboutEqual(xs[0].t, -6.0));
+  CHECK(aboutEqual(xs[1].t, -4.0));
 }
 
 TEST_CASE("An intersection encapsulates t and object") {
@@ -91,7 +91,16 @@ TEST_CASE("Aggregating intersections") {
   Sphere s;
   Intersection i1{1, s};
   Intersection i2{2, s};
-  auto xs = intersections({i1, i2});
+  auto xs = std::vector<Intersection>({i1, i2});
+  REQUIRE(xs.size() == 2);
+  CHECK(xs[0].object == s);
+  CHECK(xs[1].object == s);
+}
+
+TEST_CASE("Intersect sets the object on the intersection") {
+  Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
+  Sphere s;
+  auto xs = intersect(s, r);
   REQUIRE(xs.size() == 2);
   CHECK(xs[0].object == s);
   CHECK(xs[1].object == s);

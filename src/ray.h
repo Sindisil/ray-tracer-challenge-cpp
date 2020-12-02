@@ -16,12 +16,6 @@ struct Intersection {
   Sphere object;
 };
 
-inline std::vector<Intersection>
-intersections(std::initializer_list<Intersection> is) {
-  std::vector<Intersection> v{is};
-  return v;
-}
-
 struct Ray {
   Point origin{0, 0, 0};
   Vec3 direction{0, 0, 0};
@@ -29,7 +23,7 @@ struct Ray {
   Point position(float t) { return origin + direction * t; };
 };
 
-std::vector<float> intersect(Sphere const &s, Ray const &r);
+std::vector<Intersection> intersect(Sphere const &s, Ray const &r);
 
 } // namespace raytrace
 
