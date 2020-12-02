@@ -153,7 +153,7 @@ template <size_t N> inline bool operator!=(Matrix<N> lhs, Matrix<N> rhs) {
 template <size_t N> bool operator==(Matrix<N> lhs, Matrix<N> rhs) {
   for (int r = 0; r < int{N}; ++r) {
     for (int c = 0; c < int{N}; ++c) {
-      if (!about_equal(lhs(r, c), rhs(r, c))) {
+      if (!aboutEqual(lhs(r, c), rhs(r, c))) {
         return false;
       }
     }
