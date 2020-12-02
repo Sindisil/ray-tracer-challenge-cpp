@@ -9,6 +9,8 @@
 
 using raytrace::aboutEqual;
 using raytrace::intersect;
+using raytrace::Intersection;
+using raytrace::intersections;
 using raytrace::Point;
 using raytrace::Ray;
 using raytrace ::Sphere;
@@ -76,4 +78,21 @@ TEST_CASE("A sphere is behind a ray") {
   REQUIRE(xs.size() == 2);
   CHECK(aboutEqual(xs[0], -6.0));
   CHECK(aboutEqual(xs[1], -4.0));
+}
+
+TEST_CASE("An intersection encapsulates t and object") {
+  Sphere s;
+  Intersection i{3.5f, s};
+  CHECK(aboutEqual(i.t, 3.5));
+  CHECK(i.object == s);
+}
+
+TEST_CASE("Aggregating intersections") {
+  Sphere s;
+  Intersection i1{1, s};
+  Intersection i2{2, s};
+  auto xs = intersections({i1, i2});
+  REQUIRE(xs.size() == 2);
+  CHECK(xs[0].object == s);
+  CHECK(xs[1].object == s);
 }

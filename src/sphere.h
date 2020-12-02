@@ -10,7 +10,7 @@
 
 namespace raytrace {
 
-static std::atomic<unsigned> next_id(1);
+static std::atomic<unsigned> next_id(0);
 
 class Sphere {
 public:
@@ -20,6 +20,8 @@ public:
 private:
   unsigned m_id;
 };
+
+inline bool operator==(Sphere lhs, Sphere rhs) { return lhs.id() == rhs.id(); }
 
 } // namespace raytrace
 
