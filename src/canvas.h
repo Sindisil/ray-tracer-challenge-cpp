@@ -1,7 +1,7 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "primatives.h"
+#include "primitives.h"
 
 #include <stdexcept>
 #include <vector>

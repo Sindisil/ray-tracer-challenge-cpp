@@ -1,12 +1,11 @@
-#ifndef PRIMATIVES_H_GUARD
-#define PRIMATIVES_H_GUARD
+#ifndef PRIMITIVES_H_GUARD
+#define PRIMITIVES_H_GUARD
 
 #include <algorithm>
 #include <array>
 #include <cmath>
 #include <initializer_list>
 #include <limits>
-#include <ostream>
 #include <stdexcept>
 
 namespace raytrace {

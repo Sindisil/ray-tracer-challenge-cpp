@@ -1,9 +1,10 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
-#include "primatives.h"
+#include "primitives.h"
 
 #include <cmath>
+#include <ostream>
 
 namespace raytrace {
 
@@ -20,7 +21,7 @@ public:
     return cells[r][c];
   }
 
-  Matrix<N> transpose() {
+  Matrix<N> transpose() const {
     Matrix<N> t{};
     for (int c = 0; c < int{N}; ++c) {
       for (int r = 0; r < int{N}; ++r) {
@@ -31,10 +32,10 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<(NN > 1)>::type * = nullptr>
-  Matrix<N - 1> submatrix(int r_skip, int c_skip) {
+  Matrix<N - 1> submatrix(int r_skip, int c_skip) const {
     Matrix<N - 1> s{};
-    int srow = 0;
-    int scol = 0;
+    int sRow = 0;
+    int sCol = 0;
 
     if (r_skip > int{N} || c_skip > int{N}) {
       throw std::out_of_range("row or column to skip was out of range");
@@ -44,20 +45,20 @@ public:
       if (r != r_skip) {
         for (int c = 0; c < int{N}; ++c) {
           if (c != c_skip) {
-            s(srow, scol) = cells[r][c];
-            ++scol;
+            s(sRow, sCol) = cells[r][c];
+            ++sCol;
           }
         }
-        ++srow;
-        scol = 0;
+        ++sRow;
+        sCol = 0;
       }
     }
     return s;
   }
 
-  bool isInvertable() { return determinant() != 0; }
+  bool isInvertable() const { return determinant() != 0; }
 
-  Matrix<N> invert() {
+  Matrix<N> invert() const {
     if (!isInvertable()) {
       throw std::domain_error("Matrix not invertable");
     }
@@ -72,14 +73,14 @@ public:
     return m;
   }
 
-  float minor(int r, int c) { return submatrix(r, c).determinant(); }
+  float minor(int r, int c) const { return submatrix(r, c).determinant(); }
 
-  float cofactor(int r, int c) {
+  float cofactor(int r, int c) const {
     auto f = minor(r, c);
     return (r + c) % 2 == 0 ? f : -f;
   }
 
-  float determinant() {
+  float determinant() const {
     if constexpr (N == 2) {
       return (cells[0][0] * cells[1][1]) - (cells[0][1] * cells[1][0]);
     } else {
@@ -92,19 +93,19 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<4> translate(float x, float y, float z) {
+  Matrix<4> translate(float x, float y, float z) const {
     return Matrix<4>{{{1, 0, 0, x}, {0, 1, 0, y}, {0, 0, 1, z}, {0, 0, 0, 1}}} *
            (*this);
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> scale(float x, float y, float z) {
+  Matrix<N> scale(float x, float y, float z) const {
     return Matrix<4>{{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}}} *
            (*this);
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> rotate_x(float r) {
+  Matrix<N> rotate_x(float r) const {
     return Matrix<4>{{{1, 0, 0, 0},
                       {0, std::cos(r), -std::sin(r), 0},
                       {0, std::sin(r), std::cos(r), 0},
@@ -113,7 +114,7 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> rotate_y(float r) {
+  Matrix<N> rotate_y(float r) const {
     return Matrix<4>{{{std::cos(r), 0, std::sin(r), 0},
                       {0, 1, 0, 0},
                       {-std::sin(r), 0, std::cos(r), 0},
@@ -122,7 +123,7 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> rotate_z(float r) {
+  Matrix<N> rotate_z(float r) const {
     return Matrix<4>{{{std::cos(r), -std::sin(r), 0, 0},
                       {std::sin(r), std::cos(r), 0, 0},
                       {0, 0, 1, 0},
@@ -131,7 +132,8 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> shear(float xy, float xz, float yx, float yz, float zx, float zy) {
+  Matrix<N> shear(float xy, float xz, float yx, float yz, float zx,
+                  float zy) const {
     return Matrix<4>{
                {{1, xy, xz, 0}, {yx, 1, yz, 0}, {zx, zy, 1, 0}, {0, 0, 0, 1}}} *
            (*this);

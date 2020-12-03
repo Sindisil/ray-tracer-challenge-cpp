@@ -1,6 +1,9 @@
 #include "ray.h"
 
+#include <algorithm>
 #include <cmath>
+#include <optional>
+#include <ostream>
 #include <vector>
 
 #include "sphere.h"
@@ -19,6 +22,18 @@ std::vector<Intersection> intersect(Sphere const &s, Ray const &r) {
     xs.push_back(Intersection{(-b + std::sqrt(discriminant)) / (2 * a), s});
   }
   return xs;
+}
+
+std::optional<Intersection> Intersections::hit() {
+  auto h = std::find_if(m_intersections.begin(), m_intersections.end(),
+                        [](Intersection const &i) { return i.t >= 0; });
+  return h == m_intersections.end() ? std::nullopt
+                                    : std::optional<Intersection>(*h);
+}
+
+std::ostream &operator<<(std::ostream &os, Intersection const &val) {
+  os << "Intersection(t=" << val.t << ", " << val.object << ")";
+  return os;
 }
 
 } // namespace raytrace

@@ -1,5 +1,5 @@
 #include "canvas.h"
-#include "primatives.h"
+#include "primitives.h"
 
 #include <algorithm>
 #include <iostream>

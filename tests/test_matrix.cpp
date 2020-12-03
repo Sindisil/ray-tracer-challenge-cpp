@@ -2,7 +2,7 @@
 
 #include "doctest.h"
 #include "matrix.h"
-#include "primatives.h"
+#include "primitives.h"
 
 using namespace raytrace;
 

@@ -1,16 +1,16 @@
-#include "primatives.h"
+#include "primitives.h"
 
-#include <iostream>
+#include <ostream>
 
 namespace raytrace {
 
 std::ostream &operator<<(std::ostream &os, Vec3 const &val) {
-  os << "(" << val.x << ", " << val.y << ", " << val.z << ")";
+  os << "Vec3(" << val.x << ", " << val.y << ", " << val.z << ")";
   return os;
 }
 
 std::ostream &operator<<(std::ostream &os, Point const &val) {
-  os << "(" << val.x << ", " << val.y << ", " << val.z << ")";
+  os << "Point(" << val.x << ", " << val.y << ", " << val.z << ")";
   return os;
 }
 
@@ -20,7 +20,7 @@ bool operator==(Color c1, Color c2) {
 }
 
 std::ostream &operator<<(std::ostream &os, Color const &val) {
-  os << "(r=" << val.r << ", g=" << val.g << ", b=" << val.b << ")";
+  os << "Color(r=" << val.r << ", g=" << val.g << ", b=" << val.b << ")";
   return os;
 }
 

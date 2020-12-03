@@ -1,6 +1,6 @@
 #include "canvas.h"
 #include "matrix.h"
-#include "primatives.h"
+#include "primitives.h"
 
 #include <algorithm>
 #include <iostream>

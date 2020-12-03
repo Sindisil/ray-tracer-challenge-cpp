@@ -1,6 +1,6 @@
 #include "doctest.h"
 
-#include "primatives.h"
+#include "primitives.h"
 
 using namespace raytrace;
 
