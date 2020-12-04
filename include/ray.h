@@ -1,8 +1,6 @@
 #ifndef RAY_H_GUARD
 #define RAY_H_GUARD
 
-#include "doctest.h"
-
 #include <algorithm>
 #include <initializer_list>
 #include <ios>

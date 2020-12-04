@@ -1,8 +1,6 @@
 #ifndef SPHERE_H_GUARD
 #define SPHERE_H_GUARD
 
-#include "doctest.h"
-
 #include <atomic>
 #include <cstdint>
 

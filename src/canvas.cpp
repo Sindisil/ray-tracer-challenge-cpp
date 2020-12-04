@@ -6,6 +6,7 @@
 #include <string>
 
 namespace raytrace {
+
 std::string Canvas::to_ppm() {
   constexpr auto max_ppm_line_len = 70;
   std::ostringstream ppm;
