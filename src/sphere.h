@@ -6,6 +6,7 @@
 #include <atomic>
 #include <cstdint>
 
+#include "matrix.h"
 #include "primitives.h"
 
 namespace raytrace {
@@ -14,11 +15,14 @@ static std::atomic<unsigned> next_id(0);
 
 class Sphere {
 public:
-  Sphere() { m_id = std::atomic_fetch_add(&next_id, 1); }
-  unsigned id() const { return m_id; }
+  Matrix<4> transform{identity_matrix()};
+
+  Sphere() { id_ = std::atomic_fetch_add(&next_id, 1); }
+  Sphere(Matrix<4> transform) : transform(transform) { Sphere(); };
+  unsigned id() const { return id_; }
 
 private:
-  unsigned m_id;
+  unsigned id_;
 };
 
 inline bool operator==(Sphere lhs, Sphere rhs) { return lhs.id() == rhs.id(); }

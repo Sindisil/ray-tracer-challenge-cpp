@@ -7,7 +7,7 @@
 
 using raytrace::Canvas;
 using raytrace::Color;
-using raytrace::identityMatrix;
+using raytrace::identity_matrix;
 using raytrace::Matrix;
 using raytrace::pi;
 using raytrace::Point;
@@ -28,7 +28,7 @@ int main() {
         canvas.width() - center.x + static_cast<int>(p.x * radius),
         canvas.height() - center.y + static_cast<int>(p.y * radius),
         Color{240, 0, 0});
-    p = identityMatrix().rotate_z(pi / 6) * p;
+    p = identity_matrix().rotate_z(pi / 6) * p;
   }
 
   std::cout << canvas.to_ppm();

@@ -77,11 +77,11 @@ TEST_CASE("Matrix multiplied by a Point") {
 
 TEST_CASE("Multiplying a matrix by the identity matrix") {
   Matrix<4> m{0, 1, 2, 4, 1, 2, 4, 8, 2, 4, 8, 16, 4, 8, 16, 32};
-  CHECK(m * identityMatrix() == m);
+  CHECK(m * identity_matrix() == m);
 }
 
 TEST_CASE("Multiplying the identity matrix by a Point or Vector") {
-  Matrix<4> m = identityMatrix();
+  Matrix<4> m = identity_matrix();
   Point p{1, 2, 3};
   Vec3 v{4, 5, 6};
 
@@ -97,9 +97,9 @@ TEST_CASE("Transposing a matrix") {
 }
 
 TEST_CASE("Transposing the identity matrix") {
-  Matrix<4> m = identityMatrix();
+  Matrix<4> m = identity_matrix();
 
-  CHECK(m.transpose() == identityMatrix());
+  CHECK(m.transpose() == identity_matrix());
 }
 
 TEST_CASE("Calculating the determinant of a 2x2 matrix") {
@@ -207,20 +207,20 @@ TEST_CASE("Multiplying a product by its inverse") {
 }
 
 TEST_CASE("Multiplying by a translation matrix") {
-  auto transform = identityMatrix().translate(5, -3, 2);
+  auto transform = identity_matrix().translate(5, -3, 2);
   Point p{-3, 4, 5};
 
   CHECK(transform * p == Point{2, 1, 7});
 }
 
 TEST_CASE("Multiplying by the innverse of a translation matrix") {
-  auto inv = identityMatrix().translate(5, -3, 2).invert();
+  auto inv = identity_matrix().translate(5, -3, 2).invert();
   auto p = Point{-3, 4, 5};
   CHECK(inv * p == Point{-8, 7, 3});
 }
 
 TEST_CASE("Translation does not affect vectors") {
-  auto transform = identityMatrix().translate(5, -3, 2);
+  auto transform = identity_matrix().translate(5, -3, 2);
   auto v = Vec3{-3, 4, 5};
   CHECK(transform * v == v);
 }
@@ -228,88 +228,88 @@ TEST_CASE("Translation does not affect vectors") {
 TEST_CASE("A scaling matrix applied to a point") {
   Point p{-4, 6, 8};
 
-  CHECK(identityMatrix().scale(2, 3, 4) * p == Point{-8, 18, 32});
+  CHECK(identity_matrix().scale(2, 3, 4) * p == Point{-8, 18, 32});
 }
 
 TEST_CASE("A scaling matrix applied to a vector") {
   Vec3 v{-4, 6, 8};
 
-  CHECK(identityMatrix().scale(2, 3, 4) * v == Vec3{-8, 18, 32});
+  CHECK(identity_matrix().scale(2, 3, 4) * v == Vec3{-8, 18, 32});
 }
 
 TEST_CASE("Multiplying by the inverse of a scaling matrix") {
   Vec3 v{-4, 6, 8};
-  CHECK(identityMatrix().scale(2, 3, 4).invert() * v == Vec3{-2, 2, 2});
+  CHECK(identity_matrix().scale(2, 3, 4).invert() * v == Vec3{-2, 2, 2});
 }
 
 TEST_CASE("Reflection is scaling by a negative value") {
   Point p{2, 3, 4};
-  CHECK(identityMatrix().scale(-1, 1, 1) * p == Point{-2, 3, 4});
+  CHECK(identity_matrix().scale(-1, 1, 1) * p == Point{-2, 3, 4});
 }
 
 TEST_CASE("Rotating a point around the x axis") {
   Point p{0, 1, 0};
 
-  CHECK(identityMatrix().rotate_x(pi / 4) * p ==
+  CHECK(identity_matrix().rotate_x(pi / 4) * p ==
         Point{0, std::sqrt(2.f) / 2, std::sqrt(2.f) / 2});
-  CHECK(identityMatrix().rotate_x(pi / 2) * p == Point{0, 0, 1});
+  CHECK(identity_matrix().rotate_x(pi / 2) * p == Point{0, 0, 1});
 }
 
 TEST_CASE("Inverse of rotate_x rotates the opposite direction") {
   Point p{0, 1, 0};
-  CHECK(identityMatrix().rotate_x(pi / 4).invert() * p ==
+  CHECK(identity_matrix().rotate_x(pi / 4).invert() * p ==
         Point{0, std::sqrt(2.f) / 2, -std::sqrt(2.f) / 2});
 }
 
 TEST_CASE("Rotating a point around the y axis") {
   Point p{0, 0, 1};
-  CHECK(identityMatrix().rotate_y(pi / 4) * p ==
+  CHECK(identity_matrix().rotate_y(pi / 4) * p ==
         Point{std::sqrt(2.f) / 2, 0, std::sqrt(2.f) / 2});
-  CHECK(identityMatrix().rotate_y(pi / 2) * p == Point{1, 0, 0});
+  CHECK(identity_matrix().rotate_y(pi / 2) * p == Point{1, 0, 0});
 }
 
 TEST_CASE("Rotating a point around the z axis") {
   Point p{0, 1, 0};
-  CHECK(identityMatrix().rotate_z(pi / 4) * p ==
+  CHECK(identity_matrix().rotate_z(pi / 4) * p ==
         Point{-std::sqrt(2.f) / 2, std::sqrt(2.f) / 2, 0});
-  CHECK(identityMatrix().rotate_z(pi / 2) * p == Point{-1, 0, 0});
+  CHECK(identity_matrix().rotate_z(pi / 2) * p == Point{-1, 0, 0});
 }
 
 TEST_CASE("A shearing transformation moves x in proportion to y") {
   Point p{2, 3, 4};
-  CHECK(identityMatrix().shear(1, 0, 0, 0, 0, 0) * p == Point{5, 3, 4});
+  CHECK(identity_matrix().shear(1, 0, 0, 0, 0, 0) * p == Point{5, 3, 4});
 }
 
 TEST_CASE("A shearing transformation moves x in proportion to z") {
   Point p{2, 3, 4};
-  CHECK(identityMatrix().shear(0, 1, 0, 0, 0, 0) * p == Point{6, 3, 4});
+  CHECK(identity_matrix().shear(0, 1, 0, 0, 0, 0) * p == Point{6, 3, 4});
 }
 
 TEST_CASE("A shearing transformation moves y in proportion to x") {
   Point p{2, 3, 4};
-  CHECK(identityMatrix().shear(0, 0, 1, 0, 0, 0) * p == Point{2, 5, 4});
+  CHECK(identity_matrix().shear(0, 0, 1, 0, 0, 0) * p == Point{2, 5, 4});
 }
 
 TEST_CASE("A shearing transformation moves y in proportion to z") {
   Point p{2, 3, 4};
-  CHECK(identityMatrix().shear(0, 0, 0, 1, 0, 0) * p == Point{2, 7, 4});
+  CHECK(identity_matrix().shear(0, 0, 0, 1, 0, 0) * p == Point{2, 7, 4});
 }
 
 TEST_CASE("A shearing transformation moves z in proportion to x") {
   Point p{2, 3, 4};
-  CHECK(identityMatrix().shear(0, 0, 0, 0, 1, 0) * p == Point{2, 3, 6});
+  CHECK(identity_matrix().shear(0, 0, 0, 0, 1, 0) * p == Point{2, 3, 6});
 }
 
 TEST_CASE("A shearing transformation moves z in proportion to y") {
   Point p{2, 3, 4};
-  CHECK(identityMatrix().shear(0, 0, 0, 0, 0, 1) * p == Point{2, 3, 7});
+  CHECK(identity_matrix().shear(0, 0, 0, 0, 0, 1) * p == Point{2, 3, 7});
 }
 
-TEST_CASE("Transformations are applied in seqence") {
+TEST_CASE("Transformations are applied in sequence") {
   Point p{1, 0, 1};
-  auto a{identityMatrix().rotate_x(pi / 2)};
-  auto b{identityMatrix().scale(5, 5, 5)};
-  auto c{identityMatrix().translate(10, 5, 7)};
+  auto a{identity_matrix().rotate_x(pi / 2)};
+  auto b{identity_matrix().scale(5, 5, 5)};
+  auto c{identity_matrix().translate(10, 5, 7)};
 
   auto p2{a * p};
   CHECK(p2 == Point{1, -1, 0});
@@ -321,13 +321,13 @@ TEST_CASE("Transformations are applied in seqence") {
 
 TEST_CASE("Chained transformations must be appied in the correct order") {
   Point p{1, 0, 1};
-  auto a{identityMatrix().rotate_x(pi / 2)};
-  auto b{identityMatrix().scale(5, 5, 5)};
-  auto c{identityMatrix().translate(10, 5, 7)};
+  auto a{identity_matrix().rotate_x(pi / 2)};
+  auto b{identity_matrix().scale(5, 5, 5)};
+  auto c{identity_matrix().translate(10, 5, 7)};
 
   auto t = c * b * a;
   CHECK(t * p == Point{15, 0, 7});
-  CHECK(identityMatrix().rotate_x(pi / 2).scale(5, 5, 5).translate(10, 5, 7) *
+  CHECK(identity_matrix().rotate_x(pi / 2).scale(5, 5, 5).translate(10, 5, 7) *
             p ==
         Point{15, 0, 7});
 }

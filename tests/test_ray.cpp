@@ -8,8 +8,8 @@
 #include "primitives.h"
 #include "sphere.h"
 
-using raytrace::aboutEqual;
-using raytrace::identityMatrix;
+using raytrace::are_about_equal;
+using raytrace::identity_matrix;
 using raytrace::intersect;
 using raytrace::Intersection;
 using raytrace::Intersections;
@@ -45,8 +45,8 @@ TEST_CASE("A ray intersects a sphere at two points") {
 
   auto xs = intersect(s, r);
   REQUIRE(xs.size() == 2);
-  CHECK(aboutEqual(xs[0].t, 4.0));
-  CHECK(aboutEqual(xs[1].t, 6.0));
+  CHECK(are_about_equal(xs[0].t, 4.0));
+  CHECK(are_about_equal(xs[1].t, 6.0));
 }
 
 TEST_CASE("A ray intersects a sphere at a tangent") {
@@ -54,8 +54,8 @@ TEST_CASE("A ray intersects a sphere at a tangent") {
   Sphere s{};
   auto xs = intersect(s, r);
   REQUIRE(xs.size() == 2);
-  CHECK(aboutEqual(xs[0].t, 5.0));
-  CHECK(aboutEqual(xs[1].t, 5.0));
+  CHECK(are_about_equal(xs[0].t, 5.0));
+  CHECK(are_about_equal(xs[1].t, 5.0));
 }
 
 TEST_CASE("A ray misses a sphere") {
@@ -70,8 +70,8 @@ TEST_CASE("A ray originates inside a sphere") {
   Sphere s{};
   auto xs = intersect(s, r);
   REQUIRE(xs.size() == 2);
-  CHECK(aboutEqual(xs[0].t, -1.0));
-  CHECK(aboutEqual(xs[1].t, 1.0));
+  CHECK(are_about_equal(xs[0].t, -1.0));
+  CHECK(are_about_equal(xs[1].t, 1.0));
 }
 
 TEST_CASE("A sphere is behind a ray") {
@@ -79,14 +79,14 @@ TEST_CASE("A sphere is behind a ray") {
   Sphere s{};
   auto xs = intersect(s, r);
   REQUIRE(xs.size() == 2);
-  CHECK(aboutEqual(xs[0].t, -6.0));
-  CHECK(aboutEqual(xs[1].t, -4.0));
+  CHECK(are_about_equal(xs[0].t, -6.0));
+  CHECK(are_about_equal(xs[1].t, -4.0));
 }
 
 TEST_CASE("An intersection encapsulates t and object") {
   Sphere s;
   Intersection i{3.5f, s};
-  CHECK(aboutEqual(i.t, 3.5));
+  CHECK(are_about_equal(i.t, 3.5));
   CHECK(i.object == s);
 }
 
@@ -164,14 +164,48 @@ TEST_CASE("The hit is always the lowest nonnegative intersection") {
 
 TEST_CASE("Translating a ray") {
   Ray r{Point{1, 2, 3}, Vec3{0, 1, 0}};
-  auto r2 = r.transform(identityMatrix().translate(3, 4, 5));
+  auto r2 = r.transform(identity_matrix().translate(3, 4, 5));
   CHECK(r2.origin == Point{4, 6, 8});
   CHECK(r2.direction == Vec3{0, 1, 0});
 }
 
 TEST_CASE("Scaling a ray") {
   Ray r{Point{1, 2, 3}, Vec3{0, 1, 0}};
-  auto r2 = r.transform(identityMatrix().scale(2, 3, 4));
+  auto r2 = r.transform(identity_matrix().scale(2, 3, 4));
   CHECK(r2.origin == Point{2, 6, 12});
   CHECK(r2.direction == Vec3{0, 3, 0});
+}
+
+TEST_CASE("A sphere's default transformation") {
+  Sphere s;
+  REQUIRE(s.transform == identity_matrix());
+}
+
+TEST_CASE("Creating a sphere with a transformation") {
+  auto t = identity_matrix().translate(2, 3, 4);
+  Sphere s{t};
+  REQUIRE(s.transform == t);
+}
+
+TEST_CASE("Changing a sphere's transformation") {
+  Sphere s;
+  auto t = identity_matrix().translate(2, 3, 4);
+  s.transform = t;
+  REQUIRE(s.transform == t);
+}
+
+TEST_CASE("Intersecting a scaled sphere with a ray") {
+  Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
+  Sphere s{identity_matrix().scale(2, 2, 2)};
+  auto xs = intersect(s, r);
+  REQUIRE(xs.size() == 2);
+  CHECK(are_about_equal(xs[0].t, 3));
+  CHECK(are_about_equal(xs[1].t, 7));
+}
+
+TEST_CASE("Intersecting a translated sphere with a ray") {
+  Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
+  Sphere s{identity_matrix().translate(5, 0, 0)};
+  auto xs = intersect(s, r);
+  REQUIRE(xs.size() == 0);
 }

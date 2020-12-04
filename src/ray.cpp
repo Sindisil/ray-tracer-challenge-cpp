@@ -10,8 +10,11 @@
 
 namespace raytrace {
 
-std::vector<Intersection> intersect(Sphere const &s, Ray const &r) {
+std::vector<Intersection> intersect(Sphere s, Ray r) {
   std::vector<Intersection> xs;
+  // transform ray by inverse of sphere's transform,
+  // instead of actually transforming the sphere
+  r = r.transform(s.transform.invert());
   auto sphere_to_ray = r.origin - Point{0, 0, 0};
   auto a = dot(r.direction, r.direction);
   auto b = 2 * dot(r.direction, sphere_to_ray);

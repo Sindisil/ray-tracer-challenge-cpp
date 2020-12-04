@@ -25,7 +25,7 @@ inline bool operator<(Intersection lhs, Intersection rhs) {
 }
 
 inline bool operator==(Intersection lhs, Intersection rhs) {
-  return lhs.object == rhs.object && aboutEqual(lhs.t, rhs.t);
+  return lhs.object == rhs.object && are_about_equal(lhs.t, rhs.t);
 }
 
 class Intersections {
@@ -57,7 +57,7 @@ struct Ray {
   Ray transform(Matrix<4> m) const { return Ray{origin * m, direction * m}; };
 };
 
-std::vector<Intersection> intersect(Sphere const &s, Ray const &r);
+std::vector<Intersection> intersect(Sphere s, Ray r);
 
 std::ostream &operator<<(std::ostream &os, Intersection const &val);
 

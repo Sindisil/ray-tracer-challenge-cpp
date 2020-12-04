@@ -142,7 +142,7 @@ public:
 
 // Free functions for Matrix
 
-inline Matrix<4> identityMatrix() {
+inline Matrix<4> identity_matrix() {
   return Matrix<4>{{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}}};
 }
 
@@ -155,7 +155,7 @@ template <size_t N> inline bool operator!=(Matrix<N> lhs, Matrix<N> rhs) {
 template <size_t N> bool operator==(Matrix<N> lhs, Matrix<N> rhs) {
   for (int r = 0; r < int{N}; ++r) {
     for (int c = 0; c < int{N}; ++c) {
-      if (!aboutEqual(lhs(r, c), rhs(r, c))) {
+      if (!are_about_equal(lhs(r, c), rhs(r, c))) {
         return false;
       }
     }

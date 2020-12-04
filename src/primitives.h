@@ -10,7 +10,7 @@
 
 namespace raytrace {
 
-inline bool aboutEqual(float lhs, float rhs) {
+inline bool are_about_equal(float lhs, float rhs) {
   return std::abs(lhs - rhs) < .00001f;
 }
 
@@ -88,13 +88,13 @@ struct Point {
 };
 
 inline bool operator==(Point const &lhs, Point const &rhs) {
-  return aboutEqual(lhs.x, rhs.x) && aboutEqual(lhs.y, rhs.y) &&
-         aboutEqual(lhs.z, rhs.z);
+  return are_about_equal(lhs.x, rhs.x) && are_about_equal(lhs.y, rhs.y) &&
+         are_about_equal(lhs.z, rhs.z);
 }
 
 inline bool operator==(Vec3 const &lhs, Vec3 const &rhs) {
-  return aboutEqual(lhs.x, rhs.x) && aboutEqual(lhs.y, rhs.y) &&
-         aboutEqual(lhs.z, rhs.z);
+  return are_about_equal(lhs.x, rhs.x) && are_about_equal(lhs.y, rhs.y) &&
+         are_about_equal(lhs.z, rhs.z);
 }
 
 inline bool operator!=(Point const &lhs, Point const &rhs) {
