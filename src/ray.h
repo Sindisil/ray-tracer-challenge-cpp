@@ -9,6 +9,7 @@
 #include <optional>
 #include <vector>
 
+#include "matrix.h"
 #include "primitives.h"
 #include "sphere.h"
 
@@ -53,6 +54,7 @@ struct Ray {
   Vec3 direction{0, 0, 0};
 
   Point position(float t) const { return origin + direction * t; };
+  Ray transform(Matrix<4> m) const { return Ray{origin * m, direction * m}; };
 };
 
 std::vector<Intersection> intersect(Sphere const &s, Ray const &r);

@@ -4,13 +4,16 @@
 
 #include <vector>
 
+#include "matrix.h"
 #include "primitives.h"
 #include "sphere.h"
 
 using raytrace::aboutEqual;
+using raytrace::identityMatrix;
 using raytrace::intersect;
 using raytrace::Intersection;
 using raytrace::Intersections;
+using raytrace::Matrix;
 using raytrace::Point;
 using raytrace::Ray;
 using raytrace ::Sphere;
@@ -157,4 +160,18 @@ TEST_CASE("The hit is always the lowest nonnegative intersection") {
   auto i = xs.hit();
   REQUIRE(i.has_value());
   CHECK(*i == i4);
+}
+
+TEST_CASE("Translating a ray") {
+  Ray r{Point{1, 2, 3}, Vec3{0, 1, 0}};
+  auto r2 = r.transform(identityMatrix().translate(3, 4, 5));
+  CHECK(r2.origin == Point{4, 6, 8});
+  CHECK(r2.direction == Vec3{0, 1, 0});
+}
+
+TEST_CASE("Scaling a ray") {
+  Ray r{Point{1, 2, 3}, Vec3{0, 1, 0}};
+  auto r2 = r.transform(identityMatrix().scale(2, 3, 4));
+  CHECK(r2.origin == Point{2, 6, 12});
+  CHECK(r2.direction == Vec3{0, 3, 0});
 }

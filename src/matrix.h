@@ -142,7 +142,7 @@ public:
 
 // Free functions for Matrix
 
-Matrix<4> identityMatrix() {
+inline Matrix<4> identityMatrix() {
   return Matrix<4>{{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}}};
 }
 
