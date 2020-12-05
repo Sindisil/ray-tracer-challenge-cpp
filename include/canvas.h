@@ -4,10 +4,16 @@
 #include "primitives.h"
 
 #include <stdexcept>
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace raytrace {
+
+struct Coordinate {
+  int x;
+  int y;
+};
+
 class Canvas {
 public:
   Canvas(int width, int height) : m_width(width), m_height(height) {

@@ -7,19 +7,15 @@
 
 using raytrace::Canvas;
 using raytrace::Color;
+using raytrace::Coordinate;
 using raytrace::identity_matrix;
 using raytrace::Matrix;
 using raytrace::pi;
 using raytrace::Point;
 
-struct coordinate {
-  int x;
-  int y;
-};
-
 int main() {
   Canvas canvas{800, 800};
-  constexpr coordinate center{400, 400};
+  constexpr Coordinate center{400, 400};
   constexpr int radius{300};
 
   Point p{0, 1, 0}; // start at noon
