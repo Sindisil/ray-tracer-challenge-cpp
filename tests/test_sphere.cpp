@@ -2,6 +2,8 @@
 
 #include "sphere.h"
 
+#include <cmath>
+
 #include "ray.h"
 
 using raytrace::are_about_equal;
@@ -43,4 +45,37 @@ TEST_CASE("Intersecting a translated sphere with a ray") {
   Sphere s{identity_matrix().translate(5, 0, 0)};
   auto xs = intersect(s, r);
   REQUIRE(xs.size() == 0);
+}
+
+TEST_CASE("The normal of a sphere at a point on the x axis") {
+  Sphere s;
+  auto n = s.normal_at(Point{1, 0, 0});
+  CHECK(n == Vec3{1, 0, 0});
+}
+
+TEST_CASE("The normal on a sphere at a point on the y axis") {
+  Sphere s;
+  auto n = s.normal_at(Point{0, 1, 0});
+  CHECK(n == Vec3{0, 1, 0});
+}
+
+TEST_CASE("The normal on a sphere at a point on the z axis") {
+  Sphere s;
+  auto n = s.normal_at(Point{0, 0, 1});
+  CHECK(n == Vec3{0, 0, 1});
+}
+
+TEST_CASE("The normal on a sphere at a nonaxial point") {
+  Sphere s;
+  auto n = s.normal_at(Point{std::sqrt(3.0f) / 3.0f, std::sqrt(3.0f) / 3.0f,
+                             std::sqrt(3.0f) / 3.0f});
+  CHECK(n == Vec3{std::sqrt(3.0f) / 3.0f, std::sqrt(3.0f) / 3.0f,
+                  std::sqrt(3.0f) / 3.0f});
+}
+
+TEST_CASE("The normal is a normalized vector") {
+  Sphere s;
+  auto n = s.normal_at(Point{std::sqrt(3.0f) / 3.0f, std::sqrt(3.0f) / 3.0f,
+                             std::sqrt(3.0f) / 3.0f});
+  CHECK(n == n.normalize());
 }

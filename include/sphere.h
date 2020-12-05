@@ -18,6 +18,7 @@ public:
   Sphere() { id_ = std::atomic_fetch_add(&next_id, 1); }
   Sphere(Matrix<4> transform) : transform(transform) { Sphere(); };
   unsigned id() const { return id_; }
+  Vec3 normal_at(Point p) { return (p - Point{0, 0, 0}).normalize(); }
 
 private:
   unsigned id_;
