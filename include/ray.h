@@ -55,7 +55,7 @@ struct Ray {
   Ray transform(Matrix<4> m) const { return Ray{origin * m, direction * m}; };
 };
 
-std::vector<Intersection> intersect(Sphere s, Ray r);
+Intersections intersect(Sphere s, Ray r);
 
 std::ostream &operator<<(std::ostream &os, Intersection const &val);
 

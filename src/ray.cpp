@@ -10,8 +10,8 @@
 
 namespace raytrace {
 
-std::vector<Intersection> intersect(Sphere s, Ray r) {
-  std::vector<Intersection> xs;
+Intersections intersect(Sphere s, Ray r) {
+  Intersections xs;
   // transform ray by inverse of sphere's transform,
   // instead of actually transforming the sphere
   r = r.transform(s.transform.invert());
@@ -21,8 +21,8 @@ std::vector<Intersection> intersect(Sphere s, Ray r) {
   auto c = dot(sphere_to_ray, sphere_to_ray) - 1;
   auto discriminant = (b * b) - 4 * a * c;
   if (discriminant >= 0) {
-    xs.push_back(Intersection{(-b - std::sqrt(discriminant)) / (2 * a), s});
-    xs.push_back(Intersection{(-b + std::sqrt(discriminant)) / (2 * a), s});
+    xs.add(Intersection{(-b - std::sqrt(discriminant)) / (2 * a), s});
+    xs.add(Intersection{(-b + std::sqrt(discriminant)) / (2 * a), s});
   }
   return xs;
 }
