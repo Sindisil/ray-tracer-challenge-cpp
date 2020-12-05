@@ -31,20 +31,22 @@ public:
   using size_type = std::vector<Intersections>::size_type;
 
   Intersections &add(Intersection new_intersection) {
-    auto i = std::upper_bound(m_intersections.begin(), m_intersections.end(),
+    auto i = std::upper_bound(intersections_.begin(), intersections_.end(),
                               new_intersection);
-    m_intersections.insert(i, new_intersection);
+    intersections_.insert(i, new_intersection);
     return *this;
   }
 
   std::optional<Intersection> hit();
 
-  Intersection operator[](size_type i) { return m_intersections[i]; }
+  Intersection operator[](size_type i) { return intersections_[i]; }
 
-  size_type size() { return m_intersections.size(); }
+  size_type size() { return intersections_.size(); }
+
+  bool empty() { return intersections_.empty(); }
 
 private:
-  std::vector<Intersection> m_intersections;
+  std::vector<Intersection> intersections_;
 };
 
 struct Ray {

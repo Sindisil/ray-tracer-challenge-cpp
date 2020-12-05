@@ -28,10 +28,10 @@ Intersections intersect(Sphere s, Ray r) {
 }
 
 std::optional<Intersection> Intersections::hit() {
-  auto h = std::find_if(m_intersections.begin(), m_intersections.end(),
+  auto h = std::find_if(intersections_.begin(), intersections_.end(),
                         [](Intersection const &i) { return i.t >= 0; });
-  return h == m_intersections.end() ? std::nullopt
-                                    : std::optional<Intersection>(*h);
+  return h == intersections_.end() ? std::nullopt
+                                   : std::optional<Intersection>(*h);
 }
 
 std::ostream &operator<<(std::ostream &os, Intersection const &val) {
