@@ -8,6 +8,7 @@
 
 using raytrace::are_about_equal;
 using raytrace::identity_matrix;
+using raytrace::pi;
 using raytrace::Point;
 using raytrace::Ray;
 using raytrace::Sphere;
@@ -78,4 +79,16 @@ TEST_CASE("The normal is a normalized vector") {
   auto n = s.normal_at(Point{std::sqrt(3.0f) / 3.0f, std::sqrt(3.0f) / 3.0f,
                              std::sqrt(3.0f) / 3.0f});
   CHECK(n == n.normalize());
+}
+
+TEST_CASE("Computing the normal on a translated sphere") {
+  Sphere s(identity_matrix().translate(0, 1, 0));
+  auto n = s.normal_at(Point{0, 1.70711f, -0.70711f});
+  CHECK(n == Vec3{0, 0.70711f, -0.70711f});
+}
+
+TEST_CASE("Computing the normal on a transformed sphere") {
+  Sphere s(identity_matrix().rotate_z(pi / 5.0f).scale(1, 0.5f, 1));
+  auto n = s.normal_at(Point{0, std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2});
+  CHECK(n == Vec3{0, 0.97014f, -0.24254f});
 }

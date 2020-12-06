@@ -8,8 +8,6 @@
 
 namespace raytrace {
 
-const float pi = 2 * acos(0.f);
-
 template <size_t N> struct Matrix {
 public:
   float cells[N][N]{};

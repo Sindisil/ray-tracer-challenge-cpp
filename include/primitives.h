@@ -10,8 +10,11 @@
 
 namespace raytrace {
 
+constexpr float epsilon{0.00001f};
+const float pi = 2 * acos(0.f);
+
 inline bool are_about_equal(float lhs, float rhs) {
-  return std::abs(lhs - rhs) < .00001f;
+  return std::abs(lhs - rhs) < epsilon;
 }
 
 struct Vec3 {
@@ -50,15 +53,12 @@ struct Vec3 {
     return *this;
   }
 
-  Vec3 &normalize() {
+  Vec3 normalize() {
     auto mag = magnitude();
     if (mag == 0) {
       throw std::range_error("Can't normalize Vec3 with zero magnitude");
     }
-    x /= mag;
-    y /= mag;
-    z /= mag;
-    return *this;
+    return Vec3(x / mag, y / mag, z / mag);
   }
 
   float magnitude() { return sqrt(x * x + y * y + z * z); }
