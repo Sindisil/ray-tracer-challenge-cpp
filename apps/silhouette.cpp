@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 
 #include "canvas.h"
@@ -17,6 +18,10 @@ using raytrace::Point;
 using raytrace::Ray;
 using raytrace::Sphere;
 
+using std::chrono::duration_cast;
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
+
 int main() {
   auto const ray_origin = Point{0, 0, -5};
   constexpr float wall_z{10.0f};
@@ -28,6 +33,8 @@ int main() {
 
   Canvas canvas{canvas_size, canvas_size};
   Sphere shape;
+
+  auto begin = high_resolution_clock::now();
 
   for (int y = 0; y < canvas_size; ++y) {
     float world_y = half_wall - pixel_size * y;
@@ -45,5 +52,25 @@ int main() {
     }
   }
 
-  std::cout << canvas.to_ppm();
+  auto end_rendering = high_resolution_clock::now();
+
+  auto ppm = canvas.to_ppm();
+
+  auto end_create_ppm = high_resolution_clock::now();
+
+  std::cout << ppm;
+
+  auto end_write_ppm = high_resolution_clock::now();
+
+  std::cerr << "\nRendering took "
+            << duration_cast<milliseconds>(end_rendering - begin).count()
+            << "ms.";
+  std::cerr
+      << "\nPPM generation took "
+      << duration_cast<milliseconds>(end_create_ppm - end_rendering).count()
+      << "ms.";
+  std::cerr
+      << "\nWriting PPM to stdout took "
+      << duration_cast<milliseconds>(end_write_ppm - end_create_ppm).count()
+      << "ms.\n";
 }
