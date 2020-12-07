@@ -214,3 +214,17 @@ TEST_CASE("Multiplying colors") {
   Color c2{.9f, 1.f, .1f};
   CHECK(c1 * c2 == Color{.9f, .2f, .4f});
 }
+
+TEST_CASE("Reflecting a vector approaching at 45°") {
+  auto v = Vec3{1, -1, 0};
+  auto n = Vec3{0, 1, 0};
+  auto r = v.reflect(n);
+  CHECK(r == Vec3{1, 1, 0});
+}
+
+TEST_CASE("Reflecting a vector off a slanted surface") {
+  auto v = Vec3{0, -1, 0};
+  auto n = Vec3{std::sqrt(2.0f) / 2, std::sqrt(2.0f) / 2, 0};
+  auto r = v.reflect(n);
+  CHECK(r == Vec3{1, 0, 0});
+}

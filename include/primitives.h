@@ -53,7 +53,7 @@ struct Vec3 {
     return *this;
   }
 
-  Vec3 normalize() {
+  Vec3 normalize() const {
     auto mag = magnitude();
     if (mag == 0) {
       throw std::range_error("Can't normalize Vec3 with zero magnitude");
@@ -61,13 +61,16 @@ struct Vec3 {
     return Vec3(x / mag, y / mag, z / mag);
   }
 
-  float magnitude() { return sqrt(x * x + y * y + z * z); }
+  float magnitude() const { return sqrt(x * x + y * y + z * z); }
 
-  float dot(Vec3 v) { return (x * v.x) + (y * v.y) + (z * v.z); }
-  Vec3 cross(Vec3 v) {
+  float dot(Vec3 v) const { return (x * v.x) + (y * v.y) + (z * v.z); }
+
+  Vec3 cross(Vec3 v) const {
     return Vec3{(y * v.z) - (z * v.y), (z * v.x) - (x * v.z),
                 (x * v.y) - (y * v.x)};
   }
+
+  Vec3 reflect(Vec3 normal) const;
 };
 
 struct Point {
