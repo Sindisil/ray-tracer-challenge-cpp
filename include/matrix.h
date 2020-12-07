@@ -144,12 +144,6 @@ inline Matrix<4> identity_matrix() {
   return Matrix<4>{{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}}};
 }
 
-template <size_t N> bool operator==(Matrix<N> lhs, Matrix<N> rhs);
-
-template <size_t N> inline bool operator!=(Matrix<N> lhs, Matrix<N> rhs) {
-  return !(lhs == rhs);
-}
-
 template <size_t N> bool operator==(Matrix<N> lhs, Matrix<N> rhs) {
   for (int r = 0; r < int{N}; ++r) {
     for (int c = 0; c < int{N}; ++c) {
@@ -159,6 +153,10 @@ template <size_t N> bool operator==(Matrix<N> lhs, Matrix<N> rhs) {
     }
   }
   return true;
+}
+
+template <size_t N> inline bool operator!=(Matrix<N> lhs, Matrix<N> rhs) {
+  return !(lhs == rhs);
 }
 
 template <size_t N> Matrix<N> operator*(Matrix<N> lhs, Matrix<N> rhs) {

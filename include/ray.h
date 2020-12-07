@@ -26,6 +26,21 @@ inline bool operator==(Intersection lhs, Intersection rhs) {
   return lhs.object == rhs.object && are_about_equal(lhs.t, rhs.t);
 }
 
+struct Ray {
+  Point origin{0, 0, 0};
+  Vec3 direction{0, 0, 0};
+
+  Point position(float t) const { return origin + direction * t; };
+  Ray transform(Matrix<4> m) const { return Ray{origin * m, direction * m}; };
+};
+
+std::ostream &operator<<(std::ostream &os, Intersection const &val);
+
+inline bool operator==(Ray lhs, Ray rhs) {
+  return lhs.origin == rhs.origin && lhs.direction == rhs.direction;
+}
+inline bool operator!=(Ray lhs, Ray rhs) { return !(lhs == rhs); }
+
 class Intersections {
 public:
   using size_type = std::vector<Intersections>::size_type;
@@ -49,17 +64,7 @@ private:
   std::vector<Intersection> intersections_;
 };
 
-struct Ray {
-  Point origin{0, 0, 0};
-  Vec3 direction{0, 0, 0};
-
-  Point position(float t) const { return origin + direction * t; };
-  Ray transform(Matrix<4> m) const { return Ray{origin * m, direction * m}; };
-};
-
 Intersections intersect(Sphere s, Ray r);
-
-std::ostream &operator<<(std::ostream &os, Intersection const &val);
 
 } // namespace raytrace
 

@@ -25,6 +25,13 @@ TEST_CASE("Creating a sphere with a transformation") {
   REQUIRE(s.transform == t);
 }
 
+TEST_CASE("Comparing spheres") {
+  auto s1 = Sphere{};
+  auto s2 = Sphere{};
+  CHECK(s1 == s1);
+  CHECK(s1 != s2);
+}
+
 TEST_CASE("Changing a sphere's transformation") {
   Sphere s;
   auto t = identity_matrix().translate(2, 3, 4);

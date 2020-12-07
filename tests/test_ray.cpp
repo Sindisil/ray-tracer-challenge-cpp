@@ -31,6 +31,13 @@ TEST_CASE("creating and querying a ray") {
   CHECK(r2.direction == direction);
 }
 
+TEST_CASE("Comparing rays") {
+  auto r = Ray{Point{1, 2, 3}, Vec3{4, 5, 6}};
+  CHECK(r == Ray{Point{1, 2, 3}, Vec3{4, 5, 6}});
+  CHECK(r != Ray{Point{0, 0, 0}, Vec3{4, 5, 6}});
+  CHECK(r != Ray{Point{1, 2, 3}, Vec3{0, 0, 1}});
+}
+
 TEST_CASE("Computing a point from a distance") {
   Ray r{Point{2, 3, 4}, Vec3{1, 0, 0}};
   CHECK(r.position(0) == Point{2, 3, 4});

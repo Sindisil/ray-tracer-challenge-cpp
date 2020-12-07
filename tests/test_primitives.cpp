@@ -48,6 +48,12 @@ TEST_CASE("Points may be compared for equality and non-equality") {
     CHECK_FALSE(a == c);
     CHECK_FALSE(c == b);
   }
+
+  SUBCASE("All three components are tested") {
+    CHECK(a != Point{5.0f, -3.0f, 0.0f});
+    CHECK(a != Point{5.0f, 0.0f, 17.0f});
+    CHECK(a != Point{0.0f, -3.0f, 17.0f});
+  }
 }
 
 // Vec3 tests
@@ -81,6 +87,12 @@ TEST_CASE("Vec3s may be compared for equality and non-equality") {
     CHECK(a == b);
     CHECK_FALSE(a == c);
     CHECK_FALSE(c == b);
+  }
+
+  SUBCASE("All three components are tested") {
+    CHECK(a != Vec3{5.0f, -3.0f, 0.0f});
+    CHECK(a != Vec3{5.0f, 0.0f, 17.0f});
+    CHECK(a != Vec3{0.0f, -3.0f, 17.0f});
   }
 }
 

@@ -25,6 +25,7 @@ private:
 };
 
 inline bool operator==(Sphere lhs, Sphere rhs) { return lhs.id() == rhs.id(); }
+inline bool operator!=(Sphere lhs, Sphere rhs) { return !(lhs == rhs); }
 
 std::ostream &operator<<(std::ostream &os, Sphere const &val);
 
