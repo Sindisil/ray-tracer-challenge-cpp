@@ -19,8 +19,8 @@ std::ostream &operator<<(std::ostream &os, Point const &val) {
 }
 
 bool operator==(Color c1, Color c2) {
-  return are_about_equal(c1.r, c2.r) && are_about_equal(c1.r, c2.r) &&
-         are_about_equal(c1.r, c2.r);
+  return are_about_equal(c1.r, c2.r) && are_about_equal(c1.g, c2.g) &&
+         are_about_equal(c1.b, c2.b);
 }
 
 std::ostream &operator<<(std::ostream &os, Color const &val) {

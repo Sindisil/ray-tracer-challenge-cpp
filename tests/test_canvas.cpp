@@ -47,9 +47,9 @@ TEST_CASE("Constructing the PPM header") {
 
 TEST_CASE("Constructing the PPM pixel data") {
   Canvas c{5, 3};
-  c.write_pixel(0, 0, Color(1.5f, 0.f, 0.f));
-  c.write_pixel(2, 1, Color(0.f, 0.5f, 0.f));
-  c.write_pixel(4, 2, Color(-.5f, 0.f, 1.f));
+  c.write_pixel(0, 0, Color{1.5f, 0.0f, 0.0f});
+  c.write_pixel(2, 1, Color{0.0f, 0.5f, 0.0f});
+  c.write_pixel(4, 2, Color{-0.5f, 0.0f, 1.0f});
 
   std::istringstream lines{c.to_ppm()};
   std::string line;

@@ -143,8 +143,6 @@ struct Color {
   float g;
   float b;
 
-  Color(float r, float g, float b) : r(r), g(g), b(b) {}
-
   Color &operator+=(Color c) {
     r += c.r;
     g += c.g;
@@ -154,7 +152,7 @@ struct Color {
 
   Color &operator-=(Color c) {
     r -= c.r;
-    g -= c.r;
+    g -= c.g;
     b -= c.b;
     return *this;
   }

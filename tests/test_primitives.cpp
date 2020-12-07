@@ -210,9 +210,17 @@ TEST_CASE("Multiplying a color by a scalar") {
 }
 
 TEST_CASE("Multiplying colors") {
-  Color c1{1.f, .2f, .4f};
-  Color c2{.9f, 1.f, .1f};
-  CHECK(c1 * c2 == Color{.9f, .2f, .4f});
+  Color c1{1.0f, 0.2f, 0.4f};
+  Color c2{0.9f, 1.0f, 0.1f};
+  CHECK(c1 * c2 == Color{.9f, .2f, .04f});
+}
+
+TEST_CASE("Comparing colors") {
+  auto c1 = Color{1.0f, 0.2f, 0.4f};
+  CHECK(c1 == Color{1.0f, 0.2f, 0.4f});
+  CHECK(c1 != Color{1.0f, 0.2f, 0.0f});
+  CHECK(c1 != Color{0.0f, 0.2f, 0.4f});
+  CHECK(c1 != Color{1.0f, 0.0f, 0.4f});
 }
 
 TEST_CASE("Reflecting a vector approaching at 45°") {
