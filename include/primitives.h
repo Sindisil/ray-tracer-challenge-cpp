@@ -138,50 +138,5 @@ inline Vec3 cross(Vec3 v1, Vec3 v2) { return v1.cross(v2); }
 std::ostream &operator<<(std::ostream &os, Vec3 const &val);
 std::ostream &operator<<(std::ostream &os, Point const &val);
 
-struct Color {
-  float r;
-  float g;
-  float b;
-
-  Color &operator+=(Color c) {
-    r += c.r;
-    g += c.g;
-    b += c.b;
-    return *this;
-  }
-
-  Color &operator-=(Color c) {
-    r -= c.r;
-    g -= c.g;
-    b -= c.b;
-    return *this;
-  }
-
-  Color &operator*=(float f) {
-    r *= f;
-    g *= f;
-    b *= f;
-    return *this;
-  }
-
-  Color &operator*=(Color c) {
-    r *= c.r;
-    g *= c.g;
-    b *= c.b;
-    return *this;
-  }
-};
-
-std::ostream &operator<<(std::ostream &os, Color const &val);
-
-bool operator==(Color c1, Color c2);
-inline bool operator!=(Color c1, Color c2) { return !(c1 == c2); }
-
-inline Color operator+(Color c1, Color c2) { return c1 += c2; }
-inline Color operator-(Color c1, Color c2) { return c1 -= c2; }
-inline Color operator*(Color c, float f) { return c *= f; }
-inline Color operator*(float f, Color c) { return c *= f; }
-inline Color operator*(Color c1, Color c2) { return c1 *= c2; }
-
 } // namespace raytrace
 #endif

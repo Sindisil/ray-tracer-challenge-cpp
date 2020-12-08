@@ -2,6 +2,8 @@
 
 #include "doctest.h"
 
+#include "primitives.h"
+
 using raytrace::are_about_equal;
 using raytrace::Color;
 using raytrace::Material;

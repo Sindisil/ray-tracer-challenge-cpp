@@ -3,7 +3,7 @@
 
 #include <stdexcept>
 
-#include "primitives.h"
+#include "color.h"
 
 namespace raytrace {
 

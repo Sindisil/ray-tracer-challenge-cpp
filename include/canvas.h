@@ -1,7 +1,7 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "primitives.h"
+#include "color.h"
 
 #include <stdexcept>
 #include <string>
