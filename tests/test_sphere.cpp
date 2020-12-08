@@ -4,10 +4,12 @@
 
 #include <cmath>
 
+#include "materials.h"
 #include "ray.h"
 
 using raytrace::are_about_equal;
 using raytrace::identity_matrix;
+using raytrace::Material;
 using raytrace::pi;
 using raytrace::Point;
 using raytrace::Ray;
@@ -98,4 +100,19 @@ TEST_CASE("Computing the normal on a transformed sphere") {
   Sphere s(identity_matrix().rotate_z(pi / 5.0f).scale(1, 0.5f, 1));
   auto n = s.normal_at(Point{0, std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2});
   CHECK(n == Vec3{0, 0.97014f, -0.24254f});
+}
+
+TEST_CASE("A sphere has a default material") {
+  auto s = Sphere{};
+  CHECK(s.material == Material());
+}
+
+TEST_CASE("A sphere may be assigned a material") {
+  auto s = Sphere{};
+  auto m = Material{};
+  m.ambient(1.0f);
+  s.material = m;
+  CHECK(s.material == m);
+  m.ambient(.5f);
+  CHECK(s.material != m);
 }

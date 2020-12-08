@@ -12,10 +12,10 @@ public:
   Material() = default;
   Material(Color color) : color_(color){};
 
-  Color color() const { return color_; }
+  auto color() -> Color const { return color_; }
   void color(Color color) { color_ = color; }
 
-  float ambient() const { return ambient_; }
+  auto ambient() -> float const { return ambient_; }
   void ambient(float ambient) {
     if (ambient_ >= 0) {
       ambient_ = ambient;
@@ -24,7 +24,7 @@ public:
     }
   }
 
-  float diffuse() const { return diffuse_; }
+  auto diffuse() -> float const { return diffuse_; }
   void diffuse(float diffuse) {
     if (diffuse_ >= 0) {
       diffuse_ = diffuse;
@@ -33,7 +33,7 @@ public:
     }
   }
 
-  float specular() const { return specular_; }
+  auto specular() -> float const { return specular_; }
   void specular(float specular) {
     if (specular_ >= 0) {
       specular_ = specular;
@@ -42,7 +42,7 @@ public:
     }
   }
 
-  float shininess() const { return shininess_; }
+  auto shininess() -> float const { return shininess_; }
   void shininess(float shininess) {
     if (shininess_ >= 0) {
       shininess_ = shininess;
@@ -58,6 +58,16 @@ private:
   float specular_{0.9f};
   float shininess_{200.0f};
 };
+
+inline auto operator==(Material lhs, Material rhs) -> bool {
+  return lhs.ambient() == rhs.ambient() && lhs.color() == rhs.color() &&
+         lhs.diffuse() == rhs.diffuse() && lhs.shininess() == rhs.shininess() &&
+         lhs.specular() == rhs.specular();
+}
+
+inline auto operator!=(Material lhs, Material rhs) -> bool {
+  return !(lhs == rhs);
+}
 
 } // namespace raytrace
 #endif
