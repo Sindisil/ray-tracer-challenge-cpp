@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "color.h"
+#include "lights.h"
 
 namespace raytrace {
 
@@ -68,6 +69,9 @@ inline auto operator==(Material lhs, Material rhs) -> bool {
 inline auto operator!=(Material lhs, Material rhs) -> bool {
   return !(lhs == rhs);
 }
+
+auto lighting(Material material, PointLight light, Point point, Vec3 eye,
+              Vec3 normal) -> Color;
 
 } // namespace raytrace
 #endif
