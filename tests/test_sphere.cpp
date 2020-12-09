@@ -4,10 +4,12 @@
 
 #include <cmath>
 
+#include "color.h"
 #include "materials.h"
 #include "ray.h"
 
 using raytrace::are_about_equal;
+using raytrace::Color;
 using raytrace::identity_matrix;
 using raytrace::Material;
 using raytrace::pi;
@@ -105,6 +107,12 @@ TEST_CASE("Computing the normal on a transformed sphere") {
 TEST_CASE("A sphere has a default material") {
   auto s = Sphere{};
   CHECK(s.material == Material());
+}
+
+TEST_CASE("A sphere may be created with a specified material") {
+  auto m = Material{Color{1.0f, 1.0f, 1.0f}};
+  auto s = Sphere{m};
+  CHECK(s.material == m);
 }
 
 TEST_CASE("A sphere may be assigned a material") {
