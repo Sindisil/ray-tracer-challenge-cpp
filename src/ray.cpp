@@ -10,8 +10,8 @@
 
 namespace raytrace {
 
-Intersections intersect(Sphere s, Ray r) {
-  Intersections xs;
+auto intersect(Sphere s, Ray r) -> Intersections {
+  auto xs = Intersections{};
   // transform ray by inverse of sphere's transform,
   // instead of actually transforming the sphere
   r = r.transform(s.transform.invert());
@@ -27,14 +27,14 @@ Intersections intersect(Sphere s, Ray r) {
   return xs;
 }
 
-std::optional<Intersection> Intersections::hit() {
+auto Intersections::hit() -> std::optional<Intersection> {
   auto h = std::find_if(intersections_.begin(), intersections_.end(),
                         [](Intersection const &i) { return i.t >= 0; });
   return h == intersections_.end() ? std::nullopt
                                    : std::optional<Intersection>(*h);
 }
 
-std::ostream &operator<<(std::ostream &os, Intersection const &val) {
+auto operator<<(std::ostream &os, Intersection const &val) -> std::ostream & {
   os << "Intersection(t=" << val.t << ", " << val.object << ")";
   return os;
 }

@@ -10,28 +10,28 @@ struct Color {
   float g;
   float b;
 
-  Color &operator+=(Color c) {
+  auto operator+=(Color c) -> Color & {
     r += c.r;
     g += c.g;
     b += c.b;
     return *this;
   }
 
-  Color &operator-=(Color c) {
+  auto operator-=(Color c) -> Color & {
     r -= c.r;
     g -= c.g;
     b -= c.b;
     return *this;
   }
 
-  Color &operator*=(float f) {
+  auto operator*=(float f) -> Color & {
     r *= f;
     g *= f;
     b *= f;
     return *this;
   }
 
-  Color &operator*=(Color c) {
+  auto operator*=(Color c) -> Color & {
     r *= c.r;
     g *= c.g;
     b *= c.b;
@@ -39,16 +39,16 @@ struct Color {
   }
 };
 
-std::ostream &operator<<(std::ostream &os, Color const &val);
+auto operator<<(std::ostream &os, Color const &val) -> std::ostream &;
 
-bool operator==(Color c1, Color c2);
-inline bool operator!=(Color c1, Color c2) { return !(c1 == c2); }
+auto operator==(Color c1, Color c2) -> bool;
+inline auto operator!=(Color c1, Color c2) -> bool { return !(c1 == c2); }
 
-inline Color operator+(Color c1, Color c2) { return c1 += c2; }
-inline Color operator-(Color c1, Color c2) { return c1 -= c2; }
-inline Color operator*(Color c, float f) { return c *= f; }
-inline Color operator*(float f, Color c) { return c *= f; }
-inline Color operator*(Color c1, Color c2) { return c1 *= c2; }
+inline auto operator+(Color c1, Color c2) -> Color { return c1 += c2; }
+inline auto operator-(Color c1, Color c2) -> Color { return c1 -= c2; }
+inline auto operator*(Color c, float f) -> Color { return c *= f; }
+inline auto operator*(float f, Color c) -> Color { return c *= f; }
+inline auto operator*(Color c1, Color c2) -> Color { return c1 *= c2; }
 
 } // namespace raytrace
 

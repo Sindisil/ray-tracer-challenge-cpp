@@ -32,17 +32,18 @@ public:
     return m_pixels.at(x + static_cast<size_t>(y) * m_width);
   }
 
-  void write_pixel(int x, int y, Color c) {
+  auto write_pixel(int x, int y, Color c) -> Canvas & {
     if (x < 0 || y < 0) {
       throw std::out_of_range("Pixel coordinates must be non-negative");
     }
     m_pixels.at(x + static_cast<size_t>(y) * m_width) = c;
+    return *this;
   }
 
-  int width() { return m_width; }
-  int height() { return m_height; }
+  auto width() -> int { return m_width; }
+  auto height() -> int { return m_height; }
 
-  std::string to_ppm();
+  auto to_ppm() -> std::string;
 
 private:
   int m_width;

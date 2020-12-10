@@ -18,11 +18,11 @@ struct Intersection {
   Sphere object;
 };
 
-inline bool operator<(Intersection lhs, Intersection rhs) {
+inline auto operator<(Intersection lhs, Intersection rhs) -> bool {
   return lhs.t < rhs.t;
 }
 
-inline bool operator==(Intersection lhs, Intersection rhs) {
+inline auto operator==(Intersection lhs, Intersection rhs) -> bool {
   return lhs.object == rhs.object && are_about_equal(lhs.t, rhs.t);
 }
 
@@ -30,41 +30,44 @@ struct Ray {
   Point origin{0, 0, 0};
   Vec3 direction{0, 0, 0};
 
-  Point position(float t) const { return origin + direction * t; };
-  Ray transform(Matrix<4> m) const { return Ray{origin * m, direction * m}; };
+  auto position(float t) -> Point const { return origin + direction * t; };
+  auto transform(Matrix<4> m) -> Ray const {
+    return Ray{origin * m, direction * m};
+  };
 };
 
-std::ostream &operator<<(std::ostream &os, Intersection const &val);
+auto operator<<(std::ostream &os, Intersection const &val) -> std::ostream &;
 
-inline bool operator==(Ray lhs, Ray rhs) {
+inline auto operator==(Ray lhs, Ray rhs) -> bool {
   return lhs.origin == rhs.origin && lhs.direction == rhs.direction;
 }
-inline bool operator!=(Ray lhs, Ray rhs) { return !(lhs == rhs); }
+
+inline auto operator!=(Ray lhs, Ray rhs) -> bool { return !(lhs == rhs); }
 
 class Intersections {
 public:
   using size_type = std::vector<Intersections>::size_type;
 
-  Intersections &add(Intersection new_intersection) {
+  auto add(Intersection new_intersection) -> Intersections & {
     auto i = std::upper_bound(intersections_.begin(), intersections_.end(),
                               new_intersection);
     intersections_.insert(i, new_intersection);
     return *this;
   }
 
-  std::optional<Intersection> hit();
+  auto hit() -> std::optional<Intersection>;
 
-  Intersection operator[](size_type i) { return intersections_[i]; }
+  auto operator[](size_type i) -> Intersection { return intersections_[i]; }
 
-  size_type size() { return intersections_.size(); }
+  auto size() -> size_type { return intersections_.size(); }
 
-  bool empty() { return intersections_.empty(); }
+  auto empty() -> bool { return intersections_.empty(); }
 
 private:
   std::vector<Intersection> intersections_;
 };
 
-Intersections intersect(Sphere s, Ray r);
+auto intersect(Sphere s, Ray r) -> Intersections;
 
 } // namespace raytrace
 

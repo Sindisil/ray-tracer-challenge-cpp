@@ -7,16 +7,16 @@
 
 namespace raytrace {
 
-std::string Canvas::to_ppm() {
+auto Canvas::to_ppm() -> std::string {
   constexpr auto max_ppm_line_len = 70;
-  std::ostringstream ppm;
+  auto ppm = std::ostringstream{};
 
   // Add PPM header
   ppm << "P3\n"
       << m_width << " " << m_height << "\n"
       << "255\n";
 
-  std::string line;
+  auto line = std::string{};
   for (int y = 0; y < m_height; ++y) {
     for (int x = 0; x < m_width; ++x) {
       auto c = pixel_at(x, y);
