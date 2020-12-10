@@ -29,17 +29,26 @@ set_target_properties(silhouette PROPERTIES CXX_EXTENSIONS OFF)
 target_compile_definitions(silhouette PRIVATE DOCTEST_CONFIG_DISABLE)
 target_link_libraries(silhouette libraytrace)
 
+add_executable(sphere sphere.cpp)
+target_include_directories(sphere PRIVATE ../include)
+target_compile_features(sphere PRIVATE cxx_std_17)
+set_target_properties(sphere PROPERTIES CXX_EXTENSIONS OFF)
+target_compile_definitions(sphere PRIVATE DOCTEST_CONFIG_DISABLE)
+target_link_libraries(sphere libraytrace)
+
 if (MSVC)
     # warning level 4 plus extra warnings
     target_compile_options(projectile PRIVATE /W4 /w44388 /w44287)
     target_compile_options(plot_projectile PRIVATE /W4 /w44388 /w44287)
     target_compile_options(clock PRIVATE /W4 /w44388 /w44287)
     target_compile_options(silhouette PRIVATE /W4 /w44388 /w44287)
+    target_compile_options(sphere PRIVATE /W4 /w44388 /w44287)
 else()
     # lots of warnings
     target_compile_options(projectile PRIVATE -Wall -Wextra -pedantic)
     target_compile_options(plot_projectile PRIVATE -Wall -Wextra -pedantic)
     target_compile_options(clock PRIVATE -Wall -Wextra -pedantic)
     target_compile_options(silhouette PRIVATE -Wall -Wextra -pedantic)
+    target_compile_options(sphere PRIVATE -Wall -Wextra -pedantic)
 endif()
 
