@@ -14,39 +14,46 @@ public:
   Material(Color color) : color_(color){};
 
   auto color() -> Color const { return color_; }
-  void color(Color color) { color_ = color; }
+  auto color(Color color) -> Material & {
+    color_ = color;
+    return *this;
+  }
 
   auto ambient() -> float const { return ambient_; }
-  void ambient(float ambient) {
+  auto ambient(float ambient) -> Material & {
     if (ambient_ >= 0) {
       ambient_ = ambient;
+      return *this;
     } else {
       throw std::out_of_range("Ambient reflection must be non-negative");
     }
   }
 
   auto diffuse() -> float const { return diffuse_; }
-  void diffuse(float diffuse) {
+  auto diffuse(float diffuse) -> Material & {
     if (diffuse_ >= 0) {
       diffuse_ = diffuse;
+      return *this;
     } else {
       throw std::out_of_range("Diffuse reflection must be non-negative");
     }
   }
 
   auto specular() -> float const { return specular_; }
-  void specular(float specular) {
+  auto specular(float specular) -> Material & {
     if (specular_ >= 0) {
       specular_ = specular;
+      return *this;
     } else {
       throw std::out_of_range("Specular reflection must be non-negative");
     }
   }
 
   auto shininess() -> float const { return shininess_; }
-  void shininess(float shininess) {
+  auto shininess(float shininess) -> Material & {
     if (shininess_ >= 0) {
       shininess_ = shininess;
+      return *this;
     } else {
       throw std::out_of_range("Shininess must be non-negative");
     }
