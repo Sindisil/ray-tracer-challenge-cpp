@@ -12,14 +12,29 @@ template <size_t N> struct Matrix {
 public:
   float cells[N][N]{};
 
-  float &operator()(int r, int c) {
+  auto operator()(int r, int c) -> float & {
     if (r < 0 || c < 0 || r >= int{N} || c >= int{N}) {
       throw std::out_of_range("index out of range");
     }
     return cells[r][c];
   }
 
-  Matrix<N> transpose() const {
+  friend auto operator==(Matrix<N> lhs, Matrix<N> rhs) -> bool {
+    for (int r = 0; r < int{N}; ++r) {
+      for (int c = 0; c < int{N}; ++c) {
+        if (!are_about_equal(lhs(r, c), rhs(r, c))) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  friend auto operator!=(Matrix<N> lhs, Matrix<N> rhs) -> bool {
+    return !(lhs == rhs);
+  }
+
+  auto transpose() const -> Matrix<N> {
     Matrix<N> t{};
     for (int c = 0; c < int{N}; ++c) {
       for (int r = 0; r < int{N}; ++r) {
@@ -30,7 +45,7 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<(NN > 1)>::type * = nullptr>
-  Matrix<N - 1> submatrix(int r_skip, int c_skip) const {
+  auto submatrix(int r_skip, int c_skip) const -> Matrix<N - 1> {
     Matrix<N - 1> s{};
     int sRow = 0;
     int sCol = 0;
@@ -54,9 +69,9 @@ public:
     return s;
   }
 
-  bool isInvertable() const { return determinant() != 0; }
+  auto isInvertable() const -> bool { return determinant() != 0; }
 
-  Matrix<N> invert() const {
+  auto invert() const -> Matrix<N> {
     if (!isInvertable()) {
       throw std::domain_error("Matrix not invertable");
     }
@@ -71,14 +86,16 @@ public:
     return m;
   }
 
-  float minor(int r, int c) const { return submatrix(r, c).determinant(); }
-
-  float cofactor(int r, int c) const {
-    auto f = minor(r, c);
-    return (r + c) % 2 == 0 ? f : -f;
+  auto minor(int r, int c) const -> float {
+    return submatrix(r, c).determinant();
   }
 
-  float determinant() const {
+  auto cofactor(int r, int c) const -> float {
+    auto f = minor(r, c);
+    return ((r + c) % 2) == 0 ? f : -f;
+  }
+
+  auto determinant() const -> float {
     if constexpr (N == 2) {
       return (cells[0][0] * cells[1][1]) - (cells[0][1] * cells[1][0]);
     } else {
@@ -91,19 +108,19 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<4> translate(float x, float y, float z) const {
+  auto translate(float x, float y, float z) const -> Matrix<4> {
     return Matrix<4>{{{1, 0, 0, x}, {0, 1, 0, y}, {0, 0, 1, z}, {0, 0, 0, 1}}} *
            (*this);
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> scale(float x, float y, float z) const {
+  auto scale(float x, float y, float z) const -> Matrix<N> {
     return Matrix<4>{{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}}} *
            (*this);
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> rotate_x(float r) const {
+  auto rotate_x(float r) const -> Matrix<N> {
     return Matrix<4>{{{1, 0, 0, 0},
                       {0, std::cos(r), -std::sin(r), 0},
                       {0, std::sin(r), std::cos(r), 0},
@@ -112,7 +129,7 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> rotate_y(float r) const {
+  auto rotate_y(float r) const -> Matrix<N> {
     return Matrix<4>{{{std::cos(r), 0, std::sin(r), 0},
                       {0, 1, 0, 0},
                       {-std::sin(r), 0, std::cos(r), 0},
@@ -121,7 +138,7 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> rotate_z(float r) const {
+  auto rotate_z(float r) const -> Matrix<N> {
     return Matrix<4>{{{std::cos(r), -std::sin(r), 0, 0},
                       {std::sin(r), std::cos(r), 0, 0},
                       {0, 0, 1, 0},
@@ -130,8 +147,8 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  Matrix<N> shear(float xy, float xz, float yx, float yz, float zx,
-                  float zy) const {
+  auto shear(float xy, float xz, float yx, float yz, float zx, float zy) const
+      -> Matrix<N> {
     return Matrix<4>{
                {{1, xy, xz, 0}, {yx, 1, yz, 0}, {zx, zy, 1, 0}, {0, 0, 0, 1}}} *
            (*this);
@@ -140,26 +157,11 @@ public:
 
 // Free functions for Matrix
 
-inline Matrix<4> identity_matrix() {
+inline auto identity_matrix() -> Matrix<4> {
   return Matrix<4>{{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}}};
 }
 
-template <size_t N> bool operator==(Matrix<N> lhs, Matrix<N> rhs) {
-  for (int r = 0; r < int{N}; ++r) {
-    for (int c = 0; c < int{N}; ++c) {
-      if (!are_about_equal(lhs(r, c), rhs(r, c))) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
-template <size_t N> inline bool operator!=(Matrix<N> lhs, Matrix<N> rhs) {
-  return !(lhs == rhs);
-}
-
-template <size_t N> Matrix<N> operator*(Matrix<N> lhs, Matrix<N> rhs) {
+template <size_t N> auto operator*(Matrix<N> lhs, Matrix<N> rhs) -> Matrix<N> {
   Matrix<N> res{};
 
   for (int r = 0; r < int{N}; ++r) {
@@ -173,7 +175,7 @@ template <size_t N> Matrix<N> operator*(Matrix<N> lhs, Matrix<N> rhs) {
 }
 
 template <size_t N, typename std::enable_if<(N == 4)>::type * = nullptr>
-Point operator*(Matrix<N> m, Point p) {
+auto operator*(Matrix<N> m, Point p) -> Point {
   auto prod = Point{};
   prod.x = m(0, 0) * p.x + m(0, 1) * p.y + m(0, 2) * p.z + m(0, 3);
   prod.y = m(1, 0) * p.x + m(1, 1) * p.y + m(1, 2) * p.z + m(1, 3);
@@ -182,12 +184,12 @@ Point operator*(Matrix<N> m, Point p) {
 }
 
 template <size_t N, typename std::enable_if<(N == 4)>::type * = nullptr>
-Point operator*(Point p, Matrix<N> m) {
+auto operator*(Point p, Matrix<N> m) -> Point {
   return m * p;
 }
 
 template <size_t N, typename std::enable_if<(N == 4)>::type * = nullptr>
-Vec3 operator*(Matrix<N> m, Vec3 v) {
+auto operator*(Matrix<N> m, Vec3 v) -> Vec3 {
   auto prod = Vec3{};
   prod.x = m(0, 0) * v.x + m(0, 1) * v.y + m(0, 2) * v.z;
   prod.y = m(1, 0) * v.x + m(1, 1) * v.y + m(1, 2) * v.z;
@@ -196,12 +198,12 @@ Vec3 operator*(Matrix<N> m, Vec3 v) {
 }
 
 template <size_t N, typename std::enable_if<(N == 4)>::type * = nullptr>
-Vec3 operator*(Vec3 v, Matrix<N> m) {
+auto operator*(Vec3 v, Matrix<N> m) -> Vec3 {
   return m * v;
 }
 
 template <size_t N>
-std::ostream &operator<<(std::ostream &os, Matrix<N> const &val) {
+auto operator<<(std::ostream &os, Matrix<N> const &val) -> std::ostream & {
   Matrix<N> &m = const_cast<Matrix<N> &>(val);
   for (int r = 0; r < int{N}; ++r) {
     os << (r == 0 ? "" : ", ") << "(";

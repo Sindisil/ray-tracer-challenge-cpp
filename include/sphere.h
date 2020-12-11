@@ -21,17 +21,21 @@ public:
   Sphere(Matrix<4> transform) : transform(transform) { Sphere(); };
   Sphere(Material material) : material(material) { Sphere(); }
 
-  unsigned id() const { return id_; }
-  Vec3 normal_at(Point p);
+  auto id() const -> unsigned { return id_; }
+  auto normal_at(Point p) const -> Vec3;
+
+  friend auto operator==(Sphere lhs, Sphere rhs) -> bool {
+    return lhs.id() == rhs.id();
+  }
+  friend auto operator!=(Sphere lhs, Sphere rhs) -> bool {
+    return !(lhs == rhs);
+  }
 
 private:
   unsigned id_;
 };
 
-inline bool operator==(Sphere lhs, Sphere rhs) { return lhs.id() == rhs.id(); }
-inline bool operator!=(Sphere lhs, Sphere rhs) { return !(lhs == rhs); }
-
-std::ostream &operator<<(std::ostream &os, Sphere const &val);
+auto operator<<(std::ostream &os, Sphere const &val) -> std::ostream &;
 
 } // namespace raytrace
 

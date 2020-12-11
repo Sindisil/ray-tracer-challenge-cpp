@@ -27,7 +27,7 @@ auto intersect(Sphere s, Ray r) -> Intersections {
   return xs;
 }
 
-auto Intersections::hit() -> std::optional<Intersection> {
+auto Intersections::hit() const -> std::optional<Intersection> {
   auto h = std::find_if(intersections_.begin(), intersections_.end(),
                         [](Intersection const &i) { return i.t >= 0; });
   return h == intersections_.end() ? std::nullopt

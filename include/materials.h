@@ -59,6 +59,17 @@ public:
     }
   }
 
+  friend auto operator==(Material lhs, Material rhs) -> bool {
+    return lhs.ambient() == rhs.ambient() && lhs.color() == rhs.color() &&
+           lhs.diffuse() == rhs.diffuse() &&
+           lhs.shininess() == rhs.shininess() &&
+           lhs.specular() == rhs.specular();
+  }
+
+  friend auto operator!=(Material lhs, Material rhs) -> bool {
+    return !(lhs == rhs);
+  }
+
 private:
   Color color_{1, 1, 1};
   float ambient_{0.1f};
@@ -66,16 +77,6 @@ private:
   float specular_{0.9f};
   float shininess_{200.0f};
 };
-
-inline auto operator==(Material lhs, Material rhs) -> bool {
-  return lhs.ambient() == rhs.ambient() && lhs.color() == rhs.color() &&
-         lhs.diffuse() == rhs.diffuse() && lhs.shininess() == rhs.shininess() &&
-         lhs.specular() == rhs.specular();
-}
-
-inline auto operator!=(Material lhs, Material rhs) -> bool {
-  return !(lhs == rhs);
-}
 
 auto lighting(Material material, PointLight light, Point point, Vec3 eye,
               Vec3 normal) -> Color;
