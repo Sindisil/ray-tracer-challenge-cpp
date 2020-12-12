@@ -98,15 +98,26 @@ TEST_CASE("An intersection encapsulates t and object") {
 }
 
 TEST_CASE("Aggregating intersections") {
-  Sphere s;
-  Intersection i1{1, s};
-  Intersection i2{2, s};
-  Intersections xs;
-  xs.add(i1);
-  xs.add(i2);
-  REQUIRE(xs.size() == 2);
-  CHECK(xs[0].object == s);
-  CHECK(xs[1].object == s);
+  SUBCASE("Non-empty Intersections") {
+    Sphere s;
+    Intersection i1{1, s};
+    Intersection i2{2, s};
+    Intersections xs;
+    xs.insert(i1);
+    xs.insert(i2);
+    REQUIRE(!xs.empty());
+    REQUIRE(xs.size() == 2);
+    CHECK(xs[0].object == s);
+    CHECK(xs[1].object == s);
+    for (auto const i : xs) {
+      CHECK(i.object == s);
+    }
+  }
+  SUBCASE("Empty Intersections") {
+    Intersections xs;
+    CHECK(xs.empty());
+    CHECK(std::begin(xs) == std::end(xs));
+  }
 }
 
 TEST_CASE("Intersect sets the object on the intersection") {
@@ -123,8 +134,8 @@ TEST_CASE("The hit, when all intersections have positive t") {
   Intersections xs;
   auto i1 = Intersection{1, s};
   auto i2 = Intersection{2, s};
-  xs.add(i1);
-  xs.add(i2);
+  xs.insert(i1);
+  xs.insert(i2);
   auto i = xs.hit();
   REQUIRE(i.has_value());
   CHECK(*i == i1);
@@ -135,8 +146,8 @@ TEST_CASE("The hit, when some intersections have negative t") {
   Intersections xs;
   auto i1 = Intersection{-1, s};
   auto i2 = Intersection{1, s};
-  xs.add(i1);
-  xs.add(i2);
+  xs.insert(i1);
+  xs.insert(i2);
   auto i = xs.hit();
   REQUIRE(i.has_value());
   CHECK(*i == i2);
@@ -147,8 +158,8 @@ TEST_CASE("The hit, when all intersections have negative t") {
   Intersections xs;
   auto i1 = Intersection{-2, s};
   auto i2 = Intersection{-1, s};
-  xs.add(i1);
-  xs.add(i2);
+  xs.insert(i1);
+  xs.insert(i2);
   auto i = xs.hit();
   REQUIRE(!i.has_value());
 }
@@ -160,10 +171,10 @@ TEST_CASE("The hit is always the lowest nonnegative intersection") {
   auto i2 = Intersection{7, s};
   auto i3 = Intersection{-3, s};
   auto i4 = Intersection{2, s};
-  xs.add(i1);
-  xs.add(i2);
-  xs.add(i3);
-  xs.add(i4);
+  xs.insert(i1);
+  xs.insert(i2);
+  xs.insert(i3);
+  xs.insert(i4);
   auto i = xs.hit();
   REQUIRE(i.has_value());
   CHECK(*i == i4);

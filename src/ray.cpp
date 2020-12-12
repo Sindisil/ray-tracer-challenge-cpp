@@ -21,8 +21,8 @@ auto intersect(Sphere s, Ray r) -> Intersections {
   auto c = dot(sphere_to_ray, sphere_to_ray) - 1;
   auto discriminant = (b * b) - 4 * a * c;
   if (discriminant >= 0) {
-    xs.add(Intersection{(-b - std::sqrt(discriminant)) / (2 * a), s});
-    xs.add(Intersection{(-b + std::sqrt(discriminant)) / (2 * a), s});
+    xs.insert(Intersection{(-b - std::sqrt(discriminant)) / (2 * a), s});
+    xs.insert(Intersection{(-b + std::sqrt(discriminant)) / (2 * a), s});
   }
   return xs;
 }

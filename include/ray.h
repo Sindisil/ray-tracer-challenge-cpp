@@ -1,5 +1,5 @@
-#ifndef RAY_H_GUARD
-#define RAY_H_GUARD
+#ifndef RAYTRACE_RAY_H_GUARD
+#define RAYTRACE_RAY_H_GUARD
 
 #include <algorithm>
 #include <initializer_list>
@@ -46,9 +46,10 @@ auto operator<<(std::ostream &os, Intersection const &val) -> std::ostream &;
 
 class Intersections {
 public:
+  using value_type = Intersections;
   using size_type = std::vector<Intersections>::size_type;
 
-  auto add(Intersection new_intersection) -> Intersections & {
+  auto insert(Intersection new_intersection) -> Intersections & {
     auto i = std::upper_bound(intersections_.begin(), intersections_.end(),
                               new_intersection);
     intersections_.insert(i, new_intersection);
@@ -62,6 +63,13 @@ public:
   auto size() const -> size_type { return intersections_.size(); }
 
   auto empty() const -> bool { return intersections_.empty(); }
+
+  auto begin() -> std::vector<Intersection>::iterator {
+    return intersections_.begin();
+  }
+  auto end() -> std::vector<Intersection>::iterator {
+    return intersections_.end();
+  }
 
 private:
   std::vector<Intersection> intersections_;
