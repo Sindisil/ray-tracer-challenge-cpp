@@ -1,5 +1,5 @@
-#ifndef MATRIX_H
-#define MATRIX_H
+#ifndef RAYTRACE_MATRIX_H_GUARD
+#define RAYTRACE_MATRIX_H_GUARD
 
 #include "primitives.h"
 

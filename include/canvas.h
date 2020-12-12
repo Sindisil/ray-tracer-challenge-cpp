@@ -1,5 +1,5 @@
-#ifndef CANVAS_H
-#define CANVAS_H
+#ifndef RAYTRACE_CANVAS_H_GUARD
+#define RAYTRACE_CANVAS_H_GUARD
 
 #include "color.h"
 

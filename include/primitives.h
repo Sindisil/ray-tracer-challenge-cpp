@@ -1,5 +1,5 @@
-#ifndef PRIMITIVES_H_GUARD
-#define PRIMITIVES_H_GUARD
+#ifndef RAYTRACE_PRIMITIVES_H_GUARD
+#define RAYTRACE_PRIMITIVES_H_GUARD
 
 #include <algorithm>
 #include <array>
