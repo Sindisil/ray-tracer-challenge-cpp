@@ -1,5 +1,5 @@
-#ifndef RAYTRACE_COLOR_H
-#define RAYTRACE_COLOR_H
+#ifndef RAYTRACE_COLOR_H_GUARD
+#define RAYTRACE_COLOR_H_GUARD
 
 #include <primitives.h>
 
@@ -48,7 +48,15 @@ struct Color {
   friend auto operator!=(Color c1, Color c2) -> bool { return !(c1 == c2); }
 };
 
-auto operator<<(std::ostream &os, Color const &val) -> std::ostream &;
+namespace colors {
+constexpr auto white = Color{1.0f, 1.0f, 1.0f};
+constexpr auto black = Color{0.0f, 0.0f, 0.0f};
+} // namespace colors
+
+inline auto operator<<(std::ostream &os, Color const &val) -> std::ostream & {
+  os << "Color(r=" << val.r << ", g=" << val.g << ", b=" << val.b << ")";
+  return os;
+}
 
 inline auto operator+(Color c1, Color c2) -> Color { return c1 += c2; }
 inline auto operator-(Color c1, Color c2) -> Color { return c1 -= c2; }
