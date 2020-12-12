@@ -23,6 +23,14 @@ TEST_CASE("The default material") {
   CHECK(are_about_equal(m.shininess(), 200.0f));
 }
 
+TEST_CASE("Mutator functions throw on values < 0") {
+  auto m = Material{};
+  CHECK_THROWS_AS(m.ambient(-1.0f), std::out_of_range);
+  CHECK_THROWS_AS(m.diffuse(-1.0f), std::out_of_range);
+  CHECK_THROWS_AS(m.specular(-1.0f), std::out_of_range);
+  CHECK_THROWS_AS(m.shininess(-1.0f), std::out_of_range);
+}
+
 TEST_CASE("Lighting function") {
   auto material = Material{};
   auto position = Point{0, 0, 0};

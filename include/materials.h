@@ -1,5 +1,5 @@
-#ifndef RAYTRACE_MATERIALS_H
-#define RAYTRACE_MATERIALS_H
+#ifndef RAYTRACE_MATERIALS_H_GUARD
+#define RAYTRACE_MATERIALS_H_GUARD
 
 #include <stdexcept>
 
@@ -21,7 +21,7 @@ public:
 
   auto ambient() -> float const { return ambient_; }
   auto ambient(float ambient) -> Material & {
-    if (ambient_ >= 0) {
+    if (ambient >= 0) {
       ambient_ = ambient;
       return *this;
     } else {
@@ -31,7 +31,7 @@ public:
 
   auto diffuse() -> float const { return diffuse_; }
   auto diffuse(float diffuse) -> Material & {
-    if (diffuse_ >= 0) {
+    if (diffuse >= 0) {
       diffuse_ = diffuse;
       return *this;
     } else {
@@ -41,7 +41,7 @@ public:
 
   auto specular() -> float const { return specular_; }
   auto specular(float specular) -> Material & {
-    if (specular_ >= 0) {
+    if (specular >= 0) {
       specular_ = specular;
       return *this;
     } else {
@@ -51,7 +51,7 @@ public:
 
   auto shininess() -> float const { return shininess_; }
   auto shininess(float shininess) -> Material & {
-    if (shininess_ >= 0) {
+    if (shininess >= 0) {
       shininess_ = shininess;
       return *this;
     } else {
