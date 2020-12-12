@@ -6,6 +6,7 @@
 
 #include "color.h"
 #include "materials.h"
+#include "primitives.h"
 #include "ray.h"
 
 using raytrace::are_about_equal;
