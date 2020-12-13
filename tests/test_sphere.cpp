@@ -21,27 +21,31 @@ using raytrace::Vec3;
 
 TEST_CASE("A sphere's default transformation") {
   Sphere s;
-  REQUIRE(s.transform == identity_matrix());
+  REQUIRE(s.transform() == identity_matrix());
 }
 
 TEST_CASE("Creating a sphere with a transformation") {
   auto t = identity_matrix().translate(2, 3, 4);
   Sphere s{t};
-  REQUIRE(s.transform == t);
+  REQUIRE(s.transform() == t);
 }
 
 TEST_CASE("Comparing spheres") {
   auto s1 = Sphere{};
   auto s2 = Sphere{};
+  auto s3 = Sphere{identity_matrix().scale(0.5f, 0.5f, 0.5f)};
+  auto s4 = s1;
   CHECK(s1 == s1);
-  CHECK(s1 != s2);
+  CHECK(s1 != s3);
+  CHECK(!s1.is(s2));
+  CHECK(s1.is(s4));
 }
 
 TEST_CASE("Changing a sphere's transformation") {
   Sphere s;
   auto t = identity_matrix().translate(2, 3, 4);
-  s.transform = t;
-  REQUIRE(s.transform == t);
+  s.transform(t);
+  REQUIRE(s.transform() == t);
 }
 
 TEST_CASE("Intersecting a scaled sphere with a ray") {
@@ -107,21 +111,21 @@ TEST_CASE("Computing the normal on a transformed sphere") {
 
 TEST_CASE("A sphere has a default material") {
   auto s = Sphere{};
-  CHECK(s.material == Material());
+  CHECK(s.material() == Material());
 }
 
 TEST_CASE("A sphere may be created with a specified material") {
   auto m = Material{Color{1.0f, 1.0f, 1.0f}};
   auto s = Sphere{m};
-  CHECK(s.material == m);
+  CHECK(s.material() == m);
 }
 
 TEST_CASE("A sphere may be assigned a material") {
   auto s = Sphere{};
   auto m = Material{};
   m.ambient(1.0f);
-  s.material = m;
-  CHECK(s.material == m);
+  s.material(m);
+  CHECK(s.material() == m);
   m.ambient(.5f);
-  CHECK(s.material != m);
+  CHECK(s.material() != m);
 }

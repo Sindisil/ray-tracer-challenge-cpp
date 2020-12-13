@@ -10,28 +10,46 @@
 
 namespace raytrace {
 
-static std::atomic<unsigned> next_id(0);
+static std::atomic<unsigned> next_id{1};
 
 class Sphere {
 public:
-  Matrix<4> transform{identity_matrix()};
-  Material material{};
+  Sphere(Material material, Matrix<4> transform)
+      : material_(material), transform_(transform) {
+    id_ = std::atomic_fetch_add(&next_id, 1);
+  }
+  Sphere(Material material) : Sphere{material, identity_matrix()} {}
+  Sphere(Matrix<4> transform) : Sphere{Material{}, transform} {}
+  Sphere() : Sphere{Material{}, identity_matrix()} {}
 
-  Sphere() { id_ = std::atomic_fetch_add(&next_id, 1); }
-  Sphere(Matrix<4> transform) : transform(transform) { Sphere(); };
-  Sphere(Material material) : material(material) { Sphere(); }
+  auto transform() -> Matrix<4> { return transform_; }
+  Sphere &transform(Matrix<4> transform) {
+    transform_ = transform;
+    return *this;
+  }
+
+  auto material() -> Material { return material_; }
+  Sphere &material(Material material) {
+    material_ = material;
+    return *this;
+  }
 
   auto id() const -> unsigned { return id_; }
+  auto is(Sphere s) const -> bool { return s.id() == id_; }
+
   auto normal_at(Point p) const -> Vec3;
 
   friend auto operator==(Sphere lhs, Sphere rhs) -> bool {
-    return lhs.id() == rhs.id();
+    return lhs.transform_ == rhs.transform_ && lhs.material_ == rhs.material_;
   }
+
   friend auto operator!=(Sphere lhs, Sphere rhs) -> bool {
     return !(lhs == rhs);
   }
 
 private:
+  Matrix<4> transform_;
+  Material material_;
   unsigned id_;
 };
 
