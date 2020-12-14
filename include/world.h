@@ -45,5 +45,18 @@ private:
 
 auto default_world() -> World;
 
+struct PreComps {
+  Intersection intersection;
+  Point point;
+  Vec3 eye_vec;
+  Vec3 normal;
+
+  PreComps(Intersection intersection, Ray ray) : intersection(intersection) {
+    point = ray.position(intersection.t);
+    eye_vec = -ray.direction;
+    normal = intersection.object.normal_at(point);
+  }
+};
+
 } // namespace raytrace
 #endif

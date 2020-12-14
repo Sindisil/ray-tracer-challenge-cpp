@@ -12,9 +12,11 @@ using raytrace::are_about_equal;
 using raytrace::Color;
 using raytrace::default_world;
 using raytrace::identity_matrix;
+using raytrace::Intersection;
 using raytrace::Material;
 using raytrace::Point;
 using raytrace::PointLight;
+using raytrace::PreComps;
 using raytrace::Ray;
 using raytrace::Sphere;
 using raytrace::Vec3;
@@ -57,4 +59,17 @@ TEST_CASE("Intersect a world with a ray") {
   CHECK_EQ(xs[1].t, doctest::Approx(4.5f));
   CHECK_EQ(xs[2].t, doctest::Approx(5.5f));
   CHECK_EQ(xs[3].t, doctest::Approx(6.0f));
+}
+
+TEST_CASE("Precomputing the state of an intersection") {
+  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto shape = Sphere{};
+  auto i = Intersection{4.0f, shape};
+  auto comps = PreComps{i, r};
+
+  CHECK(comps.intersection.t == i.t);
+  CHECK(comps.intersection.object == i.object);
+  CHECK(comps.point == Point{0.0f, 0.0f, -1.0f});
+  CHECK(comps.eye_vec == Vec3{0.0f, 0.0f, -1.0f});
+  CHECK(comps.normal == Vec3{0.0f, 0.0f, -1.0f});
 }
