@@ -5,15 +5,19 @@
 #include "color.h"
 #include "lights.h"
 #include "primitives.h"
+#include "ray.h"
 #include "sphere.h"
 
+using raytrace::are_about_equal;
 using raytrace::Color;
 using raytrace::default_world;
 using raytrace::identity_matrix;
 using raytrace::Material;
 using raytrace::Point;
 using raytrace::PointLight;
+using raytrace::Ray;
 using raytrace::Sphere;
+using raytrace::Vec3;
 using raytrace::World;
 
 TEST_CASE("Newly constructed World is empty") {
@@ -41,4 +45,16 @@ TEST_CASE("The default World") {
     CHECK(prev_id < i.id());
     prev_id = i.id();
   }
+}
+
+TEST_CASE("Intersect a world with a ray") {
+  auto w = default_world();
+  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto xs = w.intersect(r);
+
+  REQUIRE(xs.size() == 4);
+  CHECK_EQ(xs[0].t, doctest::Approx(4.0f));
+  CHECK_EQ(xs[1].t, doctest::Approx(4.5f));
+  CHECK_EQ(xs[2].t, doctest::Approx(5.5f));
+  CHECK_EQ(xs[3].t, doctest::Approx(6.0f));
 }

@@ -3,6 +3,7 @@
 
 #include "lights.h"
 #include "primitives.h"
+#include "ray.h"
 #include "sphere.h"
 
 #include <algorithm>
@@ -35,26 +36,14 @@ public:
   auto light() -> PointLight & { return light_; }
   auto light(PointLight light) { light_ = light; }
 
+  auto intersect(Ray r) -> Intersections;
+
 private:
   PointLight light_;
   std::vector<Sphere> objects_;
 };
 
-// Create World containing:
-// * 1 white point light at -10, 10, -10
-// * two concentric spheres:
-//    1 with Color{0.8, 1.0, .6}, diffuse{0.7}, and specular{0.2}
-//    1 default material, but scaled by 0.5 in each dimension
-auto default_world() -> World {
-  auto w = World{};
-  w.light(PointLight{Point{-10.0f, 10.0f, -10.0f}, colors::white});
-
-  auto m = Material{Color{0.8f, 1.0f, 0.6f}}.diffuse(0.7f).specular(0.2f);
-  w.push_back(Sphere{m});
-
-  w.push_back(Sphere{identity_matrix().scale(0.5f, 0.5f, 0.5f)});
-  return w;
-}
+auto default_world() -> World;
 
 } // namespace raytrace
 #endif
