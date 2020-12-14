@@ -11,7 +11,6 @@ using raytrace::Canvas;
 using raytrace::Color;
 using raytrace::Coordinate;
 using raytrace::identity_matrix;
-using raytrace::intersect;
 using raytrace::normalize;
 using raytrace::pi;
 using raytrace::Point;
@@ -45,7 +44,7 @@ int main() {
       Point target{world_x, world_y, wall_z};
 
       Ray r{ray_origin, normalize(target - ray_origin)};
-      auto xs = intersect(shape, r);
+      auto xs = r.intersect(shape);
       if (xs.hit().has_value()) {
         canvas.write_pixel(x, y, red);
       }

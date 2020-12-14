@@ -51,7 +51,7 @@ TEST_CASE("Changing a sphere's transformation") {
 TEST_CASE("Intersecting a scaled sphere with a ray") {
   Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
   Sphere s{identity_matrix().scale(2, 2, 2)};
-  auto xs = intersect(s, r);
+  auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
   CHECK(are_about_equal(xs[0].t, 3));
   CHECK(are_about_equal(xs[1].t, 7));
@@ -60,7 +60,7 @@ TEST_CASE("Intersecting a scaled sphere with a ray") {
 TEST_CASE("Intersecting a translated sphere with a ray") {
   Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
   Sphere s{identity_matrix().translate(5, 0, 0)};
-  auto xs = intersect(s, r);
+  auto xs = r.intersect(s);
   REQUIRE(xs.size() == 0);
 }
 

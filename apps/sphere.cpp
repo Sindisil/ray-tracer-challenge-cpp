@@ -14,7 +14,6 @@ using raytrace::Canvas;
 using raytrace::Color;
 using raytrace::Coordinate;
 using raytrace::identity_matrix;
-using raytrace::intersect;
 using raytrace::lighting;
 using raytrace::Material;
 using raytrace::normalize;
@@ -54,7 +53,7 @@ int main() {
       auto target = Point{world_x, world_y, wall_z};
 
       auto r = Ray{ray_origin, normalize(target - ray_origin)};
-      auto xs = intersect(shape, r);
+      auto xs = r.intersect(shape);
       if (xs.hit().has_value()) {
         auto hit = xs.hit().value();
         auto hit_point = r.position(hit.t);

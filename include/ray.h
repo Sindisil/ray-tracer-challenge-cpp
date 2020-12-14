@@ -26,22 +26,6 @@ struct Intersection {
   }
 };
 
-struct Ray {
-  Point origin{0, 0, 0};
-  Vec3 direction{0, 0, 0};
-
-  auto position(float t) const -> Point { return origin + direction * t; };
-  auto transform(Matrix<4> m) const -> Ray {
-    return Ray{origin * m, direction * m};
-  };
-
-  friend auto operator==(Ray lhs, Ray rhs) -> bool {
-    return lhs.origin == rhs.origin && lhs.direction == rhs.direction;
-  }
-
-  friend auto operator!=(Ray lhs, Ray rhs) -> bool { return !(lhs == rhs); }
-};
-
 auto operator<<(std::ostream &os, Intersection const &val) -> std::ostream &;
 
 class Intersections {
@@ -75,7 +59,24 @@ private:
   std::vector<Intersection> intersections_;
 };
 
-auto intersect(Sphere s, Ray r) -> Intersections;
+struct Ray {
+  Point origin{0, 0, 0};
+  Vec3 direction{0, 0, 0};
+
+  auto position(float t) const -> Point { return origin + direction * t; };
+  auto transform(Matrix<4> m) const -> Ray {
+    return Ray{origin * m, direction * m};
+  };
+
+  auto intersect(Sphere s, Intersections &xs) -> Intersections;
+  auto intersect(Sphere s) -> Intersections;
+
+  friend auto operator==(Ray lhs, Ray rhs) -> bool {
+    return lhs.origin == rhs.origin && lhs.direction == rhs.direction;
+  }
+
+  friend auto operator!=(Ray lhs, Ray rhs) -> bool { return !(lhs == rhs); }
+};
 
 } // namespace raytrace
 

@@ -10,7 +10,6 @@
 
 using raytrace::are_about_equal;
 using raytrace::identity_matrix;
-using raytrace::intersect;
 using raytrace::Intersection;
 using raytrace::Intersections;
 using raytrace::Matrix;
@@ -50,7 +49,7 @@ TEST_CASE("A ray intersects a sphere at two points") {
   Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
   Sphere s{};
 
-  auto xs = intersect(s, r);
+  auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
   CHECK(are_about_equal(xs[0].t, 4.0));
   CHECK(are_about_equal(xs[1].t, 6.0));
@@ -59,7 +58,7 @@ TEST_CASE("A ray intersects a sphere at two points") {
 TEST_CASE("A ray intersects a sphere at a tangent") {
   Ray r{Point{0, 1, -5}, Vec3{0, 0, 1}};
   Sphere s{};
-  auto xs = intersect(s, r);
+  auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
   CHECK(are_about_equal(xs[0].t, 5.0));
   CHECK(are_about_equal(xs[1].t, 5.0));
@@ -68,14 +67,14 @@ TEST_CASE("A ray intersects a sphere at a tangent") {
 TEST_CASE("A ray misses a sphere") {
   Ray r{Point{0, 2, -5}, Vec3{0, 0, 1}};
   Sphere s{};
-  auto xs = intersect(s, r);
+  auto xs = r.intersect(s);
   REQUIRE(xs.empty());
 }
 
 TEST_CASE("A ray originates inside a sphere") {
   Ray r{Point{0, 0, 0}, Vec3{0, 0, 1}};
   Sphere s{};
-  auto xs = intersect(s, r);
+  auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
   CHECK(are_about_equal(xs[0].t, -1.0));
   CHECK(are_about_equal(xs[1].t, 1.0));
@@ -84,7 +83,7 @@ TEST_CASE("A ray originates inside a sphere") {
 TEST_CASE("A sphere is behind a ray") {
   Ray r{Point{0, 0, 5}, Vec3{0, 0, 1}};
   Sphere s{};
-  auto xs = intersect(s, r);
+  auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
   CHECK(are_about_equal(xs[0].t, -6.0));
   CHECK(are_about_equal(xs[1].t, -4.0));
@@ -123,7 +122,7 @@ TEST_CASE("Aggregating intersections") {
 TEST_CASE("Intersect sets the object on the intersection") {
   Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
   Sphere s;
-  auto xs = intersect(s, r);
+  auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
   CHECK(xs[0].object == s);
   CHECK(xs[1].object == s);
