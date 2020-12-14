@@ -38,7 +38,7 @@ int main() {
 
   auto canvas = Canvas{canvas_size, canvas_size};
   auto shape = Sphere{Material{Color{1.0f, 1.0f, 1.0f}}};
-  shape.material.shininess(50.0f);
+  shape.material().shininess(50.0f);
 
   auto light =
       PointLight{Point{-10.0f, 10.0f, -10.0f}, Color{1.0f, 1.0f, 1.0f}};
@@ -61,7 +61,7 @@ int main() {
         auto normal = hit.object.normal_at(hit_point);
         auto eye_dir = -r.direction;
         auto color =
-            lighting(hit.object.material, light, hit_point, eye_dir, normal);
+            lighting(hit.object.material(), light, hit_point, eye_dir, normal);
 
         canvas.write_pixel(x, y, color);
       }
