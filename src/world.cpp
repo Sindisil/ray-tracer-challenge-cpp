@@ -2,14 +2,14 @@
 
 #include "ray.h"
 
+#include <numeric>
+
 namespace raytrace {
 
 auto World::intersect(Ray r) -> Intersections {
-  auto xs = Intersections{};
-  for (auto s : objects_) {
-    r.intersect(s, xs);
-  }
-  return xs;
+  return std::accumulate(
+      objects_.begin(), objects_.end(), Intersections{},
+      [&r](auto xs, auto obj) { return r.intersect(obj, xs); });
 }
 
 // Create World containing:
