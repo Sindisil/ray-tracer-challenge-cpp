@@ -71,7 +71,7 @@ public:
   }
 
 private:
-  Color color_{1, 1, 1};
+  Color color_{1.0f, 1.0f, 1.0f};
   float ambient_{0.1f};
   float diffuse_{0.9f};
   float specular_{0.9f};

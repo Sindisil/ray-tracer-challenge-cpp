@@ -22,6 +22,8 @@ using raytrace::Sphere;
 using raytrace::Vec3;
 using raytrace::World;
 
+namespace Colors = raytrace::colors;
+
 TEST_CASE("Newly constructed World is empty") {
   auto w = World{};
   CHECK(w.empty());
@@ -106,4 +108,25 @@ TEST_CASE("Shading an intersection from the inside") {
   auto comps = PreComps{i, r};
   auto c = w.shade_hit(comps);
   CHECK(c == Color{0.90498f, 0.90498f, 0.90498f});
+}
+
+TEST_CASE("The color when a ray misses") {
+  auto w = default_world();
+  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 1.0f, 0.0f}};
+  CHECK(w.color_at(r) == Colors::black);
+}
+
+TEST_CASE("The color when a ray hits") {
+  auto w = default_world();
+  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  CHECK(w.color_at(r) == Color{0.38066f, 0.47583f, 0.2855f});
+}
+
+TEST_CASE("The color with an intersection behind the ray") {
+  auto w = default_world();
+  for (auto &o : w) {
+    o.material().ambient(1.0f);
+  }
+  auto r = Ray{Point{0.0f, 0.0f, 0.75f}, Vec3{0.0f, 0.0f, -1.0f}};
+  CHECK(w.color_at(r) == w[1].material().color());
 }

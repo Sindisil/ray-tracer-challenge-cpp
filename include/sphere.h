@@ -22,13 +22,13 @@ public:
   Sphere(Matrix<4> transform) : Sphere{Material{}, transform} {}
   Sphere() : Sphere{Material{}, identity_matrix()} {}
 
-  auto transform() -> Matrix<4> { return transform_; }
+  auto transform() -> Matrix<4> & { return transform_; }
   Sphere &transform(Matrix<4> transform) {
     transform_ = transform;
     return *this;
   }
 
-  auto material() -> Material { return material_; }
+  auto material() -> Material & { return material_; }
   Sphere &material(Material material) {
     material_ = material;
     return *this;

@@ -17,6 +17,12 @@ auto World::shade_hit(PreComps comps) const -> Color {
                   comps.eye_vec, comps.normal);
 }
 
+auto World::color_at(Ray r) const -> Color {
+  auto xs = intersect(r);
+  auto h = xs.hit();
+  return h ? shade_hit(PreComps{*h, r}) : colors::black;
+}
+
 // Create World containing:
 // * 1 white point light at -10, 10, -10
 // * two concentric spheres:

@@ -65,6 +65,8 @@ public:
 
   auto shade_hit(PreComps comps) const -> Color;
 
+  auto color_at(Ray r) const -> Color;
+
 private:
   PointLight light_;
   std::vector<Sphere> objects_;
