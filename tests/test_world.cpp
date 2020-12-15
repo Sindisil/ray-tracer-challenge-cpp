@@ -86,5 +86,3 @@ TEST_CASE("Precomputing the state of an intersection") {
     CHECK(comps.normal == Vec3{0.0f, 0.0f, -1.0f});
   }
 }
-
-TEST_CASE("PreComps when intersection occurs on the outside") {}
