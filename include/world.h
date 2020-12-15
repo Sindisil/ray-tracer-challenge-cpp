@@ -11,6 +11,26 @@
 
 namespace raytrace {
 
+struct PreComps {
+  Intersection intersection;
+  Point point;
+  Vec3 eye_vec;
+  Vec3 normal;
+  bool inside;
+
+  PreComps(Intersection intersection, Ray ray) : intersection(intersection) {
+    point = ray.position(intersection.t);
+    eye_vec = -ray.direction;
+    normal = intersection.object.normal_at(point);
+    if (dot(normal, eye_vec) < 0) {
+      inside = true;
+      normal = -normal;
+    } else {
+      inside = false;
+    }
+  }
+};
+
 class World {
 public:
   using value_type = Sphere;
@@ -33,10 +53,17 @@ public:
 
   auto end() -> std::vector<Sphere>::iterator { return objects_.end(); }
 
-  auto light() -> PointLight & { return light_; }
-  auto light(PointLight light) { light_ = light; }
+  auto operator[](size_type i) -> value_type { return objects_[i]; }
 
-  auto intersect(Ray r) -> Intersections;
+  auto light() -> PointLight & { return light_; }
+  auto light(PointLight light) -> World & {
+    light_ = light;
+    return *this;
+  }
+
+  auto intersect(Ray r) const -> Intersections;
+
+  auto shade_hit(PreComps comps) const -> Color;
 
 private:
   PointLight light_;
@@ -44,26 +71,6 @@ private:
 };
 
 auto default_world() -> World;
-
-struct PreComps {
-  Intersection intersection;
-  Point point;
-  Vec3 eye_vec;
-  Vec3 normal;
-  bool inside;
-
-  PreComps(Intersection intersection, Ray ray) : intersection(intersection) {
-    point = ray.position(intersection.t);
-    eye_vec = -ray.direction;
-    normal = intersection.object.normal_at(point);
-    if (dot(normal, eye_vec) < 0) {
-      inside = true;
-      normal = -normal;
-    } else {
-      inside = false;
-    }
-  }
-};
 
 } // namespace raytrace
 #endif

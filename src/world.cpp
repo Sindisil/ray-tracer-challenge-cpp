@@ -6,10 +6,15 @@
 
 namespace raytrace {
 
-auto World::intersect(Ray r) -> Intersections {
+auto World::intersect(Ray r) const -> Intersections {
   return std::accumulate(
       objects_.begin(), objects_.end(), Intersections{},
       [&r](auto xs, auto obj) { return r.intersect(obj, xs); });
+}
+
+auto World::shade_hit(PreComps comps) const -> Color {
+  return lighting(comps.intersection.object.material(), light_, comps.point,
+                  comps.eye_vec, comps.normal);
 }
 
 // Create World containing:

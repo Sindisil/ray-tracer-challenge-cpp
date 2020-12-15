@@ -86,3 +86,24 @@ TEST_CASE("Precomputing the state of an intersection") {
     CHECK(comps.normal == Vec3{0.0f, 0.0f, -1.0f});
   }
 }
+
+TEST_CASE("Shading an intersection") {
+  auto w = default_world();
+  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto shape = w[0];
+  auto i = Intersection{4, shape};
+  auto comps = PreComps{i, r};
+  auto c = w.shade_hit(comps);
+  CHECK(c == Color{0.38066f, 0.47583f, 0.2855f});
+}
+
+TEST_CASE("Shading an intersection from the inside") {
+  auto w = default_world().light(
+      PointLight{Point{0.0f, 0.25f, 0.0f}, Color{1.0f, 1.0f, 1.0f}});
+  auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto shape = w[1];
+  auto i = Intersection{0.5f, shape};
+  auto comps = PreComps{i, r};
+  auto c = w.shade_hit(comps);
+  CHECK(c == Color{0.90498f, 0.90498f, 0.90498f});
+}
