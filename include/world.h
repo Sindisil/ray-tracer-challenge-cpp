@@ -50,11 +50,18 @@ struct PreComps {
   Point point;
   Vec3 eye_vec;
   Vec3 normal;
+  bool inside;
 
   PreComps(Intersection intersection, Ray ray) : intersection(intersection) {
     point = ray.position(intersection.t);
     eye_vec = -ray.direction;
     normal = intersection.object.normal_at(point);
+    if (dot(normal, eye_vec) < 0) {
+      inside = true;
+      normal = -normal;
+    } else {
+      inside = false;
+    }
   }
 };
 

@@ -62,14 +62,29 @@ TEST_CASE("Intersect a world with a ray") {
 }
 
 TEST_CASE("Precomputing the state of an intersection") {
-  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
   auto shape = Sphere{};
-  auto i = Intersection{4.0f, shape};
-  auto comps = PreComps{i, r};
 
-  CHECK(comps.intersection.t == i.t);
-  CHECK(comps.intersection.object == i.object);
-  CHECK(comps.point == Point{0.0f, 0.0f, -1.0f});
-  CHECK(comps.eye_vec == Vec3{0.0f, 0.0f, -1.0f});
-  CHECK(comps.normal == Vec3{0.0f, 0.0f, -1.0f});
+  SUBCASE("Intersection on the outside") {
+    auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+    auto i = Intersection{4.0f, shape};
+    auto comps = PreComps{i, r};
+    CHECK(comps.intersection.t == i.t);
+    CHECK(comps.intersection.object == i.object);
+    CHECK(comps.point == Point{0.0f, 0.0f, -1.0f});
+    CHECK(comps.eye_vec == Vec3{0.0f, 0.0f, -1.0f});
+    CHECK(comps.normal == Vec3{0.0f, 0.0f, -1.0f});
+    CHECK(!comps.inside);
+  }
+
+  SUBCASE("Intersection on the inside") {
+    auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+    auto i = Intersection{1.0f, shape};
+    auto comps = PreComps{i, r};
+    CHECK(comps.point == Point{0.0f, 0.0f, 1.0f});
+    CHECK(comps.eye_vec == Vec3{0.0f, 0.0f, -1.0f});
+    CHECK(comps.inside);
+    CHECK(comps.normal == Vec3{0.0f, 0.0f, -1.0f});
+  }
 }
+
+TEST_CASE("PreComps when intersection occurs on the outside") {}
