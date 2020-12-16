@@ -206,11 +206,11 @@ template <size_t N>
 auto operator<<(std::ostream &os, Matrix<N> const &val) -> std::ostream & {
   Matrix<N> &m = const_cast<Matrix<N> &>(val);
   for (int r = 0; r < int{N}; ++r) {
-    os << (r == 0 ? "" : ", ") << "(";
+    os << (r == 0 ? "" : ", ") << "[";
     for (int c = 0; c < int{N}; ++c) {
       os << (c == 0 ? "" : ", ") << m(r, c);
     }
-    os << ")";
+    os << "]";
   }
   return os;
 }
