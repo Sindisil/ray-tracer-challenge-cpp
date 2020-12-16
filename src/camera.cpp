@@ -1,5 +1,8 @@
 #include "camera.h"
 
+#include "canvas.h"
+#include "primitives.h"
+
 namespace raytrace {
 
 void Camera::compute_pixel_size() {
@@ -29,6 +32,19 @@ auto Camera::ray_for_pixel(int x, int y) const -> Ray {
   auto direction = (pixel - origin).normalize();
 
   return Ray{origin, direction};
+}
+
+auto Camera::render(World world) const -> Canvas {
+  auto image = Canvas{h_size_, v_size_};
+
+  for (int y = 0; y < v_size_; ++y) {
+    for (int x = 0; x < h_size_; ++x) {
+      auto ray = ray_for_pixel(x, y);
+      image.write_pixel(x, y, world.color_at(ray));
+    }
+  }
+
+  return image;
 }
 
 } // namespace raytrace

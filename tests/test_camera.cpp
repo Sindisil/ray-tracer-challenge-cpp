@@ -2,17 +2,24 @@
 
 #include "doctest.h"
 
+#include "color.h"
 #include "matrix.h"
 #include "primitives.h"
+#include "transformations.h"
+#include "world.h"
 
 #include <cmath>
 
 using raytrace::Camera;
+using raytrace::Color;
+using raytrace::default_world;
 using raytrace::identity_matrix;
 using raytrace::pi;
 using raytrace::Point;
 using raytrace::Ray;
 using raytrace::Vec3;
+using raytrace::view_transform;
+using raytrace::World;
 
 TEST_CASE("Constructing a camera") {
   auto c = Camera{160, 120, pi / 2};
@@ -54,4 +61,14 @@ TEST_CASE("Constructing rays through the points on the canvas") {
     CHECK(r.origin == Point{0.0f, 2.0f, -5.0f});
     CHECK(r.direction == Vec3{std::sqrt(2.0f) / 2, 0.0f, -std::sqrt(2.0f) / 2});
   }
+}
+
+TEST_CASE("Rendering a world with a camera") {
+  auto w = default_world();
+  auto c =
+      Camera{11, 11, pi / 2,
+             view_transform(Point{0.0f, 0.0f, -5.0f}, Point{0.0f, 0.0f, 0.0f},
+                            Vec3{0.0f, 1.0f, 0.0f})};
+  auto image = c.render(w);
+  CHECK(image.pixel_at(5, 5) == Color{0.38066f, 0.47583f, 0.2855f});
 }

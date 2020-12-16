@@ -1,8 +1,10 @@
 #ifndef RAYTRACE_CAMERA_H_GUARD
 #define RAYTRACE_CAMERA_H_GUARD
 
+#include "canvas.h"
 #include "matrix.h"
 #include "ray.h"
+#include "world.h"
 
 #include <cmath>
 
@@ -28,6 +30,8 @@ public:
   auto pixel_size() const -> float { return pixel_size_; }
 
   auto ray_for_pixel(int x, int y) const -> Ray;
+
+  auto render(World world) const -> Canvas;
 
 private:
   int h_size_;
