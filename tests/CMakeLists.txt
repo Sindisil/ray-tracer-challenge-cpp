@@ -11,6 +11,7 @@ add_executable(tests tests.cpp
     test_materials.cpp
     test_color.cpp
     test_world.cpp
+    test_transformations.cpp
 )
 target_include_directories(tests PRIVATE ../include ../extern/doctest)
 target_link_libraries(tests libraytrace)
