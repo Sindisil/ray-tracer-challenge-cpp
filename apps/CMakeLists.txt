@@ -36,13 +36,19 @@ set_target_properties(sphere PROPERTIES CXX_EXTENSIONS OFF)
 target_compile_definitions(sphere PRIVATE DOCTEST_CONFIG_DISABLE)
 target_link_libraries(sphere libraytrace)
 
-
 add_executable(simple_spheres simple_spheres.cpp)
 target_include_directories(simple_spheres PRIVATE ../include)
 target_compile_features(simple_spheres PRIVATE cxx_std_17)
 set_target_properties(simple_spheres PROPERTIES CXX_EXTENSIONS OFF)
 target_compile_definitions(simple_spheres PRIVATE DOCTEST_CONFIG_DISABLE)
 target_link_libraries(simple_spheres libraytrace)
+
+add_executable(raytracer raytracer.cpp)
+target_include_directories(raytracer PRIVATE ../include)
+target_compile_features(raytracer PRIVATE cxx_std_17)
+set_target_properties(raytracer PROPERTIES CXX_EXTENSIONS OFF)
+target_compile_definitions(raytracer PRIVATE DOCTEST_CONFIG_DISABLE)
+target_link_libraries(raytracer libraytrace)
 
 if (MSVC)
     # warning level 4 plus extra warnings
@@ -52,6 +58,7 @@ if (MSVC)
     target_compile_options(silhouette PRIVATE /W4 /w44388 /w44287)
     target_compile_options(sphere PRIVATE /W4 /w44388 /w44287)
     target_compile_options(simple_spheres PRIVATE /W4 /w44388 /w44287)
+    target_compile_options(raytracer PRIVATE /W4 /w44388 /w44287)
 else()
     # lots of warnings
     target_compile_options(projectile PRIVATE -Wall -Wextra -pedantic)
@@ -59,6 +66,6 @@ else()
     target_compile_options(clock PRIVATE -Wall -Wextra -pedantic)
     target_compile_options(silhouette PRIVATE -Wall -Wextra -pedantic)
     target_compile_options(sphere PRIVATE -Wall -Wextra -pedantic)
-    target_compile_options(simple_spheres PRIVATE -Wall -Wextra -pedantic)
+    target_compile_options(raytracer PRIVATE -Wall -Wextra -pedantic)
 endif()
 
