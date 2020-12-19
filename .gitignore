@@ -4,3 +4,6 @@
 **/.settings/
 **/.vs/
 CMakeSettings.json
+*.png
+*.ppm
+*.tga
