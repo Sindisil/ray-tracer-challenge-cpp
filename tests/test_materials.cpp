@@ -76,4 +76,12 @@ TEST_CASE("Lighting function") {
     auto color = lighting(material, light, position, eye, normal);
     CHECK(color == Color{0.1f, 0.1f, 0.1f});
   }
+
+  SUBCASE("Lighting with the surface in shadow") {
+    auto eye = Vec3{0.0f, 0.0f, -1.0f};
+    auto normal = Vec3{0.0f, 0.0f, -1.0f};
+    auto light = PointLight{Point{0.0f, 0.0f, 10.0f}, Color{1.0f, 1.0f, 1.0f}};
+    auto color = lighting(material, light, position, eye, normal, true);
+    CHECK(color == Color{0.1f, 0.1f, 0.1f});
+  }
 }

@@ -79,7 +79,7 @@ private:
 };
 
 auto lighting(Material material, PointLight light, Point point, Vec3 eye,
-              Vec3 normal) -> Color;
+              Vec3 normal, bool in_shadow = false) -> Color;
 
 } // namespace raytrace
 #endif
