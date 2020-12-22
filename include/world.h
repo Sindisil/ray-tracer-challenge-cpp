@@ -67,6 +67,8 @@ public:
 
   auto color_at(Ray r) const -> Color;
 
+  auto is_shadowed(Point p) const -> bool;
+
 private:
   PointLight light_;
   std::vector<Sphere> objects_;

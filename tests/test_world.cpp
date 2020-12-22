@@ -130,3 +130,27 @@ TEST_CASE("The color with an intersection behind the ray") {
   auto r = Ray{Point{0.0f, 0.0f, 0.75f}, Vec3{0.0f, 0.0f, -1.0f}};
   CHECK(w.color_at(r) == w[1].material().color());
 }
+
+TEST_CASE("There is no shadow when nothing is collinear with point and light") {
+  auto w = default_world();
+  auto p = Point{0.0f, 10.0f, 0.0f};
+  CHECK(!w.is_shadowed(p));
+}
+
+TEST_CASE("The shadow when an object is between the point and the light") {
+  auto w = default_world();
+  auto p = Point{10.0f, -10.0f, 10.0f};
+  CHECK(w.is_shadowed(p));
+}
+
+TEST_CASE("There is no shadowwhen an object is behind the light") {
+  auto w = default_world();
+  auto p = Point{-20.0f, 20.0f, -20.0f};
+  CHECK(!w.is_shadowed(p));
+}
+
+TEST_CASE("There is no shadow when an object is behind the point") {
+  auto w = default_world();
+  auto p = Point{-2.0f, -2.0f, -2.0f};
+  CHECK(!w.is_shadowed(p));
+}

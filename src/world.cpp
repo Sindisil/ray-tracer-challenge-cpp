@@ -23,6 +23,15 @@ auto World::color_at(Ray r) const -> Color {
   return h ? shade_hit(PreComps{*h, r}) : colors::black;
 }
 
+auto World::is_shadowed(Point p) const -> bool {
+  auto v = light_.position - p;
+  auto distance = v.magnitude();
+  auto direction = v.normalize();
+  auto xs = intersect(Ray{p, direction});
+  auto h = xs.hit();
+  return h.has_value() && h->t < distance;
+}
+
 // Create World containing:
 // * 1 white point light at -10, 10, -10
 // * two concentric spheres:
