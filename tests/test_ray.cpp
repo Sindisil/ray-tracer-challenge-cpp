@@ -91,7 +91,7 @@ TEST_CASE("A sphere is behind a ray") {
 
 TEST_CASE("An intersection encapsulates t and object") {
   Sphere s;
-  Intersection i{3.5f, s};
+  Intersection i{3.5, s};
   CHECK(are_about_equal(i.t, 3.5));
   CHECK(i.object == s);
 }

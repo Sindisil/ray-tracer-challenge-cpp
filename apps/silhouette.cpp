@@ -22,9 +22,9 @@ using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 
 int main() {
-  auto const ray_origin = Point{0, 0, -5};
-  constexpr float wall_z{10.0f};
-  constexpr float wall_size{7.0f};
+  auto const ray_origin = Point{0.0, 0.0, -5.0};
+  constexpr float wall_z{10.0};
+  constexpr float wall_size{7.0};
   constexpr int canvas_size{100};
   constexpr float half_wall{wall_size / 2};
   constexpr float pixel_size{wall_size / canvas_size};

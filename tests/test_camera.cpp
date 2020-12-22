@@ -31,12 +31,12 @@ TEST_CASE("Constructing a camera") {
 
 TEST_CASE("The pixel size for a horizontal canvas") {
   auto c = Camera{200, 125, pi / 2};
-  CHECK_EQ(c.pixel_size(), doctest::Approx(0.01f));
+  CHECK_EQ(c.pixel_size(), doctest::Approx(0.01));
 }
 
 TEST_CASE("The pixel size for a vertical canvas") {
   auto c = Camera{125, 200, pi / 2};
-  CHECK_EQ(c.pixel_size(), doctest::Approx(0.01f));
+  CHECK_EQ(c.pixel_size(), doctest::Approx(0.01));
 }
 
 TEST_CASE("Constructing rays through the points on the canvas") {
@@ -44,31 +44,29 @@ TEST_CASE("Constructing rays through the points on the canvas") {
 
   SUBCASE("Constructing a ray through the center of the canvas") {
     auto r = c.ray_for_pixel(100, 50);
-    CHECK(r.origin == Point{0.0f, 0.0f, 0.0f});
-    CHECK(r.direction == Vec3{0.0f, 0.0f, -1.0f});
+    CHECK(r.origin == Point{0.0, 0.0, 0.0});
+    CHECK(r.direction == Vec3{0.0, 0.0, -1.0});
   }
 
   SUBCASE("Constructing a ray through a corner of the canvas") {
     auto r = c.ray_for_pixel(0, 0);
-    CHECK(r.origin == Point{0.0f, 0.0f, 0.0f});
-    CHECK(r.direction == Vec3{0.66519f, 0.33259f, -0.66851f});
+    CHECK(r.origin == Point{0.0, 0.0, 0.0});
+    CHECK(r.direction == Vec3{0.66519, 0.33259, -0.66851});
   }
 
   SUBCASE("Constructing a ray when the camera is transformed") {
-    c.transform(
-        identity_matrix().translate(0.0f, -2.0f, 5.0f).rotate_y(pi / 4));
+    c.transform(identity_matrix().translate(0.0, -2.0, 5.0).rotate_y(pi / 4));
     auto r = c.ray_for_pixel(100, 50);
-    CHECK(r.origin == Point{0.0f, 2.0f, -5.0f});
-    CHECK(r.direction == Vec3{std::sqrt(2.0f) / 2, 0.0f, -std::sqrt(2.0f) / 2});
+    CHECK(r.origin == Point{0.0, 2.0, -5.0});
+    CHECK(r.direction == Vec3{std::sqrt(2.0) / 2, 0.0, -std::sqrt(2.0) / 2});
   }
 }
 
 TEST_CASE("Rendering a world with a camera") {
   auto w = default_world();
-  auto c =
-      Camera{11, 11, pi / 2,
-             view_transform(Point{0.0f, 0.0f, -5.0f}, Point{0.0f, 0.0f, 0.0f},
-                            Vec3{0.0f, 1.0f, 0.0f})};
+  auto c = Camera{11, 11, pi / 2,
+                  view_transform(Point{0.0, 0.0, -5.0}, Point{0.0, 0.0, 0.0},
+                                 Vec3{0.0, 1.0, 0.0})};
   auto image = c.render(w);
-  CHECK(image.pixel_at(5, 5) == Color{0.38066f, 0.47583f, 0.2855f});
+  CHECK(image.pixel_at(5, 5) == Color{0.38066, 0.47583, 0.2855});
 }

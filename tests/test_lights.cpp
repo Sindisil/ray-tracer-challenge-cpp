@@ -20,7 +20,7 @@ TEST_CASE("A point light has position and intensity") {
 TEST_CASE("A default constructed PointLight is a white light at {0, 0, 0}") {
   auto l = PointLight{};
   CHECK(l.intensity == raytrace::colors::white);
-  CHECK(l.position == Point{0.0f, 0.0f, 0.0f});
+  CHECK(l.position == Point{0.0, 0.0, 0.0});
 }
 
 TEST_CASE("PointLights can be compared") {

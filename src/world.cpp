@@ -39,12 +39,12 @@ auto World::is_shadowed(Point p) const -> bool {
 //    1 default material, but scaled by 0.5 in each dimension
 auto default_world() -> World {
   auto w = World{};
-  w.light(PointLight{Point{-10.0f, 10.0f, -10.0f}, colors::white});
+  w.light(PointLight{Point{-10.0, 10.0, -10.0}, colors::white});
 
-  auto m = Material{Color{0.8f, 1.0f, 0.6f}}.diffuse(0.7f).specular(0.2f);
+  auto m = Material{Color{0.8, 1.0, 0.6}}.diffuse(0.7).specular(0.2);
   w.push_back(Sphere{m});
 
-  w.push_back(Sphere{identity_matrix().scale(0.5f, 0.5f, 0.5f)});
+  w.push_back(Sphere{identity_matrix().scale(0.5, 0.5, 0.5)});
   return w;
 }
 

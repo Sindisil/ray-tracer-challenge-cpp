@@ -12,7 +12,7 @@ TEST_CASE("Creating a canvas") {
   Canvas c{10, 20};
 
   bool all_black = true;
-  auto black = Color{0.f, 0.f, 0.f};
+  auto black = Color{0, 0, 0};
   for (int x = 0; x < c.width(); ++x) {
     for (int y = 0; y < c.height(); ++y) {
       if (c.pixel_at(x, y) != black) {
@@ -26,7 +26,7 @@ TEST_CASE("Creating a canvas") {
 
 TEST_CASE("Writing pixels to a canvas") {
   Canvas c{10, 20};
-  Color red{1.f, 0.f, 0.f};
+  Color red{1, 0, 0};
 
   c.write_pixel(2, 3, red);
   CHECK(c.pixel_at(2, 3) == red);
@@ -47,9 +47,9 @@ TEST_CASE("Constructing the PPM header") {
 
 TEST_CASE("Constructing the PPM pixel data") {
   Canvas c{5, 3};
-  c.write_pixel(0, 0, Color{1.5f, 0.0f, 0.0f});
-  c.write_pixel(2, 1, Color{0.0f, 0.5f, 0.0f});
-  c.write_pixel(4, 2, Color{-0.5f, 0.0f, 1.0f});
+  c.write_pixel(0, 0, Color{1.5, 0.0, 0.0});
+  c.write_pixel(2, 1, Color{0.0, 0.5, 0.0});
+  c.write_pixel(4, 2, Color{-0.5, 0.0, 1.0});
 
   std::istringstream lines{c.to_ppm()};
   std::string line;
@@ -68,7 +68,7 @@ TEST_CASE("Constructing the PPM pixel data") {
 
 TEST_CASE("PPM lines > 70 char should be split") {
   Canvas c{10, 2};
-  Color fill{1.f, .8f, .6f};
+  Color fill{1, .8, .6};
   for (int y = 0; y < c.height(); ++y) {
     for (int x = 0; x < c.width(); ++x) {
       c.write_pixel(x, y, fill);
