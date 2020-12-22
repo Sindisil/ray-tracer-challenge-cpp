@@ -14,6 +14,7 @@ namespace raytrace {
 struct PreComps {
   Intersection intersection;
   Point point;
+  Point over_point;
   Vec3 eye_vec;
   Vec3 normal;
   bool inside;
@@ -28,6 +29,7 @@ struct PreComps {
     } else {
       inside = false;
     }
+    over_point = point + normal * epsilon * 1000;
   }
 };
 

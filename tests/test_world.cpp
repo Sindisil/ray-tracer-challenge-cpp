@@ -11,6 +11,7 @@
 using raytrace::are_about_equal;
 using raytrace::Color;
 using raytrace::default_world;
+using raytrace::epsilon;
 using raytrace::identity_matrix;
 using raytrace::Intersection;
 using raytrace::Material;
@@ -87,6 +88,15 @@ TEST_CASE("Precomputing the state of an intersection") {
     CHECK(comps.inside);
     CHECK(comps.normal == Vec3{0.0f, 0.0f, -1.0f});
   }
+
+  SUBCASE("The hit should offset the point") {
+    auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+    auto s = Sphere{}.transform(identity_matrix().translate(0.0f, 0.0f, 1.0f));
+    auto i = Intersection{5, s};
+    auto comps = PreComps{i, r};
+    CHECK(comps.over_point.z < -epsilon / 2);
+    CHECK(comps.point.z > comps.over_point.z);
+  }
 }
 
 TEST_CASE("Shading an intersection") {
@@ -108,6 +118,20 @@ TEST_CASE("Shading an intersection from the inside") {
   auto comps = PreComps{i, r};
   auto c = w.shade_hit(comps);
   CHECK(c == Color{0.90498f, 0.90498f, 0.90498f});
+}
+
+TEST_CASE("shade_hit is given an intersection in shadow") {
+  auto w = World{};
+  w.light(PointLight{Point{0.0f, 0.0f, -10.0f}, Color{1.0f, 1.0f, 1.0f}});
+  auto s1 = Sphere{};
+  auto s2 = Sphere{}.transform(identity_matrix().translate(0.0f, 0.0f, 10.0f));
+  w.push_back(s1);
+  w.push_back(s2);
+  auto r = Ray{Point{0.0f, 0.0f, 5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto i = Intersection{4, s2};
+  auto comps = PreComps{i, r};
+  auto c = w.shade_hit(comps);
+  CHECK_EQ(c, Color{0.1f, 0.1f, 0.1f});
 }
 
 TEST_CASE("The color when a ray misses") {
