@@ -97,9 +97,9 @@ TEST_CASE("Vec3s may be compared for equality and non-equality") {
 }
 
 TEST_CASE("Subtracting two vectors") {
-  Vec3 v1{3.0, 2.0, 1.0};
-  Vec3 v2{5.0, 6.0, 7.0};
-  Vec3 res_v{-2.0, -4.0, -6.0};
+  Vec3 v1{3.f, 2.f, 1.f};
+  Vec3 v2{5.f, 6.f, 7.f};
+  Vec3 res_v{-2.f, -4.f, -6.f};
 
   CHECK(v1 - v2 == res_v);
 }
@@ -120,14 +120,14 @@ TEST_CASE("Multiplying a vector by a scalar") {
 TEST_CASE("Multiplying a vector by a fraction") {
   Vec3 v{1, -2, 3};
 
-  CHECK(v * .5f == Vec3{.5f, -1.0, 1.5f});
-  CHECK(.5f * v == Vec3{.5f, -1.0, 1.5f});
+  CHECK(v * .5f == Vec3{.5f, -1.f, 1.5f});
+  CHECK(.5f * v == Vec3{.5f, -1.f, 1.5f});
 }
 
 TEST_CASE("Dividing a vector by a scalar") {
   Vec3 v{1, -2, 3};
 
-  CHECK(v / 2 == Vec3{0.5f, -1.0, 1.5f});
+  CHECK(v / 2 == Vec3{0.5f, -1.f, 1.5f});
 }
 
 // Point & Vec3 tests
@@ -177,11 +177,11 @@ TEST_CASE("Non-zero length vectors can be normalized") {
     CHECK(normalize(Vec3{4, 0, 0}) == Vec3{1, 0, 0});
   }
   SUBCASE("Normalizing (1, 2, 3) gives (sqrt(14), sqrt(14), sqrt(14))") {
-    CHECK(normalize(Vec3{1.0, 2.0, 3.0}) ==
-          Vec3{1 / sqrt(14.0), 2 / sqrt(14.0), 3 / sqrt(14.0)});
+    CHECK(normalize(Vec3{1.f, 2.f, 3.f}) ==
+          Vec3{1 / sqrt(14.f), 2 / sqrt(14.f), 3 / sqrt(14.f)});
   }
   SUBCASE("A normalized vector should have a magnitude of 1") {
-    CHECK_EQ(normalize(Vec3{1, 2, 3}).magnitude(), doctest::Approx(1.0));
+    CHECK_EQ(normalize(Vec3{1, 2, 3}).magnitude(), doctest::Approx(1.f));
   }
 }
 

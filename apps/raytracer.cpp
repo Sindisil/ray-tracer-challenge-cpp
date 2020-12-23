@@ -30,46 +30,47 @@ World define_scene() {
   auto world = World{};
 
   auto floor = Sphere{};
-  floor.transform(identity_matrix().scale(10.0, 0.01, 10.0));
-  floor.material().specular(0.0).color(Color{1.0, 0.9, 0.9});
+  floor.transform(identity_matrix().scale(10.0f, 0.01f, 10.0f));
+  floor.material().specular(0.0f).color(Color{1.0f, 0.9f, 0.9f});
   world.push_back(floor);
 
   auto left_wall = Sphere{};
   left_wall.transform(identity_matrix()
-                          .scale(10.0, 0.01, 10.0)
+                          .scale(10.0f, 0.01f, 10.0f)
                           .rotate_x(pi / 2)
                           .rotate_y(-pi / 4)
-                          .translate(0.0, 0.0, 5.0));
+                          .translate(0.0f, 0.0f, 5.0f));
   left_wall.material(floor.material());
   world.push_back(left_wall);
 
   auto right_wall = Sphere{};
   right_wall.transform(identity_matrix()
-                           .scale(10.0, 0.01, 10.0)
+                           .scale(10.0f, 0.01f, 10.0f)
                            .rotate_x(pi / 2)
                            .rotate_y(pi / 4)
-                           .translate(0.0, 0.0, 5.0));
+                           .translate(0.0f, 0.0f, 5.0f));
   right_wall.material(floor.material());
   world.push_back(right_wall);
 
   auto middle = Sphere{};
-  middle.transform(identity_matrix().translate(-0.5, 1.0, 0.5));
-  middle.material().color(Color{0.1, 1.0, 0.5}).diffuse(0.7).specular(0.3);
+  middle.transform(identity_matrix().translate(-0.5f, 1.0f, 0.5f));
+  middle.material().color(Color{0.1f, 1.0f, 0.5f}).diffuse(0.7f).specular(0.3f);
   world.push_back(middle);
 
   auto right = Sphere{};
   right.transform(
-      identity_matrix().scale(0.5, 0.5, 0.5).translate(1.5, 0.5, -0.5));
-  right.material().color(Color{0.5, 1.0, 0.1}).diffuse(0.7).specular(0.3);
+      identity_matrix().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0.5f, -0.5f));
+  right.material().color(Color{0.5f, 1.0f, 0.1f}).diffuse(0.7f).specular(0.3f);
   world.push_back(right);
 
   auto left = Sphere{};
-  left.transform(
-      identity_matrix().scale(0.33, 0.33, 0.33).translate(-1.5, 0.33, -0.75));
-  left.material().color(Color{1.0, 0.8, 0.1}).diffuse(0.7).specular(0.3);
+  left.transform(identity_matrix()
+                     .scale(0.33f, 0.33f, 0.33f)
+                     .translate(-1.5f, 0.33f, -0.75f));
+  left.material().color(Color{1.0f, 0.8f, 0.1f}).diffuse(0.7f).specular(0.3f);
   world.push_back(left);
 
-  world.light().position = Point{-10.0, 10.0, -10.0};
+  world.light().position = Point{-10.0f, 10.0f, -10.0f};
   return world;
 }
 
@@ -85,8 +86,9 @@ int main(int argc, char **argv) {
   }
   auto world = define_scene();
   auto camera = Camera{x_size, y_size, pi / 3};
-  camera.transform(view_transform(Point{0.0, 1.5, -5.0}, Point{0.0, 1.0, 0.0},
-                                  Vec3{0.0, 1.0, 0.0}));
+  camera.transform(view_transform(Point{0.0f, 1.5f, -5.0f},
+                                  Point{0.0f, 1.0f, 0.0f},
+                                  Vec3{0.0f, 1.0f, 0.0f}));
 
   auto begin = high_resolution_clock::now();
 

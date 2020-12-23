@@ -29,17 +29,18 @@ using std::chrono::milliseconds;
 
 int main() {
   auto const ray_origin = Point{0, 0, -5};
-  constexpr auto wall_z = 12.0;
-  constexpr auto wall_size = 10.0;
+  constexpr auto wall_z = 12.0f;
+  constexpr auto wall_size = 10.0f;
   constexpr auto canvas_size = 400;
-  constexpr auto half_wall = wall_size / 2.0;
+  constexpr auto half_wall = wall_size / 2.0f;
   constexpr auto pixel_size = wall_size / canvas_size;
 
   auto canvas = Canvas{canvas_size, canvas_size};
-  auto shape = Sphere{Material{Color{1.0, 1.0, 1.0}}};
-  shape.material().shininess(50.0);
+  auto shape = Sphere{Material{Color{1.0f, 1.0f, 1.0f}}};
+  shape.material().shininess(50.0f);
 
-  auto light = PointLight{Point{-10.0, 10.0, -10.0}, Color{1.0, 1.0, 1.0}};
+  auto light =
+      PointLight{Point{-10.0f, 10.0f, -10.0f}, Color{1.0f, 1.0f, 1.0f}};
 
   auto begin = high_resolution_clock::now();
 

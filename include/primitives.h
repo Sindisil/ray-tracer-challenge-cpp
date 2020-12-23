@@ -10,20 +10,20 @@
 
 namespace raytrace {
 
-constexpr double epsilon{0.00001};
-const double pi = 2 * acos(0.0);
+constexpr float epsilon{0.00001f};
+const float pi = 2 * acos(0.f);
 
-inline bool are_about_equal(double lhs, double rhs) {
+inline bool are_about_equal(float lhs, float rhs) {
   return std::abs(lhs - rhs) < epsilon;
 }
 
 struct Vec3 {
-  double x{0};
-  double y{0};
-  double z{0};
+  float x{0};
+  float y{0};
+  float z{0};
 
   Vec3() = default;
-  Vec3(double x, double y, double z) : x(x), y(y), z(z) {}
+  Vec3(float x, float y, float z) : x(x), y(y), z(z) {}
 
   auto operator+=(Vec3 v) -> Vec3 & {
     x += v.x;
@@ -39,14 +39,14 @@ struct Vec3 {
     return *this;
   }
 
-  auto operator*=(double f) -> Vec3 & {
+  auto operator*=(float f) -> Vec3 & {
     x *= f;
     y *= f;
     z *= f;
     return *this;
   }
 
-  auto operator/=(double f) -> Vec3 & {
+  auto operator/=(float f) -> Vec3 & {
     x /= f;
     y /= f;
     z /= f;
@@ -70,9 +70,9 @@ struct Vec3 {
     return Vec3(x / mag, y / mag, z / mag);
   }
 
-  auto magnitude() const -> double { return sqrt(x * x + y * y + z * z); }
+  auto magnitude() const -> float { return sqrt(x * x + y * y + z * z); }
 
-  auto dot(Vec3 v) const -> double { return (x * v.x) + (y * v.y) + (z * v.z); }
+  auto dot(Vec3 v) const -> float { return (x * v.x) + (y * v.y) + (z * v.z); }
 
   auto cross(Vec3 v) const -> Vec3 {
     return Vec3{(y * v.z) - (z * v.y), (z * v.x) - (x * v.z),
@@ -83,13 +83,13 @@ struct Vec3 {
 };
 
 struct Point {
-  double x{0};
-  double y{0};
-  double z{0};
+  float x{0};
+  float y{0};
+  float z{0};
 
   Point() = default;
-  Point(double x, double y, double z) : x(x), y(y), z(z) {}
-  Point(double x, double y) : Point(x, y, 0) {}
+  Point(float x, float y, float z) : x(x), y(y), z(z) {}
+  Point(float x, float y) : Point(x, y, 0) {}
 
   auto operator+=(Vec3 v) -> Point & {
     x += v.x;
@@ -126,14 +126,14 @@ inline auto operator-(Vec3 v1, Vec3 v2) -> Vec3 { return v1 -= v2; }
 
 inline auto operator-(Vec3 v) -> Vec3 { return Vec3{-v.x, -v.y, -v.z}; }
 
-inline auto operator*(Vec3 v, double f) -> Vec3 { return v *= f; }
-inline auto operator*(double f, Vec3 v) -> Vec3 { return v *= f; }
+inline auto operator*(Vec3 v, float f) -> Vec3 { return v *= f; }
+inline auto operator*(float f, Vec3 v) -> Vec3 { return v *= f; }
 
-inline auto operator/(Vec3 v, double f) -> Vec3 { return v /= f; }
-inline auto operator/(double f, Vec3 v) -> Vec3 { return v /= f; }
+inline auto operator/(Vec3 v, float f) -> Vec3 { return v /= f; }
+inline auto operator/(float f, Vec3 v) -> Vec3 { return v /= f; }
 
 inline auto normalize(Vec3 v) -> Vec3 { return v.normalize(); }
-inline auto dot(Vec3 v1, Vec3 v2) -> double { return v1.dot(v2); }
+inline auto dot(Vec3 v1, Vec3 v2) -> float { return v1.dot(v2); }
 inline auto cross(Vec3 v1, Vec3 v2) -> Vec3 { return v1.cross(v2); }
 
 auto operator<<(std::ostream &os, Vec3 const &val) -> std::ostream &;

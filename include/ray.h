@@ -14,7 +14,7 @@
 namespace raytrace {
 
 struct Intersection {
-  double t;
+  float t;
   Sphere object;
 
   friend auto operator<(Intersection lhs, Intersection rhs) -> bool {
@@ -63,7 +63,7 @@ struct Ray {
   Point origin{0, 0, 0};
   Vec3 direction{0, 0, 0};
 
-  auto position(double t) const -> Point { return origin + direction * t; };
+  auto position(float t) const -> Point { return origin + direction * t; };
   auto transform(Matrix<4> m) const -> Ray {
     return Ray{origin * m, direction * m};
   };

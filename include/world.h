@@ -29,7 +29,7 @@ struct PreComps {
     } else {
       inside = false;
     }
-    over_point = point + normal * epsilon;
+    over_point = point + normal * epsilon * 1000;
   }
 };
 

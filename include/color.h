@@ -8,9 +8,9 @@
 namespace raytrace {
 
 struct Color {
-  double r;
-  double g;
-  double b;
+  float r;
+  float g;
+  float b;
 
   auto operator+=(Color c) -> Color & {
     r += c.r;
@@ -26,7 +26,7 @@ struct Color {
     return *this;
   }
 
-  auto operator*=(double f) -> Color & {
+  auto operator*=(float f) -> Color & {
     r *= f;
     g *= f;
     b *= f;
@@ -60,8 +60,8 @@ inline auto operator<<(std::ostream &os, Color const &val) -> std::ostream & {
 
 inline auto operator+(Color c1, Color c2) -> Color { return c1 += c2; }
 inline auto operator-(Color c1, Color c2) -> Color { return c1 -= c2; }
-inline auto operator*(Color c, double n) -> Color { return c *= n; }
-inline auto operator*(double f, Color c) -> Color { return c *= f; }
+inline auto operator*(Color c, float f) -> Color { return c *= f; }
+inline auto operator*(float f, Color c) -> Color { return c *= f; }
 inline auto operator*(Color c1, Color c2) -> Color { return c1 *= c2; }
 
 } // namespace raytrace

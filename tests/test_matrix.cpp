@@ -9,14 +9,14 @@ using namespace raytrace;
 // Matrix tests
 
 TEST_CASE("Constructing and inspecting a 4x4 matrix") {
-  Matrix<4> m{1, 2,  3,  4,  5.5,  6.5,  7.5,  8.5,
-              9, 10, 11, 12, 13.5, 14.5, 15.5, 16.5};
+  Matrix<4> m{1.f, 2.f,  3.f,  4.f,  5.5f,  6.5f,  7.5f,  8.5f,
+              9.f, 10.f, 11.f, 12.f, 13.5f, 14.5f, 15.5f, 16.5f};
   CHECK(m(0, 0) == 1);
   CHECK(m(0, 3) == 4);
-  CHECK(m(1, 0) == doctest::Approx(5.5));
-  CHECK(m(1, 2) == doctest::Approx(7.5));
+  CHECK(m(1, 0) == doctest::Approx(5.5f));
+  CHECK(m(1, 2) == doctest::Approx(7.5f));
   CHECK(m(2, 2) == 11);
-  CHECK(m(3, 2) == doctest::Approx(15.5));
+  CHECK(m(3, 2) == doctest::Approx(15.5f));
 }
 
 TEST_CASE("A 2x2 matrix ought to be representable") {
@@ -41,15 +41,15 @@ TEST_CASE("Matrix access operator subscripts are bounds checked") {
 }
 
 TEST_CASE("Matrix equality with identical matrices") {
-  Matrix<4> a{1, 2, 3, 4, 5, 6, 7, 8, 9.1, 8.1, 7.1, 6.1, 5, 4, 3, 2};
-  Matrix<4> b{1, 2, 3, 4, 5, 6, 7, 8, 9.1, 8.1, 7.1, 6.1, 5, 4, 3, 2};
+  Matrix<4> a{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
+  Matrix<4> b{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
   CHECK(a == b);
 }
 
 TEST_CASE("Matrix equality with different matrices") {
-  Matrix<4> a{1, 2, 3, 4, 5, 6, 7, 8, 9.1, 8.1, 7.1, 6.1, 5, 4, 3, 2};
-  Matrix<4> b{1, 2, 3, 4, 5, 6, 7, 8, 9.1, 8.1, 7.1, 6.1, 5, 4, 3, 2.1};
-  Matrix<4> c{1, 2, 3, 4, 5, 6, 7, 0, 9.1, 8.1, 7.1, 6.1, 5, 4, 3, 2.0};
+  Matrix<4> a{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
+  Matrix<4> b{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2.1f};
+  Matrix<4> c{1, 2, 3, 4, 5, 6, 7, 0, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2.0f};
   CHECK(a != b);
   CHECK(a != c);
 }
@@ -132,45 +132,45 @@ TEST_CASE("Calculating the minor of a 3x3 matrix") {
 
   auto b = a.submatrix(1, 0);
   auto det = b.determinant();
-  CHECK_EQ(det, doctest::Approx(25));
-  CHECK_EQ(a.minor(1, 0), doctest::Approx(25));
+  CHECK_EQ(det, doctest::Approx(25.f));
+  CHECK_EQ(a.minor(1, 0), doctest::Approx(25.f));
 }
 
 TEST_CASE("Calculating a cofactor of a 3x3 matrix") {
   Matrix<3> a{3, 5, 0, 2, -1, -7, 6, -1, 5};
 
-  CHECK_EQ(a.minor(0, 0), doctest::Approx(-12));
-  CHECK_EQ(a.cofactor(0, 0), doctest::Approx(-12));
-  CHECK_EQ(a.minor(1, 0), doctest::Approx(25));
-  CHECK_EQ(a.cofactor(1, 0), doctest::Approx(-25));
+  CHECK_EQ(a.minor(0, 0), doctest::Approx(-12.f));
+  CHECK_EQ(a.cofactor(0, 0), doctest::Approx(-12.f));
+  CHECK_EQ(a.minor(1, 0), doctest::Approx(25.f));
+  CHECK_EQ(a.cofactor(1, 0), doctest::Approx(-25.f));
 }
 
 TEST_CASE("Calculating the determinant of a 3x3 matrix") {
   Matrix<3> a{1, 2, 6, -5, 8, -4, 2, 6, 4};
-  CHECK_EQ(a.cofactor(0, 0), doctest::Approx(56));
-  CHECK_EQ(a.cofactor(0, 1), doctest::Approx(12));
-  CHECK_EQ(a.cofactor(0, 2), doctest::Approx(-46));
-  CHECK_EQ(a.determinant(), doctest::Approx(-196));
+  CHECK_EQ(a.cofactor(0, 0), doctest::Approx(56.f));
+  CHECK_EQ(a.cofactor(0, 1), doctest::Approx(12.f));
+  CHECK_EQ(a.cofactor(0, 2), doctest::Approx(-46.f));
+  CHECK_EQ(a.determinant(), doctest::Approx(-196.f));
 }
 
 TEST_CASE("Calculating the determinant of a 4x4 matrix") {
   Matrix<4> a{-2, -8, 3, 5, -3, 1, 7, 3, 1, 2, -9, 6, -6, 7, 7, -9};
-  CHECK_EQ(a.cofactor(0, 0), doctest::Approx(690));
-  CHECK_EQ(a.cofactor(0, 1), doctest::Approx(447));
-  CHECK_EQ(a.cofactor(0, 2), doctest::Approx(210));
-  CHECK_EQ(a.cofactor(0, 3), doctest::Approx(51));
-  CHECK_EQ(a.determinant(), doctest::Approx(-4071));
+  CHECK_EQ(a.cofactor(0, 0), doctest::Approx(690.f));
+  CHECK_EQ(a.cofactor(0, 1), doctest::Approx(447.f));
+  CHECK_EQ(a.cofactor(0, 2), doctest::Approx(210.f));
+  CHECK_EQ(a.cofactor(0, 3), doctest::Approx(51.f));
+  CHECK_EQ(a.determinant(), doctest::Approx(-4071.f));
 }
 
 TEST_CASE("Testing an invertable matrix for invertibility") {
   Matrix<4> a{6, 4, 4, 4, 5, 5, 7, 6, 4, -9, 3, -7, 9, 1, 7, -6};
-  CHECK_EQ(a.determinant(), doctest::Approx(-2120));
+  CHECK_EQ(a.determinant(), doctest::Approx(-2120.f));
   CHECK(a.isInvertable());
 }
 
 TEST_CASE("Testing a noninvertable matrix for invertability") {
   Matrix<4> a{-4, 2, -2, 3, 9, 6, 2, 6, 0, -5, 1, -5, 0, 0, 0, 0};
-  CHECK_EQ(a.determinant(), doctest::Approx(0));
+  CHECK_EQ(a.determinant(), doctest::Approx(0.f));
   CHECK(!a.isInvertable());
 }
 
@@ -182,21 +182,23 @@ TEST_CASE("Attempting to invert a noninvertable matrix matrix should throw") {
 TEST_CASE("Calculating the inverse of a matrix") {
   Matrix<4> a{-5, 2, 6, -8, 1, -5, 1, 8, 7, 7, -6, -7, 1, -3, 7, 4};
   auto b = a.invert();
-  CHECK_EQ(a.determinant(), doctest::Approx(532.0));
-  CHECK_EQ(a.cofactor(2, 3), doctest::Approx(-160.0));
-  CHECK_EQ(b(3, 2), doctest::Approx(-160.0 / 532.0));
-  CHECK_EQ(a.cofactor(3, 2), doctest::Approx(105.0));
-  CHECK_EQ(b(2, 3), doctest::Approx(105.0 / 532.0));
-  CHECK(b == Matrix<4>{0.21805, 0.45113, 0.24060, -0.04511, -0.80827, -1.45677,
-                       -0.44361, 0.52068, -0.07895, -0.22368, -0.05263, 0.19737,
-                       -0.52256, -0.81391, -0.30075, 0.30639});
+  CHECK_EQ(a.determinant(), doctest::Approx(532));
+  CHECK_EQ(a.cofactor(2, 3), doctest::Approx(-160));
+  CHECK_EQ(b(3, 2), doctest::Approx(-160.f / 532.f));
+  CHECK_EQ(a.cofactor(3, 2), doctest::Approx(105.f));
+  CHECK_EQ(b(2, 3), doctest::Approx(105.f / 532.f));
+  CHECK(b == Matrix<4>{0.21805f, 0.45113f, 0.24060f, -0.04511f, -0.80827f,
+                       -1.45677f, -0.44361f, 0.52068f, -0.07895f, -0.22368f,
+                       -0.05263f, 0.19737f, -0.52256f, -0.81391f, -0.30075f,
+                       0.30639f});
 }
 
 TEST_CASE("Calculating the inverse of another matrix") {
   Matrix<4> a{8, -5, 9, 2, 7, 5, 6, 1, -6, 0, 9, 6, -3, 0, -9, -4};
-  CHECK(a.invert() == Matrix<4>{-.15385, -.15385, -.28205, -.53846, -.07692,
-                                .12308, .02564, .03077, .35897, .35897, .43590,
-                                .92308, -.69231, -.69231, -.76923, -1.92308});
+  CHECK(a.invert() == Matrix<4>{-.15385f, -.15385f, -.28205f, -.53846f,
+                                -.07692f, .12308f, .02564f, .03077f, .35897f,
+                                .35897f, .43590f, .92308f, -.69231f, -.69231f,
+                                -.76923f, -1.92308f});
 }
 
 TEST_CASE("Multiplying a product by its inverse") {
@@ -251,27 +253,27 @@ TEST_CASE("Rotating a point around the x axis") {
   Point p{0, 1, 0};
 
   CHECK(identity_matrix().rotate_x(pi / 4) * p ==
-        Point{0, std::sqrt(2) / 2, std::sqrt(2) / 2});
+        Point{0, std::sqrt(2.f) / 2, std::sqrt(2.f) / 2});
   CHECK(identity_matrix().rotate_x(pi / 2) * p == Point{0, 0, 1});
 }
 
 TEST_CASE("Inverse of rotate_x rotates the opposite direction") {
   Point p{0, 1, 0};
   CHECK(identity_matrix().rotate_x(pi / 4).invert() * p ==
-        Point{0, std::sqrt(2) / 2, -std::sqrt(2) / 2});
+        Point{0, std::sqrt(2.f) / 2, -std::sqrt(2.f) / 2});
 }
 
 TEST_CASE("Rotating a point around the y axis") {
   Point p{0, 0, 1};
   CHECK(identity_matrix().rotate_y(pi / 4) * p ==
-        Point{std::sqrt(2) / 2, 0, std::sqrt(2) / 2});
+        Point{std::sqrt(2.f) / 2, 0, std::sqrt(2.f) / 2});
   CHECK(identity_matrix().rotate_y(pi / 2) * p == Point{1, 0, 0});
 }
 
 TEST_CASE("Rotating a point around the z axis") {
   Point p{0, 1, 0};
   CHECK(identity_matrix().rotate_z(pi / 4) * p ==
-        Point{-std::sqrt(2) / 2, std::sqrt(2) / 2, 0});
+        Point{-std::sqrt(2.f) / 2, std::sqrt(2.f) / 2, 0});
   CHECK(identity_matrix().rotate_z(pi / 2) * p == Point{-1, 0, 0});
 }
 

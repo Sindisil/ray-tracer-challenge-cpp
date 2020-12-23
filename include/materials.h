@@ -19,8 +19,8 @@ public:
     return *this;
   }
 
-  auto ambient() -> double const { return ambient_; }
-  auto ambient(double ambient) -> Material & {
+  auto ambient() -> float const { return ambient_; }
+  auto ambient(float ambient) -> Material & {
     if (ambient >= 0) {
       ambient_ = ambient;
       return *this;
@@ -29,8 +29,8 @@ public:
     }
   }
 
-  auto diffuse() -> double const { return diffuse_; }
-  auto diffuse(double diffuse) -> Material & {
+  auto diffuse() -> float const { return diffuse_; }
+  auto diffuse(float diffuse) -> Material & {
     if (diffuse >= 0) {
       diffuse_ = diffuse;
       return *this;
@@ -39,8 +39,8 @@ public:
     }
   }
 
-  auto specular() -> double const { return specular_; }
-  auto specular(double specular) -> Material & {
+  auto specular() -> float const { return specular_; }
+  auto specular(float specular) -> Material & {
     if (specular >= 0) {
       specular_ = specular;
       return *this;
@@ -49,8 +49,8 @@ public:
     }
   }
 
-  auto shininess() -> double const { return shininess_; }
-  auto shininess(double shininess) -> Material & {
+  auto shininess() -> float const { return shininess_; }
+  auto shininess(float shininess) -> Material & {
     if (shininess >= 0) {
       shininess_ = shininess;
       return *this;
@@ -71,11 +71,11 @@ public:
   }
 
 private:
-  Color color_{1.0, 1.0, 1.0};
-  double ambient_{0.1};
-  double diffuse_{0.9};
-  double specular_{0.9};
-  double shininess_{200.0};
+  Color color_{1.0f, 1.0f, 1.0f};
+  float ambient_{0.1f};
+  float diffuse_{0.9f};
+  float specular_{0.9f};
+  float shininess_{200.0f};
 };
 
 auto lighting(Material material, PointLight light, Point point, Vec3 eye,

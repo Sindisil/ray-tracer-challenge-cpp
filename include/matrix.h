@@ -10,9 +10,9 @@ namespace raytrace {
 
 template <size_t N> struct Matrix {
 public:
-  double cells[N][N]{};
+  float cells[N][N]{};
 
-  auto operator()(int r, int c) -> double & {
+  auto operator()(int r, int c) -> float & {
     if (r < 0 || c < 0 || r >= int{N} || c >= int{N}) {
       throw std::out_of_range("index out of range");
     }
@@ -86,20 +86,20 @@ public:
     return m;
   }
 
-  auto minor(int r, int c) const -> double {
+  auto minor(int r, int c) const -> float {
     return submatrix(r, c).determinant();
   }
 
-  auto cofactor(int r, int c) const -> double {
+  auto cofactor(int r, int c) const -> float {
     auto f = minor(r, c);
     return ((r + c) % 2) == 0 ? f : -f;
   }
 
-  auto determinant() const -> double {
+  auto determinant() const -> float {
     if constexpr (N == 2) {
       return (cells[0][0] * cells[1][1]) - (cells[0][1] * cells[1][0]);
     } else {
-      double det = 0;
+      float det = 0;
       for (int c = 0; c < int{N}; ++c) {
         det += cells[0][c] * cofactor(0, c);
       }
@@ -108,19 +108,19 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  auto translate(double x, double y, double z) const -> Matrix<4> {
+  auto translate(float x, float y, float z) const -> Matrix<4> {
     return Matrix<4>{{{1, 0, 0, x}, {0, 1, 0, y}, {0, 0, 1, z}, {0, 0, 0, 1}}} *
            (*this);
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  auto scale(double x, double y, double z) const -> Matrix<N> {
+  auto scale(float x, float y, float z) const -> Matrix<N> {
     return Matrix<4>{{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}}} *
            (*this);
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  auto rotate_x(double r) const -> Matrix<N> {
+  auto rotate_x(float r) const -> Matrix<N> {
     return Matrix<4>{{{1, 0, 0, 0},
                       {0, std::cos(r), -std::sin(r), 0},
                       {0, std::sin(r), std::cos(r), 0},
@@ -129,7 +129,7 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  auto rotate_y(double r) const -> Matrix<N> {
+  auto rotate_y(float r) const -> Matrix<N> {
     return Matrix<4>{{{std::cos(r), 0, std::sin(r), 0},
                       {0, 1, 0, 0},
                       {-std::sin(r), 0, std::cos(r), 0},
@@ -138,7 +138,7 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  auto rotate_z(double r) const -> Matrix<N> {
+  auto rotate_z(float r) const -> Matrix<N> {
     return Matrix<4>{{{std::cos(r), -std::sin(r), 0, 0},
                       {std::sin(r), std::cos(r), 0, 0},
                       {0, 0, 1, 0},
@@ -147,8 +147,8 @@ public:
   }
 
   template <size_t NN = N, typename std::enable_if<NN == 4>::type * = nullptr>
-  auto shear(double xy, double xz, double yx, double yz, double zx,
-             double zy) const -> Matrix<N> {
+  auto shear(float xy, float xz, float yx, float yz, float zx, float zy) const
+      -> Matrix<N> {
     return Matrix<4>{
                {{1, xy, xz, 0}, {yx, 1, yz, 0}, {zx, zy, 1, 0}, {0, 0, 0, 1}}} *
            (*this);
