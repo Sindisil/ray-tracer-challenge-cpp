@@ -12,7 +12,7 @@ using raytrace::are_about_equal;
 using raytrace::identity_matrix;
 using raytrace::Intersection;
 using raytrace::Intersections;
-using raytrace::Matrix;
+using raytrace::Mat4;
 using raytrace::Point;
 using raytrace::Ray;
 using raytrace ::Sphere;

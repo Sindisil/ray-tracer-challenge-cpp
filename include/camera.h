@@ -12,8 +12,7 @@ namespace raytrace {
 
 class Camera {
 public:
-  Camera(int h_size, int v_size, float fov,
-         Matrix<4> transform = identity_matrix())
+  Camera(int h_size, int v_size, float fov, Mat4 transform = identity_matrix())
       : h_size_(h_size), v_size_(v_size), fov_(fov), transform_(transform) {
     compute_pixel_size();
   }
@@ -21,8 +20,8 @@ public:
   auto h_size() const -> int { return h_size_; }
   auto v_size() const -> int { return v_size_; }
   auto fov() const -> float { return fov_; }
-  auto transform() const -> Matrix<4> { return transform_; }
-  auto transform(Matrix<4> transform) -> Camera & {
+  auto transform() const -> Mat4 { return transform_; }
+  auto transform(Mat4 transform) -> Camera & {
     transform_ = transform;
     return *this;
   }
@@ -37,7 +36,7 @@ private:
   int h_size_;
   int v_size_;
   float fov_;
-  Matrix<4> transform_;
+  Mat4 transform_;
   float half_width_;
   float half_height_;
   float pixel_size_;
