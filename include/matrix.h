@@ -3,6 +3,7 @@
 
 #include "primitives.h"
 
+#include <cassert>
 #include <cmath>
 #include <ostream>
 
@@ -10,13 +11,16 @@ namespace raytrace {
 
 template <size_t N> struct Matrix {
 public:
-  float cells[N][N]{};
+  float m_[N][N]{};
 
   auto operator()(int r, int c) -> float & {
-    if (r < 0 || c < 0 || r >= int{N} || c >= int{N}) {
-      throw std::out_of_range("index out of range");
-    }
-    return cells[r][c];
+    assert(r >= 0 && c >= 0 && r < int{N} && c < int{N});
+    return m_[r][c];
+  }
+
+  auto operator()(int r, int c) const -> float const & {
+    assert(r >= 0 && c >= 0 && r < int{N} && c < int{N});
+    return m_[r][c];
   }
 
   friend auto operator==(Matrix<N> lhs, Matrix<N> rhs) -> bool {
@@ -38,7 +42,7 @@ public:
     Matrix<N> t{};
     for (int c = 0; c < int{N}; ++c) {
       for (int r = 0; r < int{N}; ++r) {
-        t(c, r) = cells[r][c];
+        t(c, r) = m_[r][c];
       }
     }
     return t;
@@ -58,7 +62,7 @@ public:
       if (r != r_skip) {
         for (int c = 0; c < int{N}; ++c) {
           if (c != c_skip) {
-            s(sRow, sCol) = cells[r][c];
+            s(sRow, sCol) = m_[r][c];
             ++sCol;
           }
         }
@@ -72,18 +76,88 @@ public:
   auto isInvertable() const -> bool { return determinant() != 0; }
 
   auto invert() const -> Matrix<N> {
-    if (!isInvertable()) {
-      throw std::domain_error("Matrix not invertable");
-    }
+    if constexpr (N == 4) {
+      auto m = *this;
+      // 2x2 determinants needed to compute larger determinants
+      //    names are dCCRR where CC == cols && RR == rows
+      auto d2323 = m(2, 2) * m(3, 3) - m(2, 3) * m(3, 2);
+      auto d1323 = m(2, 1) * m(3, 3) - m(2, 3) * m(3, 1);
+      auto d1223 = m(2, 1) * m(3, 2) - m(2, 2) * m(3, 1);
+      auto d0323 = m(2, 0) * m(3, 3) - m(2, 3) * m(3, 0);
+      auto d0223 = m(2, 0) * m(3, 2) - m(2, 2) * m(3, 0);
+      auto d0123 = m(2, 0) * m(3, 1) - m(2, 1) * m(3, 0);
 
-    Matrix<N> m{};
-    for (int row = 0; row < int{N}; ++row) {
-      for (int col = 0; col < int{N}; ++col) {
-        auto c = cofactor(row, col);
-        m(col, row) = c / determinant();
+      auto det =
+          m(0, 0) * (m(1, 1) * d2323 - m(1, 2) * d1323 + m(1, 3) * d1223) -
+          m(0, 1) * (m(1, 0) * d2323 - m(1, 2) * d0323 + m(1, 3) * d0223) +
+          m(0, 2) * (m(1, 0) * d1323 - m(1, 1) * d0323 + m(1, 3) * d0123) -
+          m(0, 3) * (m(1, 0) * d1223 - m(1, 1) * d0223 + m(1, 2) * d0123);
+
+      if (det == 0) {
+        throw std::domain_error("Matrix not invertable");
       }
+
+      auto i_det = 1 / det;
+
+      // Additional 2x2 determinants needed to invert matrix
+      //    names are dCCRR where CC == cols && RR == rows
+      auto d2313 = m(1, 2) * m(3, 3) - m(1, 3) * m(3, 2);
+      auto d1313 = m(1, 1) * m(3, 3) - m(1, 3) * m(3, 1);
+      auto d1213 = m(1, 1) * m(3, 2) - m(1, 2) * m(3, 1);
+      auto d2312 = m(1, 2) * m(2, 3) - m(1, 3) * m(2, 2);
+      auto d1312 = m(1, 1) * m(2, 3) - m(1, 3) * m(2, 1);
+      auto d1212 = m(1, 1) * m(2, 2) - m(1, 2) * m(2, 1);
+      auto d0313 = m(1, 0) * m(3, 3) - m(1, 3) * m(3, 0);
+      auto d0213 = m(1, 0) * m(3, 2) - m(1, 2) * m(3, 0);
+      auto d0312 = m(1, 0) * m(2, 3) - m(1, 3) * m(2, 0);
+      auto d0212 = m(1, 0) * m(2, 2) - m(1, 2) * m(2, 0);
+      auto d0113 = m(1, 0) * m(3, 1) - m(1, 1) * m(3, 0);
+      auto d0112 = m(1, 0) * m(2, 1) - m(1, 1) * m(2, 0);
+
+      Matrix<4> inv{};
+      inv(0, 0) = i_det * (m(1, 1) * d2323 - m(1, 2) * d1323 + m(1, 3) * d1223);
+      inv(0, 1) =
+          i_det * -(m(0, 1) * d2323 - m(0, 2) * d1323 + m(0, 3) * d1223);
+      inv(0, 2) = i_det * (m(0, 1) * d2313 - m(0, 2) * d1313 + m(0, 3) * d1213);
+      inv(0, 3) =
+          i_det * -(m(0, 1) * d2312 - m(0, 2) * d1312 + m(0, 3) * d1212);
+
+      inv(1, 0) =
+          i_det * -(m(1, 0) * d2323 - m(1, 2) * d0323 + m(1, 3) * d0223);
+      inv(1, 1) = i_det * (m(0, 0) * d2323 - m(0, 2) * d0323 + m(0, 3) * d0223);
+      inv(1, 2) =
+          i_det * -(m(0, 0) * d2313 - m(0, 2) * d0313 + m(0, 3) * d0213);
+      inv(1, 3) = i_det * (m(0, 0) * d2312 - m(0, 2) * d0312 + m(0, 3) * d0212);
+
+      inv(2, 0) = i_det * (m(1, 0) * d1323 - m(1, 1) * d0323 + m(1, 3) * d0123);
+      inv(2, 1) =
+          i_det * -(m(0, 0) * d1323 - m(0, 1) * d0323 + m(0, 3) * d0123);
+      inv(2, 2) = i_det * (m(0, 0) * d1313 - m(0, 1) * d0313 + m(0, 3) * d0113);
+      inv(2, 3) =
+          i_det * -(m(0, 0) * d1312 - m(0, 1) * d0312 + m(0, 3) * d0112);
+
+      inv(3, 0) =
+          i_det * -(m(1, 0) * d1223 - m(1, 1) * d0223 + m(1, 2) * d0123);
+      inv(3, 1) = i_det * (m(0, 0) * d1223 - m(0, 1) * d0223 + m(0, 2) * d0123);
+      inv(3, 2) =
+          i_det * -(m(0, 0) * d1213 - m(0, 1) * d0213 + m(0, 2) * d0113);
+      inv(3, 3) = i_det * (m(0, 0) * d1212 - m(0, 1) * d0212 + m(0, 2) * d0112);
+      return inv;
+
+    } else {
+      if (!isInvertable()) {
+        throw std::domain_error("Matrix not invertable");
+      }
+
+      Matrix<N> inv{};
+      for (int row = 0; row < int{N}; ++row) {
+        for (int col = 0; col < int{N}; ++col) {
+          auto c = cofactor(row, col);
+          inv(col, row) = c / determinant();
+        }
+      }
+      return inv;
     }
-    return m;
   }
 
   auto minor(int r, int c) const -> float {
@@ -96,12 +170,27 @@ public:
   }
 
   auto determinant() const -> float {
+    auto m = (*this);
     if constexpr (N == 2) {
-      return (cells[0][0] * cells[1][1]) - (cells[0][1] * cells[1][0]);
+      return m(0, 0) * m(1, 1) - m(0, 1) * m(1, 0);
+    } else if constexpr (N == 4) {
+      // 2x2 determinants needed to compute larger determinants
+      //    names are dCCRR where CC == cols && RR == rows
+      auto d2323 = m(2, 2) * m(3, 3) - m(2, 3) * m(3, 2);
+      auto d1323 = m(2, 1) * m(3, 3) - m(2, 3) * m(3, 1);
+      auto d1223 = m(2, 1) * m(3, 2) - m(2, 2) * m(3, 1);
+      auto d0323 = m(2, 0) * m(3, 3) - m(2, 3) * m(3, 0);
+      auto d0223 = m(2, 0) * m(3, 2) - m(2, 2) * m(3, 0);
+      auto d0123 = m(2, 0) * m(3, 1) - m(2, 1) * m(3, 0);
+
+      return m(0, 0) * (m(1, 1) * d2323 - m(1, 2) * d1323 + m(1, 3) * d1223) -
+             m(0, 1) * (m(1, 0) * d2323 - m(1, 2) * d0323 + m(1, 3) * d0223) +
+             m(0, 2) * (m(1, 0) * d1323 - m(1, 1) * d0323 + m(1, 3) * d0123) -
+             m(0, 3) * (m(1, 0) * d1223 - m(1, 1) * d0223 + m(1, 2) * d0123);
     } else {
       float det = 0;
       for (int c = 0; c < int{N}; ++c) {
-        det += cells[0][c] * cofactor(0, c);
+        det += m(0, c) * cofactor(0, c);
       }
       return det;
     }

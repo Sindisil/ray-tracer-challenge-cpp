@@ -34,12 +34,6 @@ TEST_CASE("A 3x3 matrix ought to be representable") {
   CHECK(m(2, 2) == 1);
 }
 
-TEST_CASE("Matrix access operator subscripts are bounds checked") {
-  Matrix<3> a{{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}};
-  CHECK_THROWS_AS(a(-1, -1), std::out_of_range);
-  CHECK_THROWS_AS(a(3, 3), std::out_of_range);
-}
-
 TEST_CASE("Matrix equality with identical matrices") {
   Matrix<4> a{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
   Matrix<4> b{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
@@ -108,12 +102,6 @@ TEST_CASE("Calculating the determinant of a 2x2 matrix") {
   Matrix<2> a{1, 5, -3, 2};
 
   CHECK(a.determinant() == 17);
-}
-
-TEST_CASE("Submatrix row & col are bounds checked") {
-  Matrix<3> a{{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}}};
-  CHECK_THROWS_AS(a.submatrix(-1, -1), std::out_of_range);
-  CHECK_THROWS_AS(a.submatrix(4, 4), std::out_of_range);
 }
 
 TEST_CASE("A submatrix of a 3x3 matrix is a 2x2 matrix") {
