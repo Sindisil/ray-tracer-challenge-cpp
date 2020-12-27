@@ -19,6 +19,12 @@ TEST_CASE("Constructing and inspecting a 4x4 matrix") {
   CHECK(m(3, 2) == doctest::Approx(15.5f));
 }
 
+TEST_CASE("Matrix access operator subscripts are bounds checked") {
+  Mat4 a{{{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}}};
+  CHECK_THROWS_AS(a(-1, -1), std::out_of_range);
+  CHECK_THROWS_AS(a(4, 4), std::out_of_range);
+}
+
 TEST_CASE("Matrix equality with identical matrices") {
   Mat4 a{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};
   Mat4 b{1, 2, 3, 4, 5, 6, 7, 8, 9.1f, 8.1f, 7.1f, 6.1f, 5, 4, 3, 2};

@@ -3,9 +3,9 @@
 
 #include "primitives.h"
 
-#include <cassert>
 #include <cmath>
 #include <ostream>
+#include <stdexcept>
 
 namespace raytrace {
 
@@ -17,13 +17,19 @@ public:
   float m_[4][4]{};
 
   auto operator()(int r, int c) -> float & {
-    assert(r >= 0 && c >= 0 && r < 4 && c < 4);
-    return m_[r][c];
+    if (r >= 0 && c >= 0 && r < 4 && c < 4) {
+      return m_[r][c];
+    } else {
+      throw std::out_of_range("matrix index out of range");
+    }
   }
 
   auto operator()(int r, int c) const -> float const & {
-    assert(r >= 0 && c >= 0 && r < 4 && c < 4);
-    return m_[r][c];
+    if (r >= 0 && c >= 0 && r < 4 && c < 4) {
+      return m_[r][c];
+    } else {
+      throw std::out_of_range("matrix index out of range");
+    }
   }
 
   friend auto operator==(Mat4 lhs, Mat4 rhs) -> bool {
