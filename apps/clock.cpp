@@ -9,7 +9,6 @@ using raytrace::Canvas;
 using raytrace::Color;
 using raytrace::Coordinate;
 using raytrace::identity_matrix;
-using raytrace::Matrix;
 using raytrace::pi;
 using raytrace::Point;
 

@@ -3,7 +3,9 @@
 
 #include "primitives.h"
 
+#include <array>
 #include <cmath>
+#include <initializer_list>
 #include <ostream>
 #include <stdexcept>
 
@@ -13,8 +15,11 @@ struct Mat4;
 inline auto operator*(Mat4 lhs, Mat4 rhs) -> Mat4;
 
 struct Mat4 {
-public:
-  float m_[4][4]{};
+  Mat4(std::array<float, 4> r0, std::array<float, 4> r1,
+       std::array<float, 4> r2, std::array<float, 4> r3)
+      : m_{r0, r1, r2, r3} {}
+
+  Mat4() = default;
 
   auto operator()(int r, int c) -> float & {
     if (r >= 0 && c >= 0 && r < 4 && c < 4) {
@@ -135,51 +140,53 @@ public:
   }
 
   auto translate(float x, float y, float z) const -> Mat4 {
-    return Mat4{{{1, 0, 0, x}, {0, 1, 0, y}, {0, 0, 1, z}, {0, 0, 0, 1}}} *
+    return Mat4{{1, 0, 0, x}, {0, 1, 0, y}, {0, 0, 1, z}, {0, 0, 0, 1}} *
            (*this);
-  }
+  } // namespace raytrace
 
   auto scale(float x, float y, float z) const -> Mat4 {
-    return Mat4{{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}}} *
+    return Mat4{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}} *
            (*this);
   }
 
   auto rotate_x(float r) const -> Mat4 {
-    return Mat4{{{1, 0, 0, 0},
-                 {0, std::cos(r), -std::sin(r), 0},
-                 {0, std::sin(r), std::cos(r), 0},
-                 {0, 0, 0, 1}}} *
+    return Mat4{{1, 0, 0, 0},
+                {0, std::cos(r), -std::sin(r), 0},
+                {0, std::sin(r), std::cos(r), 0},
+                {0, 0, 0, 1}} *
            (*this);
   }
 
   auto rotate_y(float r) const -> Mat4 {
-    return Mat4{{{std::cos(r), 0, std::sin(r), 0},
-                 {0, 1, 0, 0},
-                 {-std::sin(r), 0, std::cos(r), 0},
-                 {0, 0, 0, 1}}} *
+    return Mat4{{std::cos(r), 0, std::sin(r), 0},
+                {0, 1, 0, 0},
+                {-std::sin(r), 0, std::cos(r), 0},
+                {0, 0, 0, 1}} *
            (*this);
   }
 
   auto rotate_z(float r) const -> Mat4 {
-    return Mat4{{{std::cos(r), -std::sin(r), 0, 0},
-                 {std::sin(r), std::cos(r), 0, 0},
-                 {0, 0, 1, 0},
-                 {0, 0, 0, 1}}} *
+    return Mat4{{std::cos(r), -std::sin(r), 0, 0},
+                {std::sin(r), std::cos(r), 0, 0},
+                {0, 0, 1, 0},
+                {0, 0, 0, 1}} *
            (*this);
   }
 
   auto shear(float xy, float xz, float yx, float yz, float zx, float zy) const
       -> Mat4 {
-    return Mat4{
-               {{1, xy, xz, 0}, {yx, 1, yz, 0}, {zx, zy, 1, 0}, {0, 0, 0, 1}}} *
+    return Mat4{{1, xy, xz, 0}, {yx, 1, yz, 0}, {zx, zy, 1, 0}, {0, 0, 0, 1}} *
            (*this);
   }
+
+private:
+  std::array<std::array<float, 4>, 4> m_{};
 };
 
 // Free functions for Matrix
 
 inline auto identity_matrix() -> Mat4 {
-  return Mat4{{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}}};
+  return Mat4{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
 }
 
 inline auto operator*(Mat4 lhs, Mat4 rhs) -> Mat4 {
