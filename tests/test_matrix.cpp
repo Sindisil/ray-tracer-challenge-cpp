@@ -61,9 +61,9 @@ TEST_CASE("Multiplying two matrices") {
 
 TEST_CASE("Matrix multiplied by a Vector") {
   Mat4 a{{1, 2, 3, 4}, {2, 4, 4, 2}, {8, 6, 4, 1}, {0, 0, 0, 1}};
-  Vec3 v{1, 2, 3};
+  Vector3 v{1, 2, 3};
 
-  CHECK(a * v == Vec3{14, 22, 32});
+  CHECK(a * v == Vector3{14, 22, 32});
 }
 
 TEST_CASE("Matrix multiplied by a Point") {
@@ -81,7 +81,7 @@ TEST_CASE("Multiplying a matrix by the identity matrix") {
 TEST_CASE("Multiplying the identity matrix by a Point or Vector") {
   Mat4 m = identity_matrix();
   Point p{1, 2, 3};
-  Vec3 v{4, 5, 6};
+  Vector3 v{4, 5, 6};
 
   CHECK(m * p == p);
   CHECK(m * v == v);
@@ -165,7 +165,7 @@ TEST_CASE("Multiplying by the innverse of a translation matrix") {
 
 TEST_CASE("Translation does not affect vectors") {
   auto transform = identity_matrix().translate(5, -3, 2);
-  auto v = Vec3{-3, 4, 5};
+  auto v = Vector3{-3, 4, 5};
   CHECK(transform * v == v);
 }
 
@@ -176,14 +176,14 @@ TEST_CASE("A scaling matrix applied to a point") {
 }
 
 TEST_CASE("A scaling matrix applied to a vector") {
-  Vec3 v{-4, 6, 8};
+  Vector3 v{-4, 6, 8};
 
-  CHECK(identity_matrix().scale(2, 3, 4) * v == Vec3{-8, 18, 32});
+  CHECK(identity_matrix().scale(2, 3, 4) * v == Vector3{-8, 18, 32});
 }
 
 TEST_CASE("Multiplying by the inverse of a scaling matrix") {
-  Vec3 v{-4, 6, 8};
-  CHECK(identity_matrix().scale(2, 3, 4).invert() * v == Vec3{-2, 2, 2});
+  Vector3 v{-4, 6, 8};
+  CHECK(identity_matrix().scale(2, 3, 4).invert() * v == Vector3{-2, 2, 2});
 }
 
 TEST_CASE("Reflection is scaling by a negative value") {

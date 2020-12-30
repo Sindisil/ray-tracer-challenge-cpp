@@ -15,15 +15,15 @@ struct PreComps {
   Intersection intersection;
   Point point;
   Point over_point;
-  Vec3 eye_vec;
-  Vec3 normal;
+  Vector3 eye_vec;
+  Vector3 normal;
   bool inside;
 
   PreComps(Intersection intersection, Ray ray) : intersection(intersection) {
     point = ray.position(intersection.t);
     eye_vec = -ray.direction;
     normal = intersection.object.normal_at(point);
-    if (dot(normal, eye_vec) < 0) {
+    if (normal.dot(eye_vec) < 0) {
       inside = true;
       normal = -normal;
     } else {

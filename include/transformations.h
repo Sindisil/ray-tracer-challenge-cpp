@@ -6,10 +6,10 @@
 
 namespace raytrace {
 
-inline auto view_transform(Point from, Point to, Vec3 up) -> Mat4 {
+inline auto view_transform(Point from, Point to, Vector3 up) -> Mat4 {
   auto forward = (to - from).normalize();
-  auto left = cross(forward, up.normalize());
-  auto true_up = cross(left, forward);
+  auto left = forward.cross(up.normalize());
+  auto true_up = left.cross(forward);
   auto orientation = Mat4{{left.x, left.y, left.z, 0.0f},
                           {true_up.x, true_up.y, true_up.z, 0.0f},
                           {-forward.x, -forward.y, -forward.z, 0.0f},

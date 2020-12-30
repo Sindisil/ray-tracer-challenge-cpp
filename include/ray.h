@@ -61,7 +61,7 @@ private:
 
 struct Ray {
   Point origin{0, 0, 0};
-  Vec3 direction{0, 0, 0};
+  Vector3 direction{0, 0, 0};
 
   auto position(float t) const -> Point { return origin + direction * t; };
   auto transform(Mat4 m) const -> Ray {

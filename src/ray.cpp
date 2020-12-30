@@ -20,9 +20,9 @@ auto Ray::intersect(Sphere s, Intersections &xs) -> Intersections {
   // instead of actually transforming the sphere
   auto r = transform(s.transform().invert());
   auto sphere_to_ray = r.origin - Point{0, 0, 0};
-  auto a = dot(r.direction, r.direction);
-  auto b = 2 * dot(r.direction, sphere_to_ray);
-  auto c = dot(sphere_to_ray, sphere_to_ray) - 1;
+  auto a = r.direction.dot(r.direction);
+  auto b = 2 * r.direction.dot(sphere_to_ray);
+  auto c = sphere_to_ray.dot(sphere_to_ray) - 1;
   auto discriminant = (b * b) - 4 * a * c;
   if (discriminant >= 0) {
     xs.insert(Intersection{(-b - std::sqrt(discriminant)) / (2 * a), s});

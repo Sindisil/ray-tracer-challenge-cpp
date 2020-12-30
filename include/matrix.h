@@ -203,24 +203,20 @@ inline auto operator*(Mat4 lhs, Mat4 rhs) -> Mat4 {
 }
 
 inline auto operator*(Mat4 m, Point p) -> Point {
-  auto prod = Point{};
-  prod.x = m(0, 0) * p.x + m(0, 1) * p.y + m(0, 2) * p.z + m(0, 3);
-  prod.y = m(1, 0) * p.x + m(1, 1) * p.y + m(1, 2) * p.z + m(1, 3);
-  prod.z = m(2, 0) * p.x + m(2, 1) * p.y + m(2, 2) * p.z + m(2, 3);
-  return prod;
+  return Point{m(0, 0) * p.x + m(0, 1) * p.y + m(0, 2) * p.z + m(0, 3),
+               m(1, 0) * p.x + m(1, 1) * p.y + m(1, 2) * p.z + m(1, 3),
+               m(2, 0) * p.x + m(2, 1) * p.y + m(2, 2) * p.z + m(2, 3)};
 }
 
 inline auto operator*(Point p, Mat4 m) -> Point { return m * p; }
 
-inline auto operator*(Mat4 m, Vec3 v) -> Vec3 {
-  auto prod = Vec3{};
-  prod.x = m(0, 0) * v.x + m(0, 1) * v.y + m(0, 2) * v.z;
-  prod.y = m(1, 0) * v.x + m(1, 1) * v.y + m(1, 2) * v.z;
-  prod.z = m(2, 0) * v.x + m(2, 1) * v.y + m(2, 2) * v.z;
-  return prod;
+inline auto operator*(Mat4 m, Vector3 v) -> Vector3 {
+  return Vector3{m(0, 0) * v.x + m(0, 1) * v.y + m(0, 2) * v.z,
+                 m(1, 0) * v.x + m(1, 1) * v.y + m(1, 2) * v.z,
+                 m(2, 0) * v.x + m(2, 1) * v.y + m(2, 2) * v.z};
 }
 
-inline auto operator*(Vec3 v, Mat4 m) -> Vec3 { return m * v; }
+inline auto operator*(Vector3 v, Mat4 m) -> Vector3 { return m * v; }
 
 inline auto operator<<(std::ostream &os, Mat4 const &val) -> std::ostream & {
   Mat4 &m = const_cast<Mat4 &>(val);

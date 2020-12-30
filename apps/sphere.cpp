@@ -16,7 +16,6 @@ using raytrace::Coordinate;
 using raytrace::identity_matrix;
 using raytrace::lighting;
 using raytrace::Material;
-using raytrace::normalize;
 using raytrace::pi;
 using raytrace::Point;
 using raytrace::PointLight;
@@ -52,7 +51,7 @@ int main() {
 
       auto target = Point{world_x, world_y, wall_z};
 
-      auto r = Ray{ray_origin, normalize(target - ray_origin)};
+      auto r = Ray{ray_origin, (target - ray_origin).normalize()};
       auto xs = r.intersect(shape);
       if (xs.hit().has_value()) {
         auto hit = xs.hit().value();

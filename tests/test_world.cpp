@@ -20,7 +20,7 @@ using raytrace::PointLight;
 using raytrace::PreComps;
 using raytrace::Ray;
 using raytrace::Sphere;
-using raytrace::Vec3;
+using raytrace::Vector3;
 using raytrace::World;
 
 namespace Colors = raytrace::colors;
@@ -54,7 +54,7 @@ TEST_CASE("The default World") {
 
 TEST_CASE("Intersect a world with a ray") {
   auto w = default_world();
-  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
   auto xs = w.intersect(r);
 
   REQUIRE(xs.size() == 4);
@@ -68,29 +68,29 @@ TEST_CASE("Precomputing the state of an intersection") {
   auto shape = Sphere{};
 
   SUBCASE("Intersection on the outside") {
-    auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+    auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
     auto i = Intersection{4.0f, shape};
     auto comps = PreComps{i, r};
     CHECK(comps.intersection.t == i.t);
     CHECK(comps.intersection.object == i.object);
     CHECK(comps.point == Point{0.0f, 0.0f, -1.0f});
-    CHECK(comps.eye_vec == Vec3{0.0f, 0.0f, -1.0f});
-    CHECK(comps.normal == Vec3{0.0f, 0.0f, -1.0f});
+    CHECK(comps.eye_vec == Vector3{0.0f, 0.0f, -1.0f});
+    CHECK(comps.normal == Vector3{0.0f, 0.0f, -1.0f});
     CHECK(!comps.inside);
   }
 
   SUBCASE("Intersection on the inside") {
-    auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+    auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vector3{0.0f, 0.0f, 1.0f}};
     auto i = Intersection{1.0f, shape};
     auto comps = PreComps{i, r};
     CHECK(comps.point == Point{0.0f, 0.0f, 1.0f});
-    CHECK(comps.eye_vec == Vec3{0.0f, 0.0f, -1.0f});
+    CHECK(comps.eye_vec == Vector3{0.0f, 0.0f, -1.0f});
     CHECK(comps.inside);
-    CHECK(comps.normal == Vec3{0.0f, 0.0f, -1.0f});
+    CHECK(comps.normal == Vector3{0.0f, 0.0f, -1.0f});
   }
 
   SUBCASE("The hit should offset the point") {
-    auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+    auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
     auto s = Sphere{}.transform(identity_matrix().translate(0.0f, 0.0f, 1.0f));
     auto i = Intersection{5, s};
     auto comps = PreComps{i, r};
@@ -101,7 +101,7 @@ TEST_CASE("Precomputing the state of an intersection") {
 
 TEST_CASE("Shading an intersection") {
   auto w = default_world();
-  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
   auto shape = w[0];
   auto i = Intersection{4, shape};
   auto comps = PreComps{i, r};
@@ -112,7 +112,7 @@ TEST_CASE("Shading an intersection") {
 TEST_CASE("Shading an intersection from the inside") {
   auto w = default_world().light(
       PointLight{Point{0.0f, 0.25f, 0.0f}, Color{1.0f, 1.0f, 1.0f}});
-  auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vector3{0.0f, 0.0f, 1.0f}};
   auto shape = w[1];
   auto i = Intersection{0.5f, shape};
   auto comps = PreComps{i, r};
@@ -127,7 +127,7 @@ TEST_CASE("shade_hit is given an intersection in shadow") {
   auto s2 = Sphere{}.transform(identity_matrix().translate(0.0f, 0.0f, 10.0f));
   w.push_back(s1);
   w.push_back(s2);
-  auto r = Ray{Point{0.0f, 0.0f, 5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto r = Ray{Point{0.0f, 0.0f, 5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
   auto i = Intersection{4, s2};
   auto comps = PreComps{i, r};
   auto c = w.shade_hit(comps);
@@ -136,13 +136,13 @@ TEST_CASE("shade_hit is given an intersection in shadow") {
 
 TEST_CASE("The color when a ray misses") {
   auto w = default_world();
-  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 1.0f, 0.0f}};
+  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 1.0f, 0.0f}};
   CHECK(w.color_at(r) == Colors::black);
 }
 
 TEST_CASE("The color when a ray hits") {
   auto w = default_world();
-  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vec3{0.0f, 0.0f, 1.0f}};
+  auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
   CHECK(w.color_at(r) == Color{0.38066f, 0.47583f, 0.2855f});
 }
 
@@ -151,7 +151,7 @@ TEST_CASE("The color with an intersection behind the ray") {
   for (auto &o : w) {
     o.material().ambient(1.0f);
   }
-  auto r = Ray{Point{0.0f, 0.0f, 0.75f}, Vec3{0.0f, 0.0f, -1.0f}};
+  auto r = Ray{Point{0.0f, 0.0f, 0.75f}, Vector3{0.0f, 0.0f, -1.0f}};
   CHECK(w.color_at(r) == w[1].material().color());
 }
 

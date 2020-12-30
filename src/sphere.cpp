@@ -4,7 +4,7 @@
 
 namespace raytrace {
 
-auto Sphere::normal_at(Point world_point) const -> Vec3 {
+auto Sphere::normal_at(Point world_point) const -> Vector3 {
   auto object_point = transform_.invert() * world_point;
   auto object_normal = object_point - Point{0, 0, 0};
   auto world_normal = transform_.invert().transpose() * object_normal;

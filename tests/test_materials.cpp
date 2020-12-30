@@ -12,7 +12,7 @@ using raytrace::Color;
 using raytrace::Material;
 using raytrace::Point;
 using raytrace::PointLight;
-using raytrace::Vec3;
+using raytrace::Vector3;
 
 TEST_CASE("The default material") {
   auto m = Material{};
@@ -36,24 +36,24 @@ TEST_CASE("Lighting function") {
   auto position = Point{0, 0, 0};
 
   SUBCASE("Lighting with the eye between the light and the surface") {
-    auto eye = Vec3{0.0f, 0.0f, -1.0f};
-    auto normal = Vec3{0.0f, 0.0f, -1.0f};
+    auto eye = Vector3{0.0f, 0.0f, -1.0f};
+    auto normal = Vector3{0.0f, 0.0f, -1.0f};
     auto light = PointLight{Point{0.0f, 0.0f, -10.0f}, Color{1.0f, 1.0f, 1.0f}};
     auto color = lighting(material, light, position, eye, normal);
     CHECK(color == Color{1.9f, 1.9f, 1.9f});
   }
 
   SUBCASE("Lighting with the eye between light and surface, eye offset 45°") {
-    auto eye = Vec3{0.0f, std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2};
-    auto normal = Vec3{0.0f, 0.0f, -1.0f};
+    auto eye = Vector3{0.0f, std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2};
+    auto normal = Vector3{0.0f, 0.0f, -1.0f};
     auto light = PointLight{Point{0.0f, 0.0f, -10.0f}, Color{1.0f, 1.0f, 1.0f}};
     auto color = lighting(material, light, position, eye, normal);
     CHECK(color == Color{1.0f, 1.0f, 1.0f});
   }
 
   SUBCASE("Lighting with the eye opposite surface, light offset 45°") {
-    auto eye = Vec3{0.0f, 0.0f, -1.0f};
-    auto normal = Vec3{0.0f, 0.0f, -1.0f};
+    auto eye = Vector3{0.0f, 0.0f, -1.0f};
+    auto normal = Vector3{0.0f, 0.0f, -1.0f};
     auto light =
         PointLight{Point{0.0f, 10.0f, -10.0f}, Color{1.0f, 1.0f, 1.0f}};
     auto color = lighting(material, light, position, eye, normal);
@@ -61,8 +61,8 @@ TEST_CASE("Lighting function") {
   }
 
   SUBCASE("Lighting with the eye in the path of the reflection vector") {
-    auto eye = Vec3{0.0f, -std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2};
-    auto normal = Vec3{0.0f, 0.0f, -1.0f};
+    auto eye = Vector3{0.0f, -std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2};
+    auto normal = Vector3{0.0f, 0.0f, -1.0f};
     auto light =
         PointLight{Point{0.0f, 10.0f, -10.0f}, Color{1.0f, 1.0f, 1.0f}};
     auto color = lighting(material, light, position, eye, normal);
@@ -70,16 +70,16 @@ TEST_CASE("Lighting function") {
   }
 
   SUBCASE("Lighting with the eye between the light and the surface") {
-    auto eye = Vec3{0.0f, 0.0f, -1.0f};
-    auto normal = Vec3{0.0f, 0.0f, -1.0f};
+    auto eye = Vector3{0.0f, 0.0f, -1.0f};
+    auto normal = Vector3{0.0f, 0.0f, -1.0f};
     auto light = PointLight{Point{0.0f, 0.0f, 10.0f}, Color{1.0f, 1.0f, 1.0f}};
     auto color = lighting(material, light, position, eye, normal);
     CHECK(color == Color{0.1f, 0.1f, 0.1f});
   }
 
   SUBCASE("Lighting with the surface in shadow") {
-    auto eye = Vec3{0.0f, 0.0f, -1.0f};
-    auto normal = Vec3{0.0f, 0.0f, -1.0f};
+    auto eye = Vector3{0.0f, 0.0f, -1.0f};
+    auto normal = Vector3{0.0f, 0.0f, -1.0f};
     auto light = PointLight{Point{0.0f, 0.0f, 10.0f}, Color{1.0f, 1.0f, 1.0f}};
     auto color = lighting(material, light, position, eye, normal, true);
     CHECK(color == Color{0.1f, 0.1f, 0.1f});

@@ -16,13 +16,13 @@ using raytrace::Mat4;
 using raytrace::Point;
 using raytrace::Ray;
 using raytrace ::Sphere;
-using raytrace::Vec3;
+using raytrace::Vector3;
 
 TEST_CASE("creating and querying a ray") {
   Point origin{1, 2, 3};
-  Vec3 direction{4, 5, 6};
+  Vector3 direction{4, 5, 6};
   Ray r1{origin, direction};
-  Ray r2{Point{1, 2, 3}, Vec3{4, 5, 6}};
+  Ray r2{Point{1, 2, 3}, Vector3{4, 5, 6}};
 
   CHECK(r1.origin == origin);
   CHECK(r1.direction == direction);
@@ -31,14 +31,14 @@ TEST_CASE("creating and querying a ray") {
 }
 
 TEST_CASE("Comparing rays") {
-  auto r = Ray{Point{1, 2, 3}, Vec3{4, 5, 6}};
-  CHECK(r == Ray{Point{1, 2, 3}, Vec3{4, 5, 6}});
-  CHECK(r != Ray{Point{0, 0, 0}, Vec3{4, 5, 6}});
-  CHECK(r != Ray{Point{1, 2, 3}, Vec3{0, 0, 1}});
+  auto r = Ray{Point{1, 2, 3}, Vector3{4, 5, 6}};
+  CHECK(r == Ray{Point{1, 2, 3}, Vector3{4, 5, 6}});
+  CHECK(r != Ray{Point{0, 0, 0}, Vector3{4, 5, 6}});
+  CHECK(r != Ray{Point{1, 2, 3}, Vector3{0, 0, 1}});
 }
 
 TEST_CASE("Computing a point from a distance") {
-  Ray r{Point{2, 3, 4}, Vec3{1, 0, 0}};
+  Ray r{Point{2, 3, 4}, Vector3{1, 0, 0}};
   CHECK(r.position(0) == Point{2, 3, 4});
   CHECK(r.position(1) == Point{3, 3, 4});
   CHECK(r.position(-1) == Point{1, 3, 4});
@@ -46,7 +46,7 @@ TEST_CASE("Computing a point from a distance") {
 }
 
 TEST_CASE("A ray intersects a sphere at two points") {
-  Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
+  Ray r{Point{0, 0, -5}, Vector3{0, 0, 1}};
   Sphere s{};
 
   auto xs = r.intersect(s);
@@ -56,7 +56,7 @@ TEST_CASE("A ray intersects a sphere at two points") {
 }
 
 TEST_CASE("A ray intersects a sphere at a tangent") {
-  Ray r{Point{0, 1, -5}, Vec3{0, 0, 1}};
+  Ray r{Point{0, 1, -5}, Vector3{0, 0, 1}};
   Sphere s{};
   auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
@@ -65,14 +65,14 @@ TEST_CASE("A ray intersects a sphere at a tangent") {
 }
 
 TEST_CASE("A ray misses a sphere") {
-  Ray r{Point{0, 2, -5}, Vec3{0, 0, 1}};
+  Ray r{Point{0, 2, -5}, Vector3{0, 0, 1}};
   Sphere s{};
   auto xs = r.intersect(s);
   REQUIRE(xs.empty());
 }
 
 TEST_CASE("A ray originates inside a sphere") {
-  Ray r{Point{0, 0, 0}, Vec3{0, 0, 1}};
+  Ray r{Point{0, 0, 0}, Vector3{0, 0, 1}};
   Sphere s{};
   auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
@@ -81,7 +81,7 @@ TEST_CASE("A ray originates inside a sphere") {
 }
 
 TEST_CASE("A sphere is behind a ray") {
-  Ray r{Point{0, 0, 5}, Vec3{0, 0, 1}};
+  Ray r{Point{0, 0, 5}, Vector3{0, 0, 1}};
   Sphere s{};
   auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
@@ -120,7 +120,7 @@ TEST_CASE("Aggregating intersections") {
 }
 
 TEST_CASE("Intersect sets the object on the intersection") {
-  Ray r{Point{0, 0, -5}, Vec3{0, 0, 1}};
+  Ray r{Point{0, 0, -5}, Vector3{0, 0, 1}};
   Sphere s;
   auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
@@ -180,15 +180,15 @@ TEST_CASE("The hit is always the lowest nonnegative intersection") {
 }
 
 TEST_CASE("Translating a ray") {
-  Ray r{Point{1, 2, 3}, Vec3{0, 1, 0}};
+  Ray r{Point{1, 2, 3}, Vector3{0, 1, 0}};
   auto r2 = r.transform(identity_matrix().translate(3, 4, 5));
   CHECK(r2.origin == Point{4, 6, 8});
-  CHECK(r2.direction == Vec3{0, 1, 0});
+  CHECK(r2.direction == Vector3{0, 1, 0});
 }
 
 TEST_CASE("Scaling a ray") {
-  Ray r{Point{1, 2, 3}, Vec3{0, 1, 0}};
+  Ray r{Point{1, 2, 3}, Vector3{0, 1, 0}};
   auto r2 = r.transform(identity_matrix().scale(2, 3, 4));
   CHECK(r2.origin == Point{2, 6, 12});
-  CHECK(r2.direction == Vec3{0, 3, 0});
+  CHECK(r2.direction == Vector3{0, 3, 0});
 }

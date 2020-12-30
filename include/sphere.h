@@ -37,7 +37,7 @@ public:
   auto id() const -> unsigned { return id_; }
   auto is(Sphere s) const -> bool { return s.id() == id_; }
 
-  auto normal_at(Point p) const -> Vec3;
+  auto normal_at(Point p) const -> Vector3;
 
   friend auto operator==(Sphere lhs, Sphere rhs) -> bool {
     return lhs.transform_ == rhs.transform_ && lhs.material_ == rhs.material_;

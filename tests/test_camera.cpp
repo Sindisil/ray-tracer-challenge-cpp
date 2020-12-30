@@ -17,7 +17,7 @@ using raytrace::identity_matrix;
 using raytrace::pi;
 using raytrace::Point;
 using raytrace::Ray;
-using raytrace::Vec3;
+using raytrace::Vector3;
 using raytrace::view_transform;
 using raytrace::World;
 
@@ -45,13 +45,13 @@ TEST_CASE("Constructing rays through the points on the canvas") {
   SUBCASE("Constructing a ray through the center of the canvas") {
     auto r = c.ray_for_pixel(100, 50);
     CHECK(r.origin == Point{0.0f, 0.0f, 0.0f});
-    CHECK(r.direction == Vec3{0.0f, 0.0f, -1.0f});
+    CHECK(r.direction == Vector3{0.0f, 0.0f, -1.0f});
   }
 
   SUBCASE("Constructing a ray through a corner of the canvas") {
     auto r = c.ray_for_pixel(0, 0);
     CHECK(r.origin == Point{0.0f, 0.0f, 0.0f});
-    CHECK(r.direction == Vec3{0.66519f, 0.33259f, -0.66851f});
+    CHECK(r.direction == Vector3{0.66519f, 0.33259f, -0.66851f});
   }
 
   SUBCASE("Constructing a ray when the camera is transformed") {
@@ -59,7 +59,8 @@ TEST_CASE("Constructing rays through the points on the canvas") {
         identity_matrix().translate(0.0f, -2.0f, 5.0f).rotate_y(pi / 4));
     auto r = c.ray_for_pixel(100, 50);
     CHECK(r.origin == Point{0.0f, 2.0f, -5.0f});
-    CHECK(r.direction == Vec3{std::sqrt(2.0f) / 2, 0.0f, -std::sqrt(2.0f) / 2});
+    CHECK(r.direction ==
+          Vector3{std::sqrt(2.0f) / 2, 0.0f, -std::sqrt(2.0f) / 2});
   }
 }
 
@@ -68,7 +69,7 @@ TEST_CASE("Rendering a world with a camera") {
   auto c =
       Camera{11, 11, pi / 2,
              view_transform(Point{0.0f, 0.0f, -5.0f}, Point{0.0f, 0.0f, 0.0f},
-                            Vec3{0.0f, 1.0f, 0.0f})};
+                            Vector3{0.0f, 1.0f, 0.0f})};
   auto image = c.render(w);
   CHECK(image.pixel_at(5, 5) == Color{0.38066f, 0.47583f, 0.2855f});
 }

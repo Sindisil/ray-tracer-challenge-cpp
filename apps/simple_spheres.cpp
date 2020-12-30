@@ -17,7 +17,7 @@ using raytrace::Material;
 using raytrace::pi;
 using raytrace::Point;
 using raytrace::Sphere;
-using raytrace::Vec3;
+using raytrace::Vector3;
 using raytrace::view_transform;
 using raytrace::World;
 
@@ -74,7 +74,7 @@ int main() {
   auto camera = Camera{800, 400, pi / 3};
   camera.transform(view_transform(Point{0.0f, 1.5f, -5.0f},
                                   Point{0.0f, 1.0f, 0.0f},
-                                  Vec3{0.0f, 1.0f, 0.0f}));
+                                  Vector3{0.0f, 1.0f, 0.0f}));
 
   auto begin = high_resolution_clock::now();
 
