@@ -13,8 +13,9 @@ auto World::intersect(Ray r) const -> Intersections {
 }
 
 auto World::shade_hit(PreComps comps) const -> Color {
-  return lighting(comps.intersection.object.material(), light_, comps.point,
-                  comps.eye_vec, comps.normal, is_shadowed(comps.over_point));
+  return lighting(comps.intersection().object.material(), light_, comps.point(),
+                  comps.eye_vec(), comps.normal(),
+                  is_shadowed(comps.over_point()));
 }
 
 auto World::color_at(Ray r) const -> Color {

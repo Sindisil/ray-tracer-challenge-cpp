@@ -11,26 +11,35 @@
 
 namespace raytrace {
 
-struct PreComps {
-  Intersection intersection;
-  Point point;
-  Point over_point;
-  Vector3 eye_vec;
-  Vector3 normal;
-  bool inside;
-
-  PreComps(Intersection intersection, Ray ray) : intersection(intersection) {
-    point = ray.position(intersection.t);
-    eye_vec = -ray.direction;
-    normal = intersection.object.normal_at(point);
-    if (normal.dot(eye_vec) < 0) {
-      inside = true;
-      normal = -normal;
+class PreComps {
+public:
+  PreComps(Intersection intersection, Ray ray) : intersection_(intersection) {
+    point_ = ray.position(intersection.t);
+    eye_vec_ = -ray.direction;
+    normal_ = intersection.object.normal_at(point_);
+    if (normal_.dot(eye_vec_) < 0) {
+      inside_ = true;
+      normal_ = -normal_;
     } else {
-      inside = false;
+      inside_ = false;
     }
-    over_point = point + normal * epsilon * 1000;
+    over_point_ = point_ + normal_ * epsilon * 1000;
   }
+
+  auto intersection() const -> Intersection { return intersection_; }
+  auto point() const -> Point { return point_; }
+  auto over_point() const -> Point { return over_point_; }
+  auto eye_vec() const -> Vector3 { return eye_vec_; }
+  auto normal() const -> Vector3 { return normal_; }
+  auto inside() const -> bool { return inside_; }
+
+private:
+  Intersection intersection_;
+  Point point_;
+  Point over_point_;
+  Vector3 eye_vec_;
+  Vector3 normal_;
+  bool inside_;
 };
 
 class World {

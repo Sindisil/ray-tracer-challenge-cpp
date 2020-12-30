@@ -71,22 +71,22 @@ TEST_CASE("Precomputing the state of an intersection") {
     auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
     auto i = Intersection{4.0f, shape};
     auto comps = PreComps{i, r};
-    CHECK(comps.intersection.t == i.t);
-    CHECK(comps.intersection.object == i.object);
-    CHECK(comps.point == Point{0.0f, 0.0f, -1.0f});
-    CHECK(comps.eye_vec == Vector3{0.0f, 0.0f, -1.0f});
-    CHECK(comps.normal == Vector3{0.0f, 0.0f, -1.0f});
-    CHECK(!comps.inside);
+    CHECK(comps.intersection().t == i.t);
+    CHECK(comps.intersection().object == i.object);
+    CHECK(comps.point() == Point{0.0f, 0.0f, -1.0f});
+    CHECK(comps.eye_vec() == Vector3{0.0f, 0.0f, -1.0f});
+    CHECK(comps.normal() == Vector3{0.0f, 0.0f, -1.0f});
+    CHECK(!comps.inside());
   }
 
   SUBCASE("Intersection on the inside") {
     auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vector3{0.0f, 0.0f, 1.0f}};
     auto i = Intersection{1.0f, shape};
     auto comps = PreComps{i, r};
-    CHECK(comps.point == Point{0.0f, 0.0f, 1.0f});
-    CHECK(comps.eye_vec == Vector3{0.0f, 0.0f, -1.0f});
-    CHECK(comps.inside);
-    CHECK(comps.normal == Vector3{0.0f, 0.0f, -1.0f});
+    CHECK(comps.point() == Point{0.0f, 0.0f, 1.0f});
+    CHECK(comps.eye_vec() == Vector3{0.0f, 0.0f, -1.0f});
+    CHECK(comps.inside());
+    CHECK(comps.normal() == Vector3{0.0f, 0.0f, -1.0f});
   }
 
   SUBCASE("The hit should offset the point") {
@@ -94,8 +94,8 @@ TEST_CASE("Precomputing the state of an intersection") {
     auto s = Sphere{}.transform(identity_matrix().translated(0.0f, 0.0f, 1.0f));
     auto i = Intersection{5, s};
     auto comps = PreComps{i, r};
-    CHECK(comps.over_point.z < -epsilon / 2);
-    CHECK(comps.point.z > comps.over_point.z);
+    CHECK(comps.over_point().z < -epsilon / 2);
+    CHECK(comps.point().z > comps.over_point().z);
   }
 }
 
