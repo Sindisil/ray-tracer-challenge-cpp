@@ -14,16 +14,16 @@ static std::atomic<unsigned> next_id{1};
 
 class Sphere {
 public:
-  Sphere(Material material, Mat4 transform)
+  Sphere(Material material, Matrix4 transform)
       : material_(material), transform_(transform) {
     id_ = std::atomic_fetch_add(&next_id, 1);
   }
   Sphere(Material material) : Sphere{material, identity_matrix()} {}
-  Sphere(Mat4 transform) : Sphere{Material{}, transform} {}
+  Sphere(Matrix4 transform) : Sphere{Material{}, transform} {}
   Sphere() : Sphere{Material{}, identity_matrix()} {}
 
-  auto transform() -> Mat4 & { return transform_; }
-  Sphere &transform(Mat4 transform) {
+  auto transform() -> Matrix4 & { return transform_; }
+  Sphere &transform(Matrix4 transform) {
     transform_ = transform;
     return *this;
   }
@@ -48,7 +48,7 @@ public:
   }
 
 private:
-  Mat4 transform_;
+  Matrix4 transform_;
   Material material_;
   unsigned id_;
 };

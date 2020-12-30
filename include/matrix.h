@@ -11,15 +11,15 @@
 
 namespace raytrace {
 
-struct Mat4;
-inline auto operator*(Mat4 lhs, Mat4 rhs) -> Mat4;
+struct Matrix4;
+inline auto operator*(Matrix4 lhs, Matrix4 rhs) -> Matrix4;
 
-struct Mat4 {
-  Mat4(std::array<float, 4> r0, std::array<float, 4> r1,
-       std::array<float, 4> r2, std::array<float, 4> r3)
+struct Matrix4 {
+  Matrix4(std::array<float, 4> r0, std::array<float, 4> r1,
+          std::array<float, 4> r2, std::array<float, 4> r3)
       : m_{r0, r1, r2, r3} {}
 
-  Mat4() = default;
+  Matrix4() = default;
 
   auto operator()(int r, int c) -> float & {
     if (r >= 0 && c >= 0 && r < 4 && c < 4) {
@@ -37,7 +37,7 @@ struct Mat4 {
     }
   }
 
-  friend auto operator==(Mat4 lhs, Mat4 rhs) -> bool {
+  friend auto operator==(Matrix4 lhs, Matrix4 rhs) -> bool {
     for (int r = 0; r < 4; ++r) {
       for (int c = 0; c < 4; ++c) {
         if (!are_about_equal(lhs(r, c), rhs(r, c))) {
@@ -48,10 +48,12 @@ struct Mat4 {
     return true;
   }
 
-  friend auto operator!=(Mat4 lhs, Mat4 rhs) -> bool { return !(lhs == rhs); }
+  friend auto operator!=(Matrix4 lhs, Matrix4 rhs) -> bool {
+    return !(lhs == rhs);
+  }
 
-  auto transpose() const -> Mat4 {
-    Mat4 t{};
+  auto transpose() const -> Matrix4 {
+    Matrix4 t{};
     for (int c = 0; c < 4; ++c) {
       for (int r = 0; r < 4; ++r) {
         t(c, r) = m_[r][c];
@@ -62,7 +64,7 @@ struct Mat4 {
 
   auto isInvertable() const -> bool { return determinant() != 0; }
 
-  auto invert() const -> Mat4 {
+  auto invert() const -> Matrix4 {
     auto m = *this;
     // 2x2 determinants needed to compute larger determinants
     //    names are dCCRR where CC == cols && RR == rows
@@ -99,7 +101,7 @@ struct Mat4 {
     auto d0113 = m(1, 0) * m(3, 1) - m(1, 1) * m(3, 0);
     auto d0112 = m(1, 0) * m(2, 1) - m(1, 1) * m(2, 0);
 
-    Mat4 inv{};
+    Matrix4 inv{};
     inv(0, 0) = i_det * (m(1, 1) * d2323 - m(1, 2) * d1323 + m(1, 3) * d1223);
     inv(0, 1) = i_det * -(m(0, 1) * d2323 - m(0, 2) * d1323 + m(0, 3) * d1223);
     inv(0, 2) = i_det * (m(0, 1) * d2313 - m(0, 2) * d1313 + m(0, 3) * d1213);
@@ -139,43 +141,44 @@ struct Mat4 {
            m(0, 3) * (m(1, 0) * d1223 - m(1, 1) * d0223 + m(1, 2) * d0123);
   }
 
-  auto translate(float x, float y, float z) const -> Mat4 {
-    return Mat4{{1, 0, 0, x}, {0, 1, 0, y}, {0, 0, 1, z}, {0, 0, 0, 1}} *
+  auto translate(float x, float y, float z) const -> Matrix4 {
+    return Matrix4{{1, 0, 0, x}, {0, 1, 0, y}, {0, 0, 1, z}, {0, 0, 0, 1}} *
            (*this);
   } // namespace raytrace
 
-  auto scale(float x, float y, float z) const -> Mat4 {
-    return Mat4{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}} *
+  auto scale(float x, float y, float z) const -> Matrix4 {
+    return Matrix4{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}} *
            (*this);
   }
 
-  auto rotate_x(float r) const -> Mat4 {
-    return Mat4{{1, 0, 0, 0},
-                {0, std::cos(r), -std::sin(r), 0},
-                {0, std::sin(r), std::cos(r), 0},
-                {0, 0, 0, 1}} *
+  auto rotate_x(float r) const -> Matrix4 {
+    return Matrix4{{1, 0, 0, 0},
+                   {0, std::cos(r), -std::sin(r), 0},
+                   {0, std::sin(r), std::cos(r), 0},
+                   {0, 0, 0, 1}} *
            (*this);
   }
 
-  auto rotate_y(float r) const -> Mat4 {
-    return Mat4{{std::cos(r), 0, std::sin(r), 0},
-                {0, 1, 0, 0},
-                {-std::sin(r), 0, std::cos(r), 0},
-                {0, 0, 0, 1}} *
+  auto rotate_y(float r) const -> Matrix4 {
+    return Matrix4{{std::cos(r), 0, std::sin(r), 0},
+                   {0, 1, 0, 0},
+                   {-std::sin(r), 0, std::cos(r), 0},
+                   {0, 0, 0, 1}} *
            (*this);
   }
 
-  auto rotate_z(float r) const -> Mat4 {
-    return Mat4{{std::cos(r), -std::sin(r), 0, 0},
-                {std::sin(r), std::cos(r), 0, 0},
-                {0, 0, 1, 0},
-                {0, 0, 0, 1}} *
+  auto rotate_z(float r) const -> Matrix4 {
+    return Matrix4{{std::cos(r), -std::sin(r), 0, 0},
+                   {std::sin(r), std::cos(r), 0, 0},
+                   {0, 0, 1, 0},
+                   {0, 0, 0, 1}} *
            (*this);
   }
 
   auto shear(float xy, float xz, float yx, float yz, float zx, float zy) const
-      -> Mat4 {
-    return Mat4{{1, xy, xz, 0}, {yx, 1, yz, 0}, {zx, zy, 1, 0}, {0, 0, 0, 1}} *
+      -> Matrix4 {
+    return Matrix4{
+               {1, xy, xz, 0}, {yx, 1, yz, 0}, {zx, zy, 1, 0}, {0, 0, 0, 1}} *
            (*this);
   }
 
@@ -185,12 +188,12 @@ private:
 
 // Free functions for Matrix
 
-inline auto identity_matrix() -> Mat4 {
-  return Mat4{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
+inline auto identity_matrix() -> Matrix4 {
+  return Matrix4{{1, 0, 0, 0}, {0, 1, 0, 0}, {0, 0, 1, 0}, {0, 0, 0, 1}};
 }
 
-inline auto operator*(Mat4 lhs, Mat4 rhs) -> Mat4 {
-  Mat4 res{};
+inline auto operator*(Matrix4 lhs, Matrix4 rhs) -> Matrix4 {
+  Matrix4 res{};
 
   for (int r = 0; r < 4; ++r) {
     for (int c = 0; c < 4; ++c) {
@@ -202,24 +205,24 @@ inline auto operator*(Mat4 lhs, Mat4 rhs) -> Mat4 {
   return res;
 }
 
-inline auto operator*(Mat4 m, Point p) -> Point {
+inline auto operator*(Matrix4 m, Point p) -> Point {
   return Point{m(0, 0) * p.x + m(0, 1) * p.y + m(0, 2) * p.z + m(0, 3),
                m(1, 0) * p.x + m(1, 1) * p.y + m(1, 2) * p.z + m(1, 3),
                m(2, 0) * p.x + m(2, 1) * p.y + m(2, 2) * p.z + m(2, 3)};
 }
 
-inline auto operator*(Point p, Mat4 m) -> Point { return m * p; }
+inline auto operator*(Point p, Matrix4 m) -> Point { return m * p; }
 
-inline auto operator*(Mat4 m, Vector3 v) -> Vector3 {
+inline auto operator*(Matrix4 m, Vector3 v) -> Vector3 {
   return Vector3{m(0, 0) * v.x + m(0, 1) * v.y + m(0, 2) * v.z,
                  m(1, 0) * v.x + m(1, 1) * v.y + m(1, 2) * v.z,
                  m(2, 0) * v.x + m(2, 1) * v.y + m(2, 2) * v.z};
 }
 
-inline auto operator*(Vector3 v, Mat4 m) -> Vector3 { return m * v; }
+inline auto operator*(Vector3 v, Matrix4 m) -> Vector3 { return m * v; }
 
-inline auto operator<<(std::ostream &os, Mat4 const &val) -> std::ostream & {
-  Mat4 &m = const_cast<Mat4 &>(val);
+inline auto operator<<(std::ostream &os, Matrix4 const &val) -> std::ostream & {
+  Matrix4 &m = const_cast<Matrix4 &>(val);
   for (int r = 0; r < 4; ++r) {
     os << (r == 0 ? "" : ", ") << "[";
     for (int c = 0; c < 4; ++c) {

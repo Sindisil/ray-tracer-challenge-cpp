@@ -6,7 +6,7 @@
 #include "primitives.h"
 
 using raytrace::identity_matrix;
-using raytrace::Mat4;
+using raytrace::Matrix4;
 using raytrace::Point;
 using raytrace::Vector3;
 
@@ -39,8 +39,8 @@ TEST_CASE("An arbitrary view transformation") {
   auto to = Point{4.0f, -2.0f, 8.0f};
   auto up = Vector3{1.0f, 1.0f, 0.0f};
   auto t = view_transform(from, to, up);
-  REQUIRE(t == Mat4{{-0.50709f, 0.50709f, 0.67612f, -2.36643f},
-                    {0.76772f, 0.60609f, 0.12122f, -2.82843f},
-                    {-0.35857f, 0.59761f, -0.71714f, 0.00000f},
-                    {0.00000f, 0.00000f, 0.00000f, 1.00000f}});
+  REQUIRE(t == Matrix4{{-0.50709f, 0.50709f, 0.67612f, -2.36643f},
+                       {0.76772f, 0.60609f, 0.12122f, -2.82843f},
+                       {-0.35857f, 0.59761f, -0.71714f, 0.00000f},
+                       {0.00000f, 0.00000f, 0.00000f, 1.00000f}});
 }
