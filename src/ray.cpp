@@ -18,7 +18,7 @@ auto Ray::intersect(Sphere s) -> Intersections {
 auto Ray::intersect(Sphere s, Intersections &xs) -> Intersections {
   // transform ray by inverse of sphere's transform,
   // instead of actually transforming the sphere
-  auto r = transform(s.transform().invert());
+  auto r = transform(s.transform().inverse());
   auto sphere_to_ray = r.origin - Point{0, 0, 0};
   auto a = r.direction.dot(r.direction);
   auto b = 2 * r.direction.dot(sphere_to_ray);

@@ -93,13 +93,13 @@ TEST_CASE("Transposing a matrix") {
   Matrix4 a{{0, 9, 3, 0}, {9, 8, 0, 8}, {1, 8, 5, 3}, {0, 0, 5, 8}};
   Matrix4 transposed{{0, 9, 1, 0}, {9, 8, 8, 0}, {3, 0, 5, 5}, {0, 8, 3, 8}};
 
-  CHECK(a.transpose() == transposed);
+  CHECK(a.transposed() == transposed);
 }
 
 TEST_CASE("Transposing the identity matrix") {
   Matrix4 m = identity_matrix();
 
-  CHECK(m.transpose() == identity_matrix());
+  CHECK(m.transposed() == identity_matrix());
 }
 
 TEST_CASE("Calculating the determinant of a 4x4 matrix") {
@@ -122,12 +122,12 @@ TEST_CASE("Testing a noninvertable matrix for invertability") {
 
 TEST_CASE("Attempting to invert a noninvertable matrix matrix should throw") {
   Matrix4 a{{-4, 2, -2, 3}, {9, 6, 2, 6}, {0, -5, 1, -5}, {0, 0, 0, 0}};
-  CHECK_THROWS_AS(a.invert(), std::domain_error);
+  CHECK_THROWS_AS(a.inverse(), std::domain_error);
 }
 
 TEST_CASE("Calculating the inverse of a matrix") {
   Matrix4 a{{-5, 2, 6, -8}, {1, -5, 1, 8}, {7, 7, -6, -7}, {1, -3, 7, 4}};
-  auto b = a.invert();
+  auto b = a.inverse();
   CHECK_EQ(a.determinant(), doctest::Approx(532));
   CHECK_EQ(b(3, 2), doctest::Approx(-160.f / 532.f));
   CHECK_EQ(b(2, 3), doctest::Approx(105.f / 532.f));
@@ -139,34 +139,34 @@ TEST_CASE("Calculating the inverse of a matrix") {
 
 TEST_CASE("Calculating the inverse of another matrix") {
   Matrix4 a{{8, -5, 9, 2}, {7, 5, 6, 1}, {-6, 0, 9, 6}, {-3, 0, -9, -4}};
-  CHECK(a.invert() == Matrix4{{-.15385f, -.15385f, -.28205f, -.53846f},
-                              {-.07692f, .12308f, .02564f, .03077f},
-                              {.35897f, .35897f, .43590f, .92308f},
-                              {-.69231f, -.69231f, -.76923f, -1.92308f}});
+  CHECK(a.inverse() == Matrix4{{-.15385f, -.15385f, -.28205f, -.53846f},
+                               {-.07692f, .12308f, .02564f, .03077f},
+                               {.35897f, .35897f, .43590f, .92308f},
+                               {-.69231f, -.69231f, -.76923f, -1.92308f}});
 }
 
 TEST_CASE("Multiplying a product by its inverse") {
   Matrix4 a{{3, -9, 7, 3}, {3, -8, 2, -9}, {-4, 4, 4, 4}, {1, -6, 5, -1}};
   Matrix4 b{{8, 2, 2, 2}, {3, -1, 7, 0}, {7, 0, 5, 4}, {6, -2, 0, 5}};
   auto c = a * b;
-  CHECK(c * b.invert() == a);
+  CHECK(c * b.inverse() == a);
 }
 
 TEST_CASE("Multiplying by a translation matrix") {
-  auto transform = identity_matrix().translate(5, -3, 2);
+  auto transform = identity_matrix().translated(5, -3, 2);
   Point p{-3, 4, 5};
 
   CHECK(transform * p == Point{2, 1, 7});
 }
 
 TEST_CASE("Multiplying by the innverse of a translation matrix") {
-  auto inv = identity_matrix().translate(5, -3, 2).invert();
+  auto inv = identity_matrix().translated(5, -3, 2).inverse();
   auto p = Point{-3, 4, 5};
   CHECK(inv * p == Point{-8, 7, 3});
 }
 
 TEST_CASE("Translation does not affect vectors") {
-  auto transform = identity_matrix().translate(5, -3, 2);
+  auto transform = identity_matrix().translated(5, -3, 2);
   auto v = Vector3{-3, 4, 5};
   CHECK(transform * v == v);
 }
@@ -174,88 +174,88 @@ TEST_CASE("Translation does not affect vectors") {
 TEST_CASE("A scaling matrix applied to a point") {
   Point p{-4, 6, 8};
 
-  CHECK(identity_matrix().scale(2, 3, 4) * p == Point{-8, 18, 32});
+  CHECK(identity_matrix().scaled(2, 3, 4) * p == Point{-8, 18, 32});
 }
 
 TEST_CASE("A scaling matrix applied to a vector") {
   Vector3 v{-4, 6, 8};
 
-  CHECK(identity_matrix().scale(2, 3, 4) * v == Vector3{-8, 18, 32});
+  CHECK(identity_matrix().scaled(2, 3, 4) * v == Vector3{-8, 18, 32});
 }
 
 TEST_CASE("Multiplying by the inverse of a scaling matrix") {
   Vector3 v{-4, 6, 8};
-  CHECK(identity_matrix().scale(2, 3, 4).invert() * v == Vector3{-2, 2, 2});
+  CHECK(identity_matrix().scaled(2, 3, 4).inverse() * v == Vector3{-2, 2, 2});
 }
 
 TEST_CASE("Reflection is scaling by a negative value") {
   Point p{2, 3, 4};
-  CHECK(identity_matrix().scale(-1, 1, 1) * p == Point{-2, 3, 4});
+  CHECK(identity_matrix().scaled(-1, 1, 1) * p == Point{-2, 3, 4});
 }
 
 TEST_CASE("Rotating a point around the x axis") {
   Point p{0, 1, 0};
 
-  CHECK(identity_matrix().rotate_x(pi / 4) * p ==
+  CHECK(identity_matrix().rotated_on_x(pi / 4) * p ==
         Point{0, std::sqrt(2.f) / 2, std::sqrt(2.f) / 2});
-  CHECK(identity_matrix().rotate_x(pi / 2) * p == Point{0, 0, 1});
+  CHECK(identity_matrix().rotated_on_x(pi / 2) * p == Point{0, 0, 1});
 }
 
-TEST_CASE("Inverse of rotate_x rotates the opposite direction") {
+TEST_CASE("Inverse of rotated_on_x rotates the opposite direction") {
   Point p{0, 1, 0};
-  CHECK(identity_matrix().rotate_x(pi / 4).invert() * p ==
+  CHECK(identity_matrix().rotated_on_x(pi / 4).inverse() * p ==
         Point{0, std::sqrt(2.f) / 2, -std::sqrt(2.f) / 2});
 }
 
 TEST_CASE("Rotating a point around the y axis") {
   Point p{0, 0, 1};
-  CHECK(identity_matrix().rotate_y(pi / 4) * p ==
+  CHECK(identity_matrix().rotated_on_y(pi / 4) * p ==
         Point{std::sqrt(2.f) / 2, 0, std::sqrt(2.f) / 2});
-  CHECK(identity_matrix().rotate_y(pi / 2) * p == Point{1, 0, 0});
+  CHECK(identity_matrix().rotated_on_y(pi / 2) * p == Point{1, 0, 0});
 }
 
 TEST_CASE("Rotating a point around the z axis") {
   Point p{0, 1, 0};
-  CHECK(identity_matrix().rotate_z(pi / 4) * p ==
+  CHECK(identity_matrix().rotated_on_z(pi / 4) * p ==
         Point{-std::sqrt(2.f) / 2, std::sqrt(2.f) / 2, 0});
-  CHECK(identity_matrix().rotate_z(pi / 2) * p == Point{-1, 0, 0});
+  CHECK(identity_matrix().rotated_on_z(pi / 2) * p == Point{-1, 0, 0});
 }
 
 TEST_CASE("A shearing transformation moves x in proportion to y") {
   Point p{2, 3, 4};
-  CHECK(identity_matrix().shear(1, 0, 0, 0, 0, 0) * p == Point{5, 3, 4});
+  CHECK(identity_matrix().sheared(1, 0, 0, 0, 0, 0) * p == Point{5, 3, 4});
 }
 
 TEST_CASE("A shearing transformation moves x in proportion to z") {
   Point p{2, 3, 4};
-  CHECK(identity_matrix().shear(0, 1, 0, 0, 0, 0) * p == Point{6, 3, 4});
+  CHECK(identity_matrix().sheared(0, 1, 0, 0, 0, 0) * p == Point{6, 3, 4});
 }
 
 TEST_CASE("A shearing transformation moves y in proportion to x") {
   Point p{2, 3, 4};
-  CHECK(identity_matrix().shear(0, 0, 1, 0, 0, 0) * p == Point{2, 5, 4});
+  CHECK(identity_matrix().sheared(0, 0, 1, 0, 0, 0) * p == Point{2, 5, 4});
 }
 
 TEST_CASE("A shearing transformation moves y in proportion to z") {
   Point p{2, 3, 4};
-  CHECK(identity_matrix().shear(0, 0, 0, 1, 0, 0) * p == Point{2, 7, 4});
+  CHECK(identity_matrix().sheared(0, 0, 0, 1, 0, 0) * p == Point{2, 7, 4});
 }
 
 TEST_CASE("A shearing transformation moves z in proportion to x") {
   Point p{2, 3, 4};
-  CHECK(identity_matrix().shear(0, 0, 0, 0, 1, 0) * p == Point{2, 3, 6});
+  CHECK(identity_matrix().sheared(0, 0, 0, 0, 1, 0) * p == Point{2, 3, 6});
 }
 
 TEST_CASE("A shearing transformation moves z in proportion to y") {
   Point p{2, 3, 4};
-  CHECK(identity_matrix().shear(0, 0, 0, 0, 0, 1) * p == Point{2, 3, 7});
+  CHECK(identity_matrix().sheared(0, 0, 0, 0, 0, 1) * p == Point{2, 3, 7});
 }
 
 TEST_CASE("Transformations are applied in sequence") {
   Point p{1, 0, 1};
-  auto a{identity_matrix().rotate_x(pi / 2)};
-  auto b{identity_matrix().scale(5, 5, 5)};
-  auto c{identity_matrix().translate(10, 5, 7)};
+  auto a{identity_matrix().rotated_on_x(pi / 2)};
+  auto b{identity_matrix().scaled(5, 5, 5)};
+  auto c{identity_matrix().translated(10, 5, 7)};
 
   auto p2{a * p};
   CHECK(p2 == Point{1, -1, 0});
@@ -267,13 +267,14 @@ TEST_CASE("Transformations are applied in sequence") {
 
 TEST_CASE("Chained transformations must be appied in the correct order") {
   Point p{1, 0, 1};
-  auto a{identity_matrix().rotate_x(pi / 2)};
-  auto b{identity_matrix().scale(5, 5, 5)};
-  auto c{identity_matrix().translate(10, 5, 7)};
+  auto a{identity_matrix().rotated_on_x(pi / 2)};
+  auto b{identity_matrix().scaled(5, 5, 5)};
+  auto c{identity_matrix().translated(10, 5, 7)};
 
   auto t = c * b * a;
   CHECK(t * p == Point{15, 0, 7});
-  CHECK(identity_matrix().rotate_x(pi / 2).scale(5, 5, 5).translate(10, 5, 7) *
+  CHECK(identity_matrix().rotated_on_x(pi / 2).scaled(5, 5, 5).translated(10, 5,
+                                                                          7) *
             p ==
         Point{15, 0, 7});
 }

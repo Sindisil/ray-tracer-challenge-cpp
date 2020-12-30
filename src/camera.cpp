@@ -26,7 +26,7 @@ auto Camera::ray_for_pixel(int x, int y) const -> Ray {
   // untransformed world space coordinates of the pixel
   auto world_x = half_width_ - x_offset;
   auto world_y = half_height_ - y_offset;
-  auto inverse_transform = transform_.invert();
+  auto inverse_transform = transform_.inverse();
   auto pixel = inverse_transform * Point{world_x, world_y, -1.0f};
   auto origin = inverse_transform * Point{0.0f, 0.0f, 0.0f};
   auto direction = (pixel - origin).normalize();

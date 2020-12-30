@@ -52,7 +52,7 @@ struct Matrix4 {
     return !(lhs == rhs);
   }
 
-  auto transpose() const -> Matrix4 {
+  auto transposed() const -> Matrix4 {
     Matrix4 t{};
     for (int c = 0; c < 4; ++c) {
       for (int r = 0; r < 4; ++r) {
@@ -64,7 +64,7 @@ struct Matrix4 {
 
   auto isInvertable() const -> bool { return determinant() != 0; }
 
-  auto invert() const -> Matrix4 {
+  auto inverse() const -> Matrix4 {
     auto m = *this;
     // 2x2 determinants needed to compute larger determinants
     //    names are dCCRR where CC == cols && RR == rows
@@ -141,17 +141,17 @@ struct Matrix4 {
            m(0, 3) * (m(1, 0) * d1223 - m(1, 1) * d0223 + m(1, 2) * d0123);
   }
 
-  auto translate(float x, float y, float z) const -> Matrix4 {
+  auto translated(float x, float y, float z) const -> Matrix4 {
     return Matrix4{{1, 0, 0, x}, {0, 1, 0, y}, {0, 0, 1, z}, {0, 0, 0, 1}} *
            (*this);
-  } // namespace raytrace
+  }
 
-  auto scale(float x, float y, float z) const -> Matrix4 {
+  auto scaled(float x, float y, float z) const -> Matrix4 {
     return Matrix4{{x, 0, 0, 0}, {0, y, 0, 0}, {0, 0, z, 0}, {0, 0, 0, 1}} *
            (*this);
   }
 
-  auto rotate_x(float r) const -> Matrix4 {
+  auto rotated_on_x(float r) const -> Matrix4 {
     return Matrix4{{1, 0, 0, 0},
                    {0, std::cos(r), -std::sin(r), 0},
                    {0, std::sin(r), std::cos(r), 0},
@@ -159,7 +159,7 @@ struct Matrix4 {
            (*this);
   }
 
-  auto rotate_y(float r) const -> Matrix4 {
+  auto rotated_on_y(float r) const -> Matrix4 {
     return Matrix4{{std::cos(r), 0, std::sin(r), 0},
                    {0, 1, 0, 0},
                    {-std::sin(r), 0, std::cos(r), 0},
@@ -167,7 +167,7 @@ struct Matrix4 {
            (*this);
   }
 
-  auto rotate_z(float r) const -> Matrix4 {
+  auto rotated_on_z(float r) const -> Matrix4 {
     return Matrix4{{std::cos(r), -std::sin(r), 0, 0},
                    {std::sin(r), std::cos(r), 0, 0},
                    {0, 0, 1, 0},
@@ -175,7 +175,7 @@ struct Matrix4 {
            (*this);
   }
 
-  auto shear(float xy, float xz, float yx, float yz, float zx, float zy) const
+  auto sheared(float xy, float xz, float yx, float yz, float zx, float zy) const
       -> Matrix4 {
     return Matrix4{
                {1, xy, xz, 0}, {yx, 1, yz, 0}, {zx, zy, 1, 0}, {0, 0, 0, 1}} *

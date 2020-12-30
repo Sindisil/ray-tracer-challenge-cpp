@@ -23,7 +23,7 @@ int main() {
         canvas.width() - center.x + static_cast<int>(p.x * radius),
         canvas.height() - center.y + static_cast<int>(p.y * radius),
         Color{240, 0, 0});
-    p = identity_matrix().rotate_z(pi / 6) * p;
+    p = identity_matrix().rotated_on_z(pi / 6) * p;
   }
 
   std::cout << canvas.to_ppm();

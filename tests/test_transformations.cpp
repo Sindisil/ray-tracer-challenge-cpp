@@ -23,7 +23,7 @@ TEST_CASE("A view transformation matrix looking in toward +z") {
   auto to = Point{0.0f, 0.0f, 1.0f};
   auto up = Vector3{0.0f, 1.0f, 0.0f};
   auto t = view_transform(from, to, up);
-  REQUIRE(t == identity_matrix().scale(-1.0f, 1.0f, -1.0f));
+  REQUIRE(t == identity_matrix().scaled(-1.0f, 1.0f, -1.0f));
 }
 
 TEST_CASE("The view transformation moves the world") {
@@ -31,7 +31,7 @@ TEST_CASE("The view transformation moves the world") {
   auto to = Point{0.0f, 0.0f, 0.0f};
   auto up = Vector3{0.0f, 1.0f, 0.0f};
   auto t = view_transform(from, to, up);
-  REQUIRE(t == identity_matrix().translate(0.0f, 0.0f, -8.0f));
+  REQUIRE(t == identity_matrix().translated(0.0f, 0.0f, -8.0f));
 }
 
 TEST_CASE("An arbitrary view transformation") {

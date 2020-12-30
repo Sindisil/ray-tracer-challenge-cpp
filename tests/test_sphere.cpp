@@ -25,7 +25,7 @@ TEST_CASE("A sphere's default transformation") {
 }
 
 TEST_CASE("Creating a sphere with a transformation") {
-  auto t = identity_matrix().translate(2, 3, 4);
+  auto t = identity_matrix().translated(2, 3, 4);
   Sphere s{t};
   REQUIRE(s.transform() == t);
 }
@@ -33,7 +33,7 @@ TEST_CASE("Creating a sphere with a transformation") {
 TEST_CASE("Comparing spheres") {
   auto s1 = Sphere{};
   auto s2 = Sphere{};
-  auto s3 = Sphere{identity_matrix().scale(0.5f, 0.5f, 0.5f)};
+  auto s3 = Sphere{identity_matrix().scaled(0.5f, 0.5f, 0.5f)};
   auto s4 = s1;
   CHECK(s1 == s1);
   CHECK(s1 != s3);
@@ -43,14 +43,14 @@ TEST_CASE("Comparing spheres") {
 
 TEST_CASE("Changing a sphere's transformation") {
   Sphere s;
-  auto t = identity_matrix().translate(2, 3, 4);
+  auto t = identity_matrix().translated(2, 3, 4);
   s.transform(t);
   REQUIRE(s.transform() == t);
 }
 
 TEST_CASE("Intersecting a scaled sphere with a ray") {
   Ray r{Point{0, 0, -5}, Vector3{0, 0, 1}};
-  Sphere s{identity_matrix().scale(2, 2, 2)};
+  Sphere s{identity_matrix().scaled(2, 2, 2)};
   auto xs = r.intersect(s);
   REQUIRE(xs.size() == 2);
   CHECK(are_about_equal(xs[0].t, 3));
@@ -59,7 +59,7 @@ TEST_CASE("Intersecting a scaled sphere with a ray") {
 
 TEST_CASE("Intersecting a translated sphere with a ray") {
   Ray r{Point{0, 0, -5}, Vector3{0, 0, 1}};
-  Sphere s{identity_matrix().translate(5, 0, 0)};
+  Sphere s{identity_matrix().translated(5, 0, 0)};
   auto xs = r.intersect(s);
   REQUIRE(xs.size() == 0);
 }
@@ -98,13 +98,13 @@ TEST_CASE("The normal is a normalized vector") {
 }
 
 TEST_CASE("Computing the normal on a translated sphere") {
-  Sphere s(identity_matrix().translate(0, 1, 0));
+  Sphere s(identity_matrix().translated(0, 1, 0));
   auto n = s.normal_at(Point{0, 1.70711f, -0.70711f});
   CHECK(n == Vector3{0, 0.70711f, -0.70711f});
 }
 
 TEST_CASE("Computing the normal on a transformed sphere") {
-  Sphere s(identity_matrix().rotate_z(pi / 5.0f).scale(1, 0.5f, 1));
+  Sphere s(identity_matrix().rotated_on_z(pi / 5.0f).scaled(1, 0.5f, 1));
   auto n = s.normal_at(Point{0, std::sqrt(2.0f) / 2, -std::sqrt(2.0f) / 2});
   CHECK(n == Vector3{0, 0.97014f, -0.24254f});
 }

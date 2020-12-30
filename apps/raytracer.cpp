@@ -30,43 +30,43 @@ World define_scene() {
   auto world = World{};
 
   auto floor = Sphere{};
-  floor.transform(identity_matrix().scale(10.0f, 0.01f, 10.0f));
+  floor.transform(identity_matrix().scaled(10.0f, 0.01f, 10.0f));
   floor.material().specular(0.0f).color(Color{1.0f, 0.9f, 0.9f});
   world.push_back(floor);
 
   auto left_wall = Sphere{};
   left_wall.transform(identity_matrix()
-                          .scale(10.0f, 0.01f, 10.0f)
-                          .rotate_x(pi / 2)
-                          .rotate_y(-pi / 4)
-                          .translate(0.0f, 0.0f, 5.0f));
+                          .scaled(10.0f, 0.01f, 10.0f)
+                          .rotated_on_x(pi / 2)
+                          .rotated_on_y(-pi / 4)
+                          .translated(0.0f, 0.0f, 5.0f));
   left_wall.material(floor.material());
   world.push_back(left_wall);
 
   auto right_wall = Sphere{};
   right_wall.transform(identity_matrix()
-                           .scale(10.0f, 0.01f, 10.0f)
-                           .rotate_x(pi / 2)
-                           .rotate_y(pi / 4)
-                           .translate(0.0f, 0.0f, 5.0f));
+                           .scaled(10.0f, 0.01f, 10.0f)
+                           .rotated_on_x(pi / 2)
+                           .rotated_on_y(pi / 4)
+                           .translated(0.0f, 0.0f, 5.0f));
   right_wall.material(floor.material());
   world.push_back(right_wall);
 
   auto middle = Sphere{};
-  middle.transform(identity_matrix().translate(-0.5f, 1.0f, 0.5f));
+  middle.transform(identity_matrix().translated(-0.5f, 1.0f, 0.5f));
   middle.material().color(Color{0.1f, 1.0f, 0.5f}).diffuse(0.7f).specular(0.3f);
   world.push_back(middle);
 
   auto right = Sphere{};
   right.transform(
-      identity_matrix().scale(0.5f, 0.5f, 0.5f).translate(1.5f, 0.5f, -0.5f));
+      identity_matrix().scaled(0.5f, 0.5f, 0.5f).translated(1.5f, 0.5f, -0.5f));
   right.material().color(Color{0.5f, 1.0f, 0.1f}).diffuse(0.7f).specular(0.3f);
   world.push_back(right);
 
   auto left = Sphere{};
   left.transform(identity_matrix()
-                     .scale(0.33f, 0.33f, 0.33f)
-                     .translate(-1.5f, 0.33f, -0.75f));
+                     .scaled(0.33f, 0.33f, 0.33f)
+                     .translated(-1.5f, 0.33f, -0.75f));
   left.material().color(Color{1.0f, 0.8f, 0.1f}).diffuse(0.7f).specular(0.3f);
   world.push_back(left);
 

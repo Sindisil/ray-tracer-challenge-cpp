@@ -56,7 +56,7 @@ TEST_CASE("Constructing rays through the points on the canvas") {
 
   SUBCASE("Constructing a ray when the camera is transformed") {
     c.transform(
-        identity_matrix().translate(0.0f, -2.0f, 5.0f).rotate_y(pi / 4));
+        identity_matrix().translated(0.0f, -2.0f, 5.0f).rotated_on_y(pi / 4));
     auto r = c.ray_for_pixel(100, 50);
     CHECK(r.origin == Point{0.0f, 2.0f, -5.0f});
     CHECK(r.direction ==

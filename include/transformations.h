@@ -14,7 +14,7 @@ inline auto view_transform(Point from, Point to, Vector3 up) -> Matrix4 {
                              {true_up.x, true_up.y, true_up.z, 0.0f},
                              {-forward.x, -forward.y, -forward.z, 0.0f},
                              {0.0f, 0.0f, 0.0f, 1.0f}};
-  return orientation * identity_matrix().translate(-from.x, -from.y, -from.z);
+  return orientation * identity_matrix().translated(-from.x, -from.y, -from.z);
 }
 } // namespace raytrace
 #endif

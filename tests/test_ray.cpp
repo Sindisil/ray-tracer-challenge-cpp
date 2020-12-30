@@ -181,14 +181,14 @@ TEST_CASE("The hit is always the lowest nonnegative intersection") {
 
 TEST_CASE("Translating a ray") {
   Ray r{Point{1, 2, 3}, Vector3{0, 1, 0}};
-  auto r2 = r.transform(identity_matrix().translate(3, 4, 5));
+  auto r2 = r.transform(identity_matrix().translated(3, 4, 5));
   CHECK(r2.origin == Point{4, 6, 8});
   CHECK(r2.direction == Vector3{0, 1, 0});
 }
 
 TEST_CASE("Scaling a ray") {
   Ray r{Point{1, 2, 3}, Vector3{0, 1, 0}};
-  auto r2 = r.transform(identity_matrix().scale(2, 3, 4));
+  auto r2 = r.transform(identity_matrix().scaled(2, 3, 4));
   CHECK(r2.origin == Point{2, 6, 12});
   CHECK(r2.direction == Vector3{0, 3, 0});
 }

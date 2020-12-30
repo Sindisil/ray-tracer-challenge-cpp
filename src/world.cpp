@@ -44,7 +44,7 @@ auto default_world() -> World {
   auto m = Material{Color{0.8f, 1.0f, 0.6f}}.diffuse(0.7f).specular(0.2f);
   w.push_back(Sphere{m});
 
-  w.push_back(Sphere{identity_matrix().scale(0.5f, 0.5f, 0.5f)});
+  w.push_back(Sphere{identity_matrix().scaled(0.5f, 0.5f, 0.5f)});
   return w;
 }
 
