@@ -48,8 +48,8 @@ public:
   }
 
 private:
-  Matrix4 transform_;
   Material material_;
+  Matrix4 transform_;
   unsigned id_;
 };
 
