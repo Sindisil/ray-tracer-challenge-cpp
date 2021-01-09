@@ -115,7 +115,6 @@ TEST_CASE("Testing an invertable matrix for invertibility") {
 
 TEST_CASE("Testing a noninvertable matrix for invertability") {
   Matrix4 a{{-4, 2, -2, 3}, {9, 6, 2, 6}, {0, -5, 1, -5}, {0, 0, 0, 0}};
-  auto b = identity_matrix();
   CHECK_EQ(a.determinant(), doctest::Approx(0.f));
   CHECK(!a.isInvertable());
 }
