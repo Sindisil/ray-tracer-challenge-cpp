@@ -19,7 +19,7 @@ public:
     return *this;
   }
 
-  auto ambient() -> float const { return ambient_; }
+  auto ambient() const -> float { return ambient_; }
   auto ambient(float ambient) -> Material & {
     if (ambient >= 0) {
       ambient_ = ambient;
@@ -29,7 +29,7 @@ public:
     }
   }
 
-  auto diffuse() -> float const { return diffuse_; }
+  auto diffuse() const -> float { return diffuse_; }
   auto diffuse(float diffuse) -> Material & {
     if (diffuse >= 0) {
       diffuse_ = diffuse;
@@ -39,7 +39,7 @@ public:
     }
   }
 
-  auto specular() -> float const { return specular_; }
+  auto specular() const -> float { return specular_; }
   auto specular(float specular) -> Material & {
     if (specular >= 0) {
       specular_ = specular;
@@ -49,7 +49,7 @@ public:
     }
   }
 
-  auto shininess() -> float const { return shininess_; }
+  auto shininess() const -> float { return shininess_; }
   auto shininess(float shininess) -> Material & {
     if (shininess >= 0) {
       shininess_ = shininess;
