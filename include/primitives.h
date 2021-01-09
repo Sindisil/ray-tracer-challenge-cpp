@@ -11,7 +11,7 @@
 
 namespace raytrace {
 
-constexpr float epsilon{0.00001f};
+constexpr float epsilon{0.0001f};
 const float pi = 2 * acos(0.f);
 
 inline bool are_about_equal(float lhs, float rhs) {
@@ -90,20 +90,6 @@ struct Point {
   float y{0};
   float z{0};
 
-  auto operator+=(Vector3 v) -> Point & {
-    x += v.x;
-    y += v.y;
-    z += v.z;
-    return *this;
-  }
-
-  auto operator-=(Vector3 v) -> Point & {
-    x -= v.x;
-    y -= v.y;
-    z -= v.z;
-    return *this;
-  }
-
   friend auto operator==(Point const &lhs, Point const &rhs) -> bool {
     return are_about_equal(lhs.x, rhs.x) && are_about_equal(lhs.y, rhs.y) &&
            are_about_equal(lhs.z, rhs.z);
@@ -114,11 +100,16 @@ struct Point {
   }
 };
 
-inline auto operator+(Point p, Vector3 v) -> Point { return p += v; }
-inline auto operator+(Vector3 v, Point p) -> Point { return p += v; }
+inline auto operator+(Point p, Vector3 v) -> Point {
+  return Point{p.x + v.x, p.y + v.y, p.z + v.z};
+}
+inline auto operator+(Vector3 v, Point p) -> Point { return p + v; }
 inline auto operator+(Vector3 v1, Vector3 v2) -> Vector3 { return v1 += v2; }
 
-inline auto operator-(Point p, Vector3 v) -> Point { return p -= v; }
+inline auto operator-(Point p, Vector3 v) -> Point {
+  return Point{p.x - v.x, p.y - v.y, p.z - v.z};
+  ;
+}
 
 inline auto operator-(Point p1, Point p2) -> Vector3 {
   return Vector3{p1.x - p2.x, p1.y - p2.y, p1.z - p2.z};
