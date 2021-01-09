@@ -7,7 +7,6 @@
 #include "sphere.h"
 
 #include <algorithm>
-#include <cmath>
 #include <vector>
 
 namespace raytrace {
@@ -24,9 +23,7 @@ public:
     } else {
       inside_ = false;
     }
-    over_point_ = point_ + Vector3{std::copysign(point_.x * bias, normal_.x),
-                                   std::copysign(point_.y * bias, normal_.y),
-                                   std::copysign(point_.z * bias, normal_.z)};
+    over_point_ = point_ + normal_ * bias;
   }
 
   auto intersection() const -> Intersection { return intersection_; }
