@@ -6,7 +6,7 @@ target_sources(libraytrace PRIVATE
     canvas.cpp
     primitives.cpp
     ray.cpp
-    sphere.cpp
+    shapes.cpp
     materials.cpp
     world.cpp
     camera.cpp

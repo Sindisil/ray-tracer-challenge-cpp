@@ -1,6 +1,6 @@
 #include "doctest.h"
 
-#include "sphere.h"
+#include "shapes.h"
 
 #include <cmath>
 

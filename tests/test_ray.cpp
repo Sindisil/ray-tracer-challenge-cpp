@@ -6,7 +6,7 @@
 
 #include "matrix.h"
 #include "primitives.h"
-#include "sphere.h"
+#include "shapes.h"
 
 using raytrace::are_about_equal;
 using raytrace::identity_matrix;

@@ -3,7 +3,7 @@
 #include "materials.h"
 #include "matrix.h"
 #include "primitives.h"
-#include "sphere.h"
+#include "shapes.h"
 #include "transformations.h"
 #include "world.h"
 

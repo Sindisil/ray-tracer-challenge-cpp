@@ -4,7 +4,7 @@
 #include "lights.h"
 #include "primitives.h"
 #include "ray.h"
-#include "sphere.h"
+#include "shapes.h"
 
 #include <algorithm>
 #include <vector>

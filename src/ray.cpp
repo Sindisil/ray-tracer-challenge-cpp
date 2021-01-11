@@ -6,7 +6,7 @@
 #include <ostream>
 #include <vector>
 
-#include "sphere.h"
+#include "shapes.h"
 
 namespace raytrace {
 

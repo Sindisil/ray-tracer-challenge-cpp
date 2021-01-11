@@ -5,7 +5,7 @@
 #include "matrix.h"
 #include "primitives.h"
 #include "ray.h"
-#include "sphere.h"
+#include "shapes.h"
 
 using raytrace::Canvas;
 using raytrace::Color;

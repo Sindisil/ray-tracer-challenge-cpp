@@ -9,7 +9,7 @@
 
 #include "matrix.h"
 #include "primitives.h"
-#include "sphere.h"
+#include "shapes.h"
 
 namespace raytrace {
 
