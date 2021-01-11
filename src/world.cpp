@@ -9,7 +9,7 @@ namespace raytrace {
 auto World::intersect(Ray r) const -> Intersections {
   return std::accumulate(
       objects_.begin(), objects_.end(), Intersections{},
-      [&r](auto xs, auto obj) { return r.intersect(obj, xs); });
+      [&r](auto xs, auto obj) { return obj.intersect(r, xs); });
 }
 
 auto World::shade_hit(PreComps comps) const -> Color {

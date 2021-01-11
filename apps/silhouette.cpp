@@ -43,7 +43,7 @@ int main() {
       Point target{world_x, world_y, wall_z};
 
       Ray r{ray_origin, (target - ray_origin).normalize()};
-      auto xs = r.intersect(shape);
+      auto xs = shape.intersect(r);
       if (xs.hit().has_value()) {
         canvas.write_pixel(x, y, red);
       }

@@ -52,7 +52,7 @@ int main() {
       auto target = Point{world_x, world_y, wall_z};
 
       auto r = Ray{ray_origin, (target - ray_origin).normalize()};
-      auto xs = r.intersect(shape);
+      auto xs = shape.intersect(r);
       if (xs.hit().has_value()) {
         auto hit = xs.hit().value();
         auto hit_point = r.position(hit.t);
