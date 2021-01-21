@@ -31,7 +31,7 @@ public:
 
   auto ray_for_pixel(int x, int y) const -> Ray;
 
-  auto render(World world) const -> Canvas;
+  auto render(World &world) const -> Canvas;
 
 private:
   int h_size_;

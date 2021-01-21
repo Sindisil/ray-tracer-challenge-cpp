@@ -9,6 +9,7 @@
 
 #include <chrono>
 #include <iostream>
+#include <memory>
 
 using raytrace::Camera;
 using raytrace::Color;
@@ -31,7 +32,7 @@ int main() {
   auto floor = Sphere{};
   floor.transform(identity_matrix().scaled(10.0f, 0.01f, 10.0f));
   floor.material().specular(0.0f).color(Color{1.0f, 0.9f, 0.9f});
-  world.push_back(floor);
+  world.push_back(std::move(std::make_unique<Sphere>(floor)));
 
   auto left_wall = Sphere{};
   left_wall.transform(identity_matrix()
@@ -40,7 +41,7 @@ int main() {
                           .rotated_on_y(-pi / 4)
                           .translated(0.0f, 0.0f, 5.0f));
   left_wall.material(floor.material());
-  world.push_back(left_wall);
+  world.push_back(std::move(std::make_unique<Sphere>(left_wall)));
 
   auto right_wall = Sphere{};
   right_wall.transform(identity_matrix()
@@ -49,25 +50,25 @@ int main() {
                            .rotated_on_y(pi / 4)
                            .translated(0.0f, 0.0f, 5.0f));
   right_wall.material(floor.material());
-  world.push_back(right_wall);
+  world.push_back(std::move(std::make_unique<Sphere>(right_wall)));
 
   auto middle = Sphere{};
   middle.transform(identity_matrix().translated(-0.5f, 1.0f, 0.5f));
   middle.material().color(Color{0.1f, 1.0f, 0.5f}).diffuse(0.7f).specular(0.3f);
-  world.push_back(middle);
+  world.push_back(std::move(std::make_unique<Sphere>(middle)));
 
   auto right = Sphere{};
   right.transform(
       identity_matrix().scaled(0.5f, 0.5f, 0.5f).translated(1.5f, 0.5f, -0.5f));
   right.material().color(Color{0.5f, 1.0f, 0.1f}).diffuse(0.7f).specular(0.3f);
-  world.push_back(right);
+  world.push_back(std::move(std::make_unique<Sphere>(right)));
 
   auto left = Sphere{};
   left.transform(identity_matrix()
                      .scaled(0.33f, 0.33f, 0.33f)
                      .translated(-1.5f, 0.33f, -0.75f));
   left.material().color(Color{1.0f, 0.8f, 0.1f}).diffuse(0.7f).specular(0.3f);
-  world.push_back(left);
+  world.push_back(std::move(std::make_unique<Sphere>(left)));
 
   world.light().position = Point{-10.0f, 10.0f, -10.0f};
 

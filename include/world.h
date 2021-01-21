@@ -7,6 +7,9 @@
 #include "shapes.h"
 
 #include <algorithm>
+#include <cstddef>
+#include <iterator>
+#include <memory>
 #include <vector>
 
 namespace raytrace {
@@ -16,7 +19,7 @@ public:
   PreComps(Intersection intersection, Ray ray) : intersection_(intersection) {
     point_ = ray.position(intersection.t);
     eye_vec_ = -ray.direction;
-    normal_ = intersection.object.normal_at(point_);
+    normal_ = intersection.object->normal_at(point_);
     if (normal_.dot(eye_vec_) < 0) {
       inside_ = true;
       normal_ = -normal_;
@@ -45,16 +48,62 @@ private:
 };
 
 class World {
-public:
-  using value_type = Sphere;
-  using size_type = std::vector<value_type>::size_type;
+private:
+  PointLight light_;
+  std::vector<std::unique_ptr<Sphere>> objects_;
 
-  auto contains(Sphere s) {
-    return std::find(objects_.begin(), objects_.end(), s) != objects_.end();
+public:
+  using shape_container = decltype(objects_);
+  using difference_type = shape_container::difference_type;
+  using value_type = Sphere;
+  using pointer = value_type *;
+  using reference = value_type &;
+  using size_type = shape_container::size_type;
+
+  World() = default;
+  World(World &&other) = default;
+
+  class ShapeIterator {
+  public:
+    using iterator_category = std::random_access_iterator_tag;
+
+    ShapeIterator(shape_container::iterator iter) : iter_(iter) {}
+
+    auto operator*() -> reference { return **iter_; }
+    auto operator->() -> pointer { return iter_->get(); }
+    auto operator[](size_type pos) -> reference { return *iter_[pos]; }
+
+    auto operator++() -> ShapeIterator & {
+      ++iter_;
+      return *this;
+    }
+
+    auto operator++(int) -> ShapeIterator & {
+      ShapeIterator i = *this;
+      ++(*this);
+      return i;
+    }
+
+    friend auto operator==(ShapeIterator const &lhs, ShapeIterator const &rhs)
+        -> bool {
+      return lhs.iter_ == rhs.iter_;
+    }
+    friend auto operator!=(ShapeIterator const &lhs, ShapeIterator const &rhs)
+        -> bool {
+      return lhs.iter_ != rhs.iter_;
+    }
+
+  private:
+    shape_container::iterator iter_;
+  };
+
+  auto contains(Sphere const &s) {
+    return std::find_if(begin(), end(),
+                        [&s](Sphere const &obj) { return obj == s; }) != end();
   }
 
-  auto push_back(Sphere s) -> World & {
-    objects_.push_back(s);
+  auto push_back(std::unique_ptr<Sphere> s) -> World & {
+    objects_.push_back(std::move(s));
     return *this;
   }
 
@@ -62,11 +111,11 @@ public:
 
   auto empty() const -> bool { return objects_.empty(); }
 
-  auto begin() -> std::vector<Sphere>::iterator { return objects_.begin(); }
+  auto begin() -> ShapeIterator { return ShapeIterator(objects_.begin()); }
 
-  auto end() -> std::vector<Sphere>::iterator { return objects_.end(); }
+  auto end() -> ShapeIterator { return ShapeIterator(objects_.end()); }
 
-  auto operator[](size_type i) -> value_type { return objects_[i]; }
+  auto operator[](size_type i) -> reference { return *objects_[i]; }
 
   auto light() -> PointLight & { return light_; }
   auto light(PointLight light) -> World & {
@@ -82,10 +131,7 @@ public:
 
   auto is_shadowed(Point p) const -> bool;
 
-private:
-  PointLight light_;
-  std::vector<Sphere> objects_;
-};
+}; // namespace raytrace
 
 auto default_world() -> World;
 

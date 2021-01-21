@@ -16,8 +16,8 @@ auto Sphere::intersect(Ray ray, Intersections &xs) -> Intersections {
   auto c = sphere_to_ray.dot(sphere_to_ray) - 1;
   auto discriminant = (b * b) - 4 * a * c;
   if (discriminant >= 0) {
-    xs.insert(Intersection{(-b - std::sqrt(discriminant)) / (2 * a), *this});
-    xs.insert(Intersection{(-b + std::sqrt(discriminant)) / (2 * a), *this});
+    xs.insert(Intersection{(-b - std::sqrt(discriminant)) / (2 * a), this});
+    xs.insert(Intersection{(-b + std::sqrt(discriminant)) / (2 * a), this});
   }
   return xs;
 }
@@ -35,7 +35,7 @@ auto Intersections::hit() const -> std::optional<Intersection> {
 }
 
 auto operator<<(std::ostream &os, Intersection const &val) -> std::ostream & {
-  os << "Intersection(t=" << val.t << ", " << val.object << ")";
+  os << "Intersection(t=" << val.t << ", " << *val.object << ")";
   return os;
 }
 

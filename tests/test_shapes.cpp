@@ -178,25 +178,25 @@ TEST_CASE("A sphere is behind a ray") {
 
 TEST_CASE("An intersection encapsulates t and object") {
   Sphere s;
-  Intersection i{3.5f, s};
+  Intersection i{3.5f, &s};
   CHECK(are_about_equal(i.t, 3.5));
-  CHECK(i.object == s);
+  CHECK(*i.object == s);
 }
 
 TEST_CASE("Aggregating intersections") {
   SUBCASE("Non-empty Intersections") {
     Sphere s;
-    Intersection i1{1, s};
-    Intersection i2{2, s};
+    Intersection i1{1, &s};
+    Intersection i2{2, &s};
     Intersections xs;
     xs.insert(i1);
     xs.insert(i2);
     REQUIRE(!xs.empty());
     REQUIRE(xs.size() == 2);
-    CHECK(xs[0].object == s);
-    CHECK(xs[1].object == s);
+    CHECK(*xs[0].object == s);
+    CHECK(*xs[1].object == s);
     for (auto const i : xs) {
-      CHECK(i.object == s);
+      CHECK(*i.object == s);
     }
   }
   SUBCASE("Empty Intersections") {
@@ -211,15 +211,15 @@ TEST_CASE("Intersect sets the object on the intersection") {
   Sphere s;
   auto xs = s.intersect(r);
   REQUIRE(xs.size() == 2);
-  CHECK(xs[0].object == s);
-  CHECK(xs[1].object == s);
+  CHECK(*xs[0].object == s);
+  CHECK(*xs[1].object == s);
 }
 
 TEST_CASE("The hit, when all intersections have positive t") {
   Sphere s;
   Intersections xs;
-  auto i1 = Intersection{1, s};
-  auto i2 = Intersection{2, s};
+  auto i1 = Intersection{1, &s};
+  auto i2 = Intersection{2, &s};
   xs.insert(i1);
   xs.insert(i2);
   auto i = xs.hit();
@@ -230,8 +230,8 @@ TEST_CASE("The hit, when all intersections have positive t") {
 TEST_CASE("The hit, when some intersections have negative t") {
   Sphere s;
   Intersections xs;
-  auto i1 = Intersection{-1, s};
-  auto i2 = Intersection{1, s};
+  auto i1 = Intersection{-1, &s};
+  auto i2 = Intersection{1, &s};
   xs.insert(i1);
   xs.insert(i2);
   auto i = xs.hit();
@@ -242,8 +242,8 @@ TEST_CASE("The hit, when some intersections have negative t") {
 TEST_CASE("The hit, when all intersections have negative t") {
   Sphere s;
   Intersections xs;
-  auto i1 = Intersection{-2, s};
-  auto i2 = Intersection{-1, s};
+  auto i1 = Intersection{-2, &s};
+  auto i2 = Intersection{-1, &s};
   xs.insert(i1);
   xs.insert(i2);
   auto i = xs.hit();
@@ -253,10 +253,10 @@ TEST_CASE("The hit, when all intersections have negative t") {
 TEST_CASE("The hit is always the lowest nonnegative intersection") {
   Sphere s;
   Intersections xs;
-  auto i1 = Intersection{5, s};
-  auto i2 = Intersection{7, s};
-  auto i3 = Intersection{-3, s};
-  auto i4 = Intersection{2, s};
+  auto i1 = Intersection{5, &s};
+  auto i2 = Intersection{7, &s};
+  auto i3 = Intersection{-3, &s};
+  auto i4 = Intersection{2, &s};
   xs.insert(i1);
   xs.insert(i2);
   xs.insert(i3);

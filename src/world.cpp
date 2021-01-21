@@ -2,6 +2,7 @@
 
 #include "ray.h"
 
+#include <memory>
 #include <numeric>
 
 namespace raytrace {
@@ -9,12 +10,12 @@ namespace raytrace {
 auto World::intersect(Ray r) const -> Intersections {
   return std::accumulate(
       objects_.begin(), objects_.end(), Intersections{},
-      [&r](auto xs, auto obj) { return obj.intersect(r, xs); });
+      [&r](auto &xs, auto &obj) { return obj->intersect(r, xs); });
 }
 
 auto World::shade_hit(PreComps comps) const -> Color {
-  return lighting(comps.intersection().object.material(), light_, comps.point(),
-                  comps.eye_vec(), comps.normal(),
+  return lighting(comps.intersection().object->material(), light_,
+                  comps.point(), comps.eye_vec(), comps.normal(),
                   is_shadowed(comps.over_point()));
 }
 
@@ -43,10 +44,11 @@ auto default_world() -> World {
   w.light(PointLight{Point{-10.0f, 10.0f, -10.0f}, colors::white});
 
   auto m = Material{Color{0.8f, 1.0f, 0.6f}}.diffuse(0.7f).specular(0.2f);
-  w.push_back(Sphere{m});
+  w.push_back(std::move(std::make_unique<Sphere>(Sphere{m})));
 
-  w.push_back(Sphere{identity_matrix().scaled(0.5f, 0.5f, 0.5f)});
-  return w;
+  w.push_back(std::move(std::make_unique<Sphere>(
+      Sphere{identity_matrix().scaled(0.5f, 0.5f, 0.5f)})));
+  return std::move(w);
 }
 
 } // namespace raytrace

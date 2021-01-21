@@ -46,7 +46,7 @@ TEST_CASE("The default World") {
   CHECK(w.contains(s2));
 
   auto prev_id = unsigned{0};
-  for (auto i : w) {
+  for (auto const &i : w) {
     CHECK(prev_id < i.id());
     prev_id = i.id();
   }
@@ -69,7 +69,7 @@ TEST_CASE("Precomputing the state of an intersection") {
 
   SUBCASE("Intersection on the outside") {
     auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
-    auto i = Intersection{4.0f, shape};
+    auto i = Intersection{4.0f, &shape};
     auto comps = PreComps{i, r};
     CHECK(comps.intersection().t == i.t);
     CHECK(comps.intersection().object == i.object);
@@ -81,7 +81,7 @@ TEST_CASE("Precomputing the state of an intersection") {
 
   SUBCASE("Intersection on the inside") {
     auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vector3{0.0f, 0.0f, 1.0f}};
-    auto i = Intersection{1.0f, shape};
+    auto i = Intersection{1.0f, &shape};
     auto comps = PreComps{i, r};
     CHECK(comps.point() == Point{0.0f, 0.0f, 1.0f});
     CHECK(comps.eye_vec() == Vector3{0.0f, 0.0f, -1.0f});
@@ -92,7 +92,7 @@ TEST_CASE("Precomputing the state of an intersection") {
   SUBCASE("The hit should offset the point") {
     auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
     auto s = Sphere{}.transform(identity_matrix().translated(0.0f, 0.0f, 1.0f));
-    auto i = Intersection{5, s};
+    auto i = Intersection{5, &s};
     auto comps = PreComps{i, r};
     CHECK(comps.over_point().z < -epsilon / 2);
     CHECK(comps.point().z > comps.over_point().z);
@@ -103,18 +103,18 @@ TEST_CASE("Shading an intersection") {
   auto w = default_world();
   auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
   auto shape = w[0];
-  auto i = Intersection{4, shape};
+  auto i = Intersection{4, &shape};
   auto comps = PreComps{i, r};
   auto c = w.shade_hit(comps);
   CHECK(c == Color{0.38066f, 0.47583f, 0.2855f});
 }
 
 TEST_CASE("Shading an intersection from the inside") {
-  auto w = default_world().light(
-      PointLight{Point{0.0f, 0.25f, 0.0f}, Color{1.0f, 1.0f, 1.0f}});
+  auto w = std::move(default_world().light(
+      PointLight{Point{0.0f, 0.25f, 0.0f}, Color{1.0f, 1.0f, 1.0f}}));
   auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vector3{0.0f, 0.0f, 1.0f}};
   auto shape = w[1];
-  auto i = Intersection{0.5f, shape};
+  auto i = Intersection{0.5f, &shape};
   auto comps = PreComps{i, r};
   auto c = w.shade_hit(comps);
   CHECK(c == Color{0.90498f, 0.90498f, 0.90498f});
@@ -125,10 +125,10 @@ TEST_CASE("shade_hit is given an intersection in shadow") {
   w.light(PointLight{Point{0.0f, 0.0f, -10.0f}, Color{1.0f, 1.0f, 1.0f}});
   auto s1 = Sphere{};
   auto s2 = Sphere{}.transform(identity_matrix().translated(0.0f, 0.0f, 10.0f));
-  w.push_back(s1);
-  w.push_back(s2);
+  w.push_back(std::move(std::make_unique<Sphere>(s1)));
+  w.push_back(std::move(std::make_unique<Sphere>(s2)));
   auto r = Ray{Point{0.0f, 0.0f, 5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
-  auto i = Intersection{4, s2};
+  auto i = Intersection{4, &s2};
   auto comps = PreComps{i, r};
   auto c = w.shade_hit(comps);
   CHECK_EQ(c, Color{0.1f, 0.1f, 0.1f});

@@ -41,18 +41,18 @@ public:
   }
 
   auto id() const -> unsigned { return id_; }
-  auto is(Sphere s) const -> bool { return s.id() == id_; }
+  auto is(Sphere const &s) const -> bool { return s.id() == id_; }
 
   auto normal_at(Point p) const -> Vector3;
 
   auto intersect(Ray r, Intersections &xs) -> Intersections;
   auto intersect(Ray r) -> Intersections;
 
-  friend auto operator==(Sphere lhs, Sphere rhs) -> bool {
+  friend auto operator==(Sphere const &lhs, Sphere const &rhs) -> bool {
     return lhs.transform_ == rhs.transform_ && lhs.material_ == rhs.material_;
   }
 
-  friend auto operator!=(Sphere lhs, Sphere rhs) -> bool {
+  friend auto operator!=(Sphere const &lhs, Sphere const &rhs) -> bool {
     return !(lhs == rhs);
   }
 
@@ -66,14 +66,14 @@ auto operator<<(std::ostream &os, Sphere const &val) -> std::ostream &;
 
 struct Intersection {
   float t;
-  Sphere object;
+  Sphere *object;
 
   friend auto operator<(Intersection lhs, Intersection rhs) -> bool {
     return lhs.t < rhs.t;
   }
 
   friend auto operator==(Intersection lhs, Intersection rhs) -> bool {
-    return lhs.object == rhs.object && are_about_equal(lhs.t, rhs.t);
+    return *lhs.object == *rhs.object && are_about_equal(lhs.t, rhs.t);
   }
 };
 

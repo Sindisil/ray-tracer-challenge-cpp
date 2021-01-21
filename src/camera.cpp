@@ -34,7 +34,7 @@ auto Camera::ray_for_pixel(int x, int y) const -> Ray {
   return Ray{origin, direction};
 }
 
-auto Camera::render(World world) const -> Canvas {
+auto Camera::render(World &world) const -> Canvas {
   auto image = Canvas{h_size_, v_size_};
 
   for (int y = 0; y < v_size_; ++y) {
