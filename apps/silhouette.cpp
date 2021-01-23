@@ -2,10 +2,11 @@
 #include <iostream>
 
 #include "canvas.h"
+#include "intersections.h"
 #include "matrix.h"
 #include "primitives.h"
 #include "ray.h"
-#include "shapes.h"
+#include "sphere.h"
 
 using raytrace::Canvas;
 using raytrace::Color;

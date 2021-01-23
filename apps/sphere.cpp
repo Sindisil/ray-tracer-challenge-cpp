@@ -3,12 +3,13 @@
 
 #include "canvas.h"
 #include "color.h"
+#include "intersections.h"
 #include "lights.h"
 #include "materials.h"
 #include "matrix.h"
 #include "primitives.h"
 #include "ray.h"
-#include "shapes.h"
+#include "sphere.h"
 
 using raytrace::Canvas;
 using raytrace::Color;

@@ -3,12 +3,14 @@ project(raytrace VERSION 0.1.0 LANGUAGES CXX)
 
 add_library(libraytrace STATIC)
 target_sources(libraytrace PRIVATE
-    canvas.cpp
-    primitives.cpp
-    shapes.cpp
-    materials.cpp
-    world.cpp
     camera.cpp
+    canvas.cpp
+    intersections.cpp
+    materials.cpp
+    primitives.cpp
+    shape.cpp
+    sphere.cpp
+    world.cpp
 )
 target_include_directories(libraytrace PUBLIC ../include)
 set_target_properties(libraytrace PROPERTIES OUTPUT_NAME "raytrace")

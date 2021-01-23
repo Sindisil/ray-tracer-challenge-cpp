@@ -6,7 +6,7 @@
 #include "lights.h"
 #include "primitives.h"
 #include "ray.h"
-#include "shapes.h"
+#include "sphere.h"
 
 using raytrace::are_about_equal;
 using raytrace::Color;

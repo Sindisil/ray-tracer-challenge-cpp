@@ -6,7 +6,8 @@ add_executable(tests tests.cpp
     test_canvas.cpp
     test_matrix.cpp
     test_ray.cpp
-    test_shapes.cpp
+    test_shape.cpp
+    test_sphere.cpp
     test_lights.cpp
     test_materials.cpp
     test_color.cpp

@@ -1,5 +1,5 @@
-#ifndef SPHERE_H_GUARD
-#define SPHERE_H_GUARD
+#ifndef RAYTRACE_SHAPE_H_GUARD
+#define RAYTRACE_SHAPE_H_GUARD
 
 #include <atomic>
 #include <cstdint>
@@ -61,64 +61,7 @@ public:
   }
 };
 
-class Sphere : public Shape {
-public:
-  using Shape::Shape;
-
-protected:
-  auto local_normal_at(Point point) const -> Vector3 override;
-  void local_intersect(Ray ray, Intersections &xs) override;
-
-}; // namespace raytrace
-
 auto operator<<(std::ostream &os, const Shape &val) -> std::ostream &;
-auto operator<<(std::ostream &os, Sphere const &val) -> std::ostream &;
-
-struct Intersection {
-  float t;
-  Shape *object;
-
-  friend auto operator<(Intersection lhs, Intersection rhs) -> bool {
-    return lhs.t < rhs.t;
-  }
-
-  friend auto operator==(Intersection lhs, Intersection rhs) -> bool {
-    return *lhs.object == *rhs.object && are_about_equal(lhs.t, rhs.t);
-  }
-};
-
-auto operator<<(std::ostream &os, Intersection const &val) -> std::ostream &;
-
-class Intersections {
-public:
-  using value_type = Intersections;
-  using size_type = std::vector<Intersections>::size_type;
-
-  auto insert(Intersection new_intersection) -> Intersections & {
-    auto i = std::upper_bound(intersections_.begin(), intersections_.end(),
-                              new_intersection);
-    intersections_.insert(i, new_intersection);
-    return *this;
-  }
-
-  auto hit() const -> std::optional<Intersection>;
-
-  auto operator[](size_type i) -> Intersection { return intersections_[i]; }
-
-  auto size() const -> size_type { return intersections_.size(); }
-
-  auto empty() const -> bool { return intersections_.empty(); }
-
-  auto begin() -> std::vector<Intersection>::iterator {
-    return intersections_.begin();
-  }
-  auto end() -> std::vector<Intersection>::iterator {
-    return intersections_.end();
-  }
-
-private:
-  std::vector<Intersection> intersections_;
-};
 
 } // namespace raytrace
 

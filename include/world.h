@@ -1,10 +1,11 @@
 #ifndef RAYTRACE_WORLD_H_GUARD
 #define RAYTRACE_WORLD_H_GUARD
 
+#include "intersections.h"
 #include "lights.h"
 #include "primitives.h"
 #include "ray.h"
-#include "shapes.h"
+#include "sphere.h"
 
 #include <algorithm>
 #include <cstddef>
