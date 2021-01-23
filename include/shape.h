@@ -24,10 +24,6 @@ private:
   Matrix4 transform_;
   unsigned id_;
 
-protected:
-  virtual auto local_normal_at(Point p) const -> Vector3 = 0;
-  virtual void local_intersect(Ray r, Intersections &xs) = 0;
-
 public:
   Shape(Material material, Matrix4 transform)
       : material_(material), transform_(transform) {
@@ -37,6 +33,9 @@ public:
   Shape(Matrix4 transform) : Shape{Material{}, transform} {}
   Shape() : Shape{Material{}, identity_matrix()} {}
   virtual ~Shape() = default;
+
+  virtual auto local_normal_at(Point p) const -> Vector3 = 0;
+  virtual void local_intersect(Ray r, Intersections &xs) = 0;
 
   auto transform() -> Matrix4 & { return transform_; }
   void transform(Matrix4 transform) { transform_ = transform; }

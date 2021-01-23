@@ -11,7 +11,6 @@ class Sphere : public Shape {
 public:
   using Shape::Shape;
 
-protected:
   auto local_normal_at(Point point) const -> Vector3 override;
   void local_intersect(Ray ray, Intersections &xs) override;
 

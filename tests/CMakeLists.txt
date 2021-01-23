@@ -2,18 +2,19 @@ cmake_minimum_required(VERSION 3.18)
 project(raytracer VERSION 0.1.0 LANGUAGES CXX)
 
 add_executable(tests tests.cpp
-    test_primitives.cpp
+    test_camera.cpp
     test_canvas.cpp
+    test_color.cpp
+    test_lights.cpp
+    test_materials.cpp
     test_matrix.cpp
+    test_plane.cpp
+    test_primitives.cpp
     test_ray.cpp
     test_shape.cpp
     test_sphere.cpp
-    test_lights.cpp
-    test_materials.cpp
-    test_color.cpp
-    test_world.cpp
     test_transformations.cpp
-    test_camera.cpp
+    test_world.cpp
 )
 target_include_directories(tests PRIVATE ../include ../extern/doctest)
 target_link_libraries(tests libraytrace)
