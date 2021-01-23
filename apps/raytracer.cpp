@@ -2,8 +2,10 @@
 #include "color.h"
 #include "materials.h"
 #include "matrix.h"
+#include "plane.h"
 #include "primitives.h"
 #include "shape.h"
+#include "sphere.h"
 #include "transformations.h"
 #include "world.h"
 
@@ -17,6 +19,7 @@ using raytrace::Color;
 using raytrace::identity_matrix;
 using raytrace::Material;
 using raytrace::pi;
+using raytrace::Plane;
 using raytrace::Point;
 using raytrace::Sphere;
 using raytrace::Vector3;
@@ -30,28 +33,21 @@ using std::chrono::milliseconds;
 World define_scene() {
   auto world = World{};
 
-  auto floor = Sphere{};
-  floor.transform(identity_matrix().scaled(10.0f, 0.01f, 10.0f));
+  auto floor = Plane{};
   floor.material().specular(0.0f).color(Color{1.0f, 0.9f, 0.9f});
-  world.push_back(std::move(std::make_unique<Sphere>(floor)));
+  world.push_back(std::move(std::make_unique<Plane>(floor)));
 
-  auto left_wall = Sphere{};
-  left_wall.transform(identity_matrix()
-                          .scaled(10.0f, 0.01f, 10.0f)
-                          .rotated_on_x(pi / 2)
-                          .rotated_on_y(-pi / 4)
-                          .translated(0.0f, 0.0f, 5.0f));
+  auto left_wall = Plane{};
+  left_wall.transform(
+      identity_matrix().rotated_on_z(pi / 2).translated(-5.0f, 0.0f, 0.0f));
   left_wall.material(floor.material());
-  world.push_back(std::move(std::make_unique<Sphere>(left_wall)));
+  world.push_back(std::move(std::make_unique<Plane>(left_wall)));
 
-  auto right_wall = Sphere{};
-  right_wall.transform(identity_matrix()
-                           .scaled(10.0f, 0.01f, 10.0f)
-                           .rotated_on_x(pi / 2)
-                           .rotated_on_y(pi / 4)
-                           .translated(0.0f, 0.0f, 5.0f));
+  auto right_wall = Plane{};
+  right_wall.transform(
+      identity_matrix().rotated_on_x(pi / 2).translated(0.0f, 0.0f, 10.0f));
   right_wall.material(floor.material());
-  world.push_back(std::move(std::make_unique<Sphere>(right_wall)));
+  world.push_back(std::move(std::make_unique<Plane>(right_wall)));
 
   auto middle = Sphere{};
   middle.transform(identity_matrix().translated(-0.5f, 1.0f, 0.5f));
@@ -69,9 +65,9 @@ World define_scene() {
                      .scaled(0.33f, 0.33f, 0.33f)
                      .translated(-1.5f, 0.33f, -0.75f));
   left.material().color(Color{1.0f, 0.8f, 0.1f}).diffuse(0.7f).specular(0.3f);
-  // world.push_back(std::move(std::make_unique<Sphere>(left)));
+  world.push_back(std::move(std::make_unique<Sphere>(left)));
 
-  world.light().position = Point{-10.0f, 10.0f, -10.0f};
+  world.light().position = Point{-1.0f, 2.0f, -3.0f};
   return world;
 }
 
