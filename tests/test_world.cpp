@@ -91,7 +91,7 @@ TEST_CASE("Precomputing the state of an intersection") {
 
   SUBCASE("The hit should offset the point") {
     auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
-    auto s = Sphere{}.transform(identity_matrix().translated(0.0f, 0.0f, 1.0f));
+    auto s = Sphere{identity_matrix().translated(0.0f, 0.0f, 1.0f)};
     auto i = Intersection{5, &s};
     auto comps = PreComps{i, r};
     CHECK(comps.over_point().z < -epsilon / 2);
@@ -124,7 +124,7 @@ TEST_CASE("shade_hit is given an intersection in shadow") {
   auto w = World{};
   w.light(PointLight{Point{0.0f, 0.0f, -10.0f}, Color{1.0f, 1.0f, 1.0f}});
   auto s1 = Sphere{};
-  auto s2 = Sphere{}.transform(identity_matrix().translated(0.0f, 0.0f, 10.0f));
+  auto s2 = Sphere{identity_matrix().translated(0.0f, 0.0f, 10.0f)};
   w.push_back(std::move(std::make_unique<Sphere>(s1)));
   w.push_back(std::move(std::make_unique<Sphere>(s2)));
   auto r = Ray{Point{0.0f, 0.0f, 5.0f}, Vector3{0.0f, 0.0f, 1.0f}};

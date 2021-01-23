@@ -6,25 +6,32 @@
 
 namespace raytrace {
 
-auto Sphere::intersect(Ray ray, Intersections &xs) -> Intersections {
-  // transform ray by inverse of sphere's transform,
-  // instead of actually transforming the sphere
-  auto r = ray.transform(transform().inverse());
-  auto sphere_to_ray = r.origin - Point{0, 0, 0};
-  auto a = r.direction.dot(r.direction);
-  auto b = 2 * r.direction.dot(sphere_to_ray);
+auto Shape::normal_at(Point point) const -> Vector3 {
+  auto local_normal = local_normal_at(transform_.inverse() * point);
+  auto world_normal = transform_.inverse().transposed() * local_normal;
+  return world_normal.normalize();
+}
+
+auto Shape::intersect(Ray ray, Intersections &xs) -> Intersections {
+  auto local_ray = ray.transform(transform_.inverse());
+  local_intersect(local_ray, xs);
+  return xs;
+}
+auto Shape::intersect(Ray ray) -> Intersections {
+  auto xs = Intersections{};
+  return intersect(ray, xs);
+}
+
+void Sphere::local_intersect(Ray ray, Intersections &xs) {
+  auto sphere_to_ray = ray.origin - Point{0, 0, 0};
+  auto a = ray.direction.dot(ray.direction);
+  auto b = 2 * ray.direction.dot(sphere_to_ray);
   auto c = sphere_to_ray.dot(sphere_to_ray) - 1;
   auto discriminant = (b * b) - 4 * a * c;
   if (discriminant >= 0) {
     xs.insert(Intersection{(-b - std::sqrt(discriminant)) / (2 * a), this});
     xs.insert(Intersection{(-b + std::sqrt(discriminant)) / (2 * a), this});
   }
-  return xs;
-}
-
-auto Sphere::intersect(Ray r) -> Intersections {
-  auto xs = Intersections{};
-  return intersect(r, xs);
 }
 
 auto Intersections::hit() const -> std::optional<Intersection> {
@@ -39,13 +46,14 @@ auto operator<<(std::ostream &os, Intersection const &val) -> std::ostream & {
   return os;
 }
 
-auto Sphere::normal_at(Point world_point) const -> Vector3 {
-  auto object_point = transform_.inverse() * world_point;
-  auto object_normal = object_point - Point{0, 0, 0};
-  auto world_normal = transform_.inverse().transposed() * object_normal;
-  return world_normal.normalize();
+auto Sphere::local_normal_at(Point local_point) const -> Vector3 {
+  return local_point - Point{0, 0, 0};
 }
 
+auto operator<<(std::ostream &os, const Shape &val) -> std::ostream & {
+  os << "Shape(Id: " << val.id() << ")";
+  return os;
+}
 auto operator<<(std::ostream &os, const Sphere &val) -> std::ostream & {
   os << "Sphere(Id: " << val.id() << ")";
   return os;

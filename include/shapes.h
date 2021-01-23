@@ -18,55 +18,65 @@ class Intersections;
 
 static std::atomic<unsigned> next_id{1};
 
-class Sphere {
-public:
-  Sphere(Material material, Matrix4 transform)
-      : material_(material), transform_(transform) {
-    id_ = std::atomic_fetch_add(&next_id, 1);
-  }
-  Sphere(Material material) : Sphere{material, identity_matrix()} {}
-  Sphere(Matrix4 transform) : Sphere{Material{}, transform} {}
-  Sphere() : Sphere{Material{}, identity_matrix()} {}
-
-  auto transform() -> Matrix4 & { return transform_; }
-  Sphere &transform(Matrix4 transform) {
-    transform_ = transform;
-    return *this;
-  }
-
-  auto material() -> Material & { return material_; }
-  Sphere &material(Material material) {
-    material_ = material;
-    return *this;
-  }
-
-  auto id() const -> unsigned { return id_; }
-  auto is(Sphere const &s) const -> bool { return s.id() == id_; }
-
-  auto normal_at(Point p) const -> Vector3;
-
-  auto intersect(Ray r, Intersections &xs) -> Intersections;
-  auto intersect(Ray r) -> Intersections;
-
-  friend auto operator==(Sphere const &lhs, Sphere const &rhs) -> bool {
-    return lhs.transform_ == rhs.transform_ && lhs.material_ == rhs.material_;
-  }
-
-  friend auto operator!=(Sphere const &lhs, Sphere const &rhs) -> bool {
-    return !(lhs == rhs);
-  }
-
+class Shape {
 private:
   Material material_;
   Matrix4 transform_;
   unsigned id_;
+
+protected:
+  virtual auto local_normal_at(Point p) const -> Vector3 = 0;
+  virtual void local_intersect(Ray r, Intersections &xs) = 0;
+
+public:
+  Shape(Material material, Matrix4 transform)
+      : material_(material), transform_(transform) {
+    id_ = std::atomic_fetch_add(&next_id, 1);
+  }
+  Shape(Material material) : Shape{material, identity_matrix()} {}
+  Shape(Matrix4 transform) : Shape{Material{}, transform} {}
+  Shape() : Shape{Material{}, identity_matrix()} {}
+  virtual ~Shape() = default;
+
+  auto transform() -> Matrix4 & { return transform_; }
+  void transform(Matrix4 transform) { transform_ = transform; }
+
+  auto material() -> Material & { return material_; }
+  void material(Material material) { material_ = material; }
+
+  auto id() const -> unsigned { return id_; }
+  auto is(Shape const &s) const -> bool { return s.id() == id_; }
+
+  auto normal_at(Point point) const -> Vector3;
+
+  auto intersect(Ray r, Intersections &xs) -> Intersections;
+  auto intersect(Ray ray) -> Intersections;
+
+  friend auto operator==(Shape const &lhs, Shape const &rhs) -> bool {
+    return lhs.transform_ == rhs.transform_ && lhs.material_ == rhs.material_;
+  }
+
+  friend auto operator!=(Shape const &lhs, Shape const &rhs) -> bool {
+    return !(lhs == rhs);
+  }
 };
 
+class Sphere : public Shape {
+public:
+  using Shape::Shape;
+
+protected:
+  auto local_normal_at(Point point) const -> Vector3 override;
+  void local_intersect(Ray ray, Intersections &xs) override;
+
+}; // namespace raytrace
+
+auto operator<<(std::ostream &os, const Shape &val) -> std::ostream &;
 auto operator<<(std::ostream &os, Sphere const &val) -> std::ostream &;
 
 struct Intersection {
   float t;
-  Sphere *object;
+  Shape *object;
 
   friend auto operator<(Intersection lhs, Intersection rhs) -> bool {
     return lhs.t < rhs.t;
