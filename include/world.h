@@ -5,7 +5,8 @@
 #include "lights.h"
 #include "primitives.h"
 #include "ray.h"
-#include "sphere.h"
+
+#include "shape.h"
 
 #include <algorithm>
 #include <cstddef>
@@ -51,12 +52,12 @@ private:
 class World {
 private:
   PointLight light_;
-  std::vector<std::unique_ptr<Sphere>> objects_;
+  std::vector<std::unique_ptr<Shape>> objects_;
 
 public:
   using shape_container = decltype(objects_);
   using difference_type = shape_container::difference_type;
-  using value_type = Sphere;
+  using value_type = Shape;
   using pointer = value_type *;
   using reference = value_type &;
   using size_type = shape_container::size_type;
@@ -98,12 +99,12 @@ public:
     shape_container::iterator iter_;
   };
 
-  auto contains(Sphere const &s) {
+  auto contains(Shape const &s) {
     return std::find_if(begin(), end(),
-                        [&s](Sphere const &obj) { return obj == s; }) != end();
+                        [&s](Shape const &obj) { return obj == s; }) != end();
   }
 
-  auto push_back(std::unique_ptr<Sphere> s) -> World & {
+  auto push_back(std::unique_ptr<Shape> s) -> World & {
     objects_.push_back(std::move(s));
     return *this;
   }

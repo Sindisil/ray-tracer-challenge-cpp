@@ -102,7 +102,7 @@ TEST_CASE("Precomputing the state of an intersection") {
 TEST_CASE("Shading an intersection") {
   auto w = default_world();
   auto r = Ray{Point{0.0f, 0.0f, -5.0f}, Vector3{0.0f, 0.0f, 1.0f}};
-  auto shape = w[0];
+  auto &shape = w[0];
   auto i = Intersection{4, &shape};
   auto comps = PreComps{i, r};
   auto c = w.shade_hit(comps);
@@ -113,7 +113,7 @@ TEST_CASE("Shading an intersection from the inside") {
   auto w = std::move(default_world().light(
       PointLight{Point{0.0f, 0.25f, 0.0f}, Color{1.0f, 1.0f, 1.0f}}));
   auto r = Ray{Point{0.0f, 0.0f, 0.0f}, Vector3{0.0f, 0.0f, 1.0f}};
-  auto shape = w[1];
+  auto &shape = w[1];
   auto i = Intersection{0.5f, &shape};
   auto comps = PreComps{i, r};
   auto c = w.shade_hit(comps);

@@ -1,6 +1,8 @@
 #include "world.h"
 
 #include "ray.h"
+#include "shape.h"
+#include "sphere.h"
 
 #include <memory>
 #include <numeric>
