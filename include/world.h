@@ -68,6 +68,11 @@ public:
   class ShapeIterator {
   public:
     using iterator_category = std::random_access_iterator_tag;
+    using difference_type = World::difference_type;
+    using value_type = World::value_type;
+    using pointer = World::pointer;
+    using reference = World::reference;
+    using size_type = World::size_type;
 
     ShapeIterator(shape_container::iterator iter) : iter_(iter) {}
 
@@ -81,9 +86,34 @@ public:
     }
 
     auto operator++(int) -> ShapeIterator & {
-      ShapeIterator i = *this;
+      ShapeIterator &i = *this;
       ++(*this);
       return i;
+    }
+
+    auto operator--() -> ShapeIterator & {
+      --iter_;
+      return *this;
+    }
+
+    auto operator--(int) -> ShapeIterator & {
+      ShapeIterator &i = *this;
+      ++(*this);
+      return i;
+    }
+
+    auto operator-=(difference_type n) -> ShapeIterator & {
+      iter_ -= n;
+      return *this;
+    }
+
+    auto operator+=(difference_type n) -> ShapeIterator & {
+      iter_ += n;
+      return *this;
+    }
+
+    auto operator-(ShapeIterator const &other) -> difference_type {
+      return iter_ - other.iter_;
     }
 
     friend auto operator==(ShapeIterator const &lhs, ShapeIterator const &rhs)
@@ -93,6 +123,10 @@ public:
     friend auto operator!=(ShapeIterator const &lhs, ShapeIterator const &rhs)
         -> bool {
       return lhs.iter_ != rhs.iter_;
+    }
+    friend auto operator<(ShapeIterator const &lhs, ShapeIterator const &rhs)
+        -> bool {
+      return lhs.iter_ < rhs.iter_;
     }
 
   private:
@@ -132,8 +166,19 @@ public:
   auto color_at(Ray r) const -> Color;
 
   auto is_shadowed(Point p) const -> bool;
+};
 
-}; // namespace raytrace
+inline auto operator-(World::ShapeIterator iter,
+                      World::ShapeIterator::difference_type n)
+    -> World::ShapeIterator {
+  return iter -= n;
+}
+
+inline auto operator+(World::ShapeIterator iter,
+                      World::ShapeIterator::difference_type n)
+    -> World::ShapeIterator {
+  return iter += n;
+}
 
 auto default_world() -> World;
 
