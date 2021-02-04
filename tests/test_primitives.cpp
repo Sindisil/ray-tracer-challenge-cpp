@@ -177,7 +177,7 @@ TEST_CASE("Non-zero length vectors can be normalized") {
   SUBCASE("Normalizing (4, 0, 0) gives (1, 0, 0)") {
     CHECK(Vector3{4, 0, 0}.normalize() == Vector3{1, 0, 0});
   }
-  SUBCASE("Normalizing (1, 2, 3) gives (sqrt(14), sqrt(14), sqrt(14))") {
+  SUBCASE("Normalizing (1, 2, 3) gives (1/sqrt(14), 2/sqrt(14), 3/sqrt(14))") {
     CHECK(Vector3{1.f, 2.f, 3.f}.normalize() ==
           Vector3{1 / sqrt(14.f), 2 / sqrt(14.f), 3 / sqrt(14.f)});
   }
